@@ -1,0 +1,5 @@
+2026-10-07T13:00:52+00:00 INFO Email "ywraq_email" for order #13697 sent CONTEXT: {"email_type":"ywraq_email","status":"sent","recipient":"guest, dev2","order":13697}
+2026-10-07T13:00:52+00:00 INFO Email "ywraq_email_customer" for order #13697 sent CONTEXT: {"email_type":"ywraq_email_customer","status":"sent","recipient":"derrickgatu","order":13697}
+2026-10-07T13:02:20+00:00 INFO Email "customer_reset_password" for user #74360 sent CONTEXT: {"email_type":"customer_reset_password","status":"sent","recipient":"derrickgatu","user":74360}
+2026-10-07T13:44:15+00:00 INFO Email "ywraq_email" for order #13704 sent CONTEXT: {"email_type":"ywraq_email","status":"sent","recipient":"guest, dev2","order":13704}
+2026-10-07T13:44:15+00:00 INFO Email "ywraq_email_customer" for order #13704 sent CONTEXT: {"email_type":"ywraq_email_customer","status":"sent","recipient":"derrickgatu","order":13704}

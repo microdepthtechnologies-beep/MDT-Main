@@ -1,0 +1,4 @@
+2026-09-30T05:44:41+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}
+2026-09-30T05:44:41+00:00 NOTICE Email "customer_new_account" for user #74336 not sent: email type is disabled CONTEXT: {"email_type":"customer_new_account","status":"disabled","recipient":"derrickgatu03","user":74336}
+2026-09-30T05:45:25+00:00 INFO Email "customer_new_account" for user #74336 sent CONTEXT: {"email_type":"customer_new_account","status":"sent","recipient":"derrickgatu03","user":74336}
+2026-09-30T05:45:25+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}

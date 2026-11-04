@@ -1,0 +1,127 @@
+/* Shared colour palette. Loaded after the layout styles so palette changes
+   apply consistently to the homepage, catalogue, dialogs and product pages. */
+:root {
+  --charcoal: #161616;
+  --surface: #f5f5f5;
+  --border: #dedede;
+  --muted: #626262;
+  --panel: #f0f0f0;
+  --panel-raised: #282828;
+  --text-primary: #222222;
+  --text-secondary: #626262;
+  --text-subtle: #6b6b6b;
+  --text-inverse: #c8c8c8;
+  --color-ink: #222222;
+  --color-ink-900: #171717;
+  --color-ink-800: #2c2c2c;
+  --color-ink-700: #3d3d3d;
+  --color-ink-600: #505050;
+  --color-paper: #f5f5f5;
+  --color-line: #dedede;
+  --color-muted: #626262;
+}
+
+body { color: var(--text-primary); }
+::selection { color: var(--text-primary); }
+dialog::backdrop { background: rgb(17 17 17 / 50%); }
+.button-dark:hover { background: #383838; }
+.button-outline { border-color: #cccccc; }
+.utility-bar, .brand-ribbon, .home-platforms, .shop-stage,
+.collection-interlude, .site-footer { background: var(--charcoal); }
+.repairs-platform { background: var(--panel-raised); color: #f5f5f5; }
+.utility-bar { color: #d5d5d5; }
+.utility-divider { color: #808080; }
+
+.hq-hero, .home-contact { background: #f7f7f7; }
+.home-solutions, .retail-platform, .department-grid a, .sidebar-help,
+.product-card-visual, .quick-view-photo, .gallery-stage, .product-quote,
+.product-support-section, .procurement-section { background: var(--panel); }
+.product-tone-1 { background: #f5f5f5; }
+.product-tone-2 { background: #ebebeb; }
+.catalogue-search { background: #f8f8f8; }
+.gallery-thumbnails button, .specification-table > div:nth-child(odd) { background: #f5f5f5; }
+.active-filters a, .procurement-mark { background: #e9e9e9; }
+.active-filters .clear-filters { background: transparent; }
+.retail-platform, .about-pillars strong, .quick-look { color: var(--text-primary); }
+.home-about-grid .large-copy { color: var(--text-primary); }
+.home-about h2 > span, .home-section-heading h2 > span { color: #727272; }
+.hero-note svg { color: var(--charcoal); }
+
+.hq-hero-description, .hero-scroll, .hero-note span, .hq-hero-baseline,
+.home-about-grid > div > p, .home-section-heading > p,
+.solution-copy .eyebrow, .solution-copy p, .solution-copy li, .solution-shop-link,
+.approach-grid p, .home-contact-grid > div > p:not(.eyebrow),
+.home-contact-links svg, .card-brand, .card-specs,
+.quick-view-copy dt, .quick-view-price span, .quick-view-note,
+.department-grid a > svg:first-child, .department-grid a > svg:last-child,
+.catalogue-assurances span, .catalogue-assurances .assurance-location,
+.filter-title svg, .filter-section .category-filter-link,
+.filter-section .category-filter-link span, .filter-note,
+.sidebar-help .eyebrow, .catalogue-search > svg,
+.product-badge, .card-bottom div > span, .image-placeholder,
+.procurement-mark, .procurement-section .eyebrow,
+.gallery-counter, .gallery-caption, .product-overline > .eyebrow,
+.product-model, .product-model span, .content-copy,
+.configuration-picker label span, .quote-price p, .quote-note,
+.product-reassurance > svg, .product-reassurance p,
+.product-information-section .eyebrow,
+.product-information-section > div > p:not(.eyebrow),
+.specification-table dd, .product-support-section .eyebrow,
+.support-options svg, .support-options p { color: var(--text-secondary); }
+.about-pillars span, .solution-number, .approach-number,
+.catalogue-view a, .price-inputs > span { color: var(--text-subtle); }
+.availability, .availability.available, .configuration-confirmation { color: #525252; }
+
+.brand-ribbon p, .home-platforms .section-index,
+.home-platforms .home-section-heading p,
+.home-platforms .home-section-heading h2 > span,
+.shop-stage .breadcrumbs, .shop-stage .breadcrumbs [aria-current],
+.shop-stage h1 > span, .shop-stage .hero-description,
+.shop-stage .category-hero-note p,
+.collection-interlude .eyebrow, .collection-interlude p,
+.footer-intro .eyebrow, .footer-brand p,
+.footer-columns a:not(.footer-brand > a:first-child),
+.footer-bottom { color: var(--text-inverse); }
+.brand-wordmarks > span { color: #ebebeb; }
+.collection-story .eyebrow, .shop-stage .hero-links .text-link,
+.site-footer { color: #f5f5f5; }
+.interlude-icon { color: #dedede; border-color: #ffffff40; }
+
+.shop-stage .hero-product {
+  background: #f1f1f1;
+  color: var(--text-primary);
+  box-shadow: 16px 16px 0 #333333;
+}
+.shop-stage .hero-product-kicker,
+.shop-stage .hero-product-label span:not(.hero-product-arrow) { color: var(--text-secondary); }
+.shop-stage .hero-product-label { border-color: #d4d4d4; }
+.catalogue-view a[aria-current], .filter-section .category-filter-link.selected,
+.card-arrow { background: var(--charcoal); color: white; }
+.filter-section .category-filter-link.selected span { color: #e5e5e5; }
+.card-arrow:hover, .quick-look:hover { background: var(--red); color: white; }
+.department-grid a:hover > svg { color: var(--red); }
+.footer-columns a:hover { color: white; }
+
+.hero-scroll > span, .hq-hero-baseline, .about-pillars,
+.solution-tabs, .solution-tabs button, .solution-copy > div,
+.approach-grid > div, .contact-whatsapp, .catalogue-view,
+.filter-form select, .filter-form input[type="number"],
+.product-list .product-card, .quick-view-copy dl > div,
+.configuration-picker select { border-color: var(--border); }
+.wordmark-0 { border-color: #888888; }
+.catalogue-search:focus-within { border-color: #808080; }
+.product-card:hover { border-color: #bcbcbc; }
+.approach-grid > div:hover { border-color: var(--red); }
+.home-contact-grid > div:last-child {
+  border-color: #e3e3e3;
+  box-shadow: 0 12px 50px rgb(0 0 0 / 6%);
+}
+.quick-look { box-shadow: 0 2px 8px rgb(0 0 0 / 6%); }
+.home-collection::after, .collection-story::after {
+  background: linear-gradient(0deg, rgb(14 14 14 / 86%), rgb(14 14 14 / 5%) 90%);
+}
+
+@media (max-width: 800px) {
+  .solution-tabs button { background: #e6e6e6; border-color: #d5d5d5; }
+  .solution-tabs button[aria-selected="true"] { background: var(--charcoal); color: white; }
+}
