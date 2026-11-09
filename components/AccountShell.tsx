@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { Logo } from "./Logo";
 import { contact } from "@/data/company";
 
-export function AccountShell({ children, register = false }: { children: ReactNode; register?: boolean }) {
+export function AccountShell({ children, register = false, recovery }: { children: ReactNode; register?: boolean; recovery?: "request" | "reset" }) {
   return <div className="account-experience">
     <header className="account-header">
       <Link href="/" aria-label="Micro Depth Technologies home"><Logo /></Link>
@@ -30,9 +30,9 @@ export function AccountShell({ children, register = false }: { children: ReactNo
       </aside>
       <section className="account-form-panel" aria-labelledby="account-title">
         <div className="account-form-wrap">
-          <span className="account-kicker account-form-kicker">MDT / {register ? "GET STARTED" : "WELCOME BACK"}</span>
-          <h1 id="account-title">{register ? <>Your next chapter<br />starts here<span>.</span></> : <>Good to have<br />you back<span>.</span></>}</h1>
-          <p className="account-intro">{register ? "Create your account to request quotations, keep track of your requests and stay connected with MDT." : "Sign in to follow your quote requests and pick up where you left off."}</p>
+          <span className="account-kicker account-form-kicker">MDT / {recovery ? "ACCOUNT RECOVERY" : register ? "GET STARTED" : "WELCOME BACK"}</span>
+          <h1 id="account-title">{recovery === "request" ? <>Let’s get you<br />back in<span>.</span></> : recovery === "reset" ? <>A fresh start.<br />A new password<span>.</span></> : register ? <>Your next chapter<br />starts here<span>.</span></> : <>Good to have<br />you back<span>.</span></>}</h1>
+          <p className="account-intro">{recovery === "request" ? "Forgot your password? Enter your account email and we’ll help you find your way back." : recovery === "reset" ? "Choose a strong password you haven’t used before. Your quotes and account details will be right where you left them." : register ? "Create your account to request quotations, keep track of your requests and stay connected with MDT." : "Sign in to follow your quote requests and pick up where you left off."}</p>
           {children}
         </div>
       </section>

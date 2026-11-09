@@ -1,0 +1,156 @@
+{
+  "hero": {
+    "mediaId": "mdt-editorial-pexels-442150",
+    "file": "2026/11/mdt-network-installation-442150.webp",
+    "title": "Network installation",
+    "alt": "Engineer connecting Ethernet cables to equipment in a network rack",
+    "description": "Real network installation photography for the headquarters introduction and infrastructure content.",
+    "tags": ["editorial", "home", "infrastructure", "installation"],
+    "source": {
+      "provider": "Pexels",
+      "photoId": "442150",
+      "photographer": "Field Engineer",
+      "pageUrl": "https://www.pexels.com/photo/electronics-engineer-fixing-cables-on-server-442150/",
+      "downloadUrl": "https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "publishedAt": "2017-06-15",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    },
+    "replaces": {
+      "file": "2026/10/mdt-data-centre.webp",
+      "original": "public/assets/d80e2ed8-7854-425e-8085-c2249ae33ac8.jpg"
+    }
+  },
+  "workspace": {
+    "mediaId": "mdt-editorial-pexels-2072060",
+    "file": "2026/11/mdt-desktop-workspace-2072060.webp",
+    "title": "Desktop workspace",
+    "alt": "Desktop computer, keyboard and mouse on a wooden office desk beside a window",
+    "description": "Photographed computer workspace for computing collections and hardware information.",
+    "tags": ["editorial", "hardware", "computing", "workspace"],
+    "source": {
+      "provider": "Pexels",
+      "photoId": "2072060",
+      "photographer": "Junior Teixeira",
+      "pageUrl": "https://www.pexels.com/photo/turned-off-silver-imac-2072060/",
+      "downloadUrl": "https://images.pexels.com/photos/2072060/pexels-photo-2072060.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "publishedAt": "2019-03-28",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    },
+    "replaces": {
+      "file": "2026/10/mdt-workspace.webp",
+      "original": "public/assets/edf9dc0c-5dab-4bf5-a3b2-b00e5c58710d.jpg"
+    }
+  },
+  "network": {
+    "mediaId": "mdt-editorial-pexels-2881232",
+    "file": "2026/11/mdt-network-switch-2881232.webp",
+    "title": "Network switching and cabling",
+    "alt": "Blue Ethernet cables connected to the ports of a network switch",
+    "description": "Close-up photograph of real network infrastructure.",
+    "tags": ["editorial", "networking", "switching", "cabling"],
+    "source": {
+      "provider": "Pexels",
+      "photoId": "2881232",
+      "photographer": "Brett Sayles",
+      "pageUrl": "https://www.pexels.com/photo/cables-connected-to-ethernet-ports-2881232/",
+      "downloadUrl": "https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "publishedAt": "2019-09-02",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    },
+    "replaces": {
+      "file": "2026/10/mdt-network.webp",
+      "original": "public/assets/e5edd73c-f7ef-4a41-a192-881cb538919b.jpg"
+    }
+  },
+  "security": {
+    "mediaId": "mdt-editorial-pexels-10902545",
+    "file": "2026/11/mdt-security-cameras-10902545.webp",
+    "title": "Physical security and surveillance",
+    "alt": "Surveillance cameras and security lights mounted on a building wall",
+    "description": "Real installed security equipment for surveillance and physical security services.",
+    "tags": ["editorial", "security", "surveillance", "cctv"],
+    "source": {
+      "provider": "Pexels",
+      "photoId": "10902545",
+      "photographer": "Possessed Photography",
+      "pageUrl": "https://www.pexels.com/photo/surveillance-camera-mounted-on-the-wall-10902545/",
+      "downloadUrl": "https://images.pexels.com/photos/10902545/pexels-photo-10902545.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "publishedAt": "2022-01-19",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    },
+    "replaces": {
+      "file": "2026/10/mdt-security.webp",
+      "original": "public/assets/6d217523-f787-4bad-90a6-781c756352f2.jpg"
+    }
+  },
+  "software": {
+    "mediaId": "mdt-editorial-pexels-19805876",
+    "file": "2026/11/mdt-nairobi-software-workspace-19805876.webp",
+    "title": "Software work in Nairobi",
+    "alt": "Developer using a laptop and external monitor in a Nairobi workspace",
+    "description": "A real Nairobi workspace photographed by Naboth Otieno, used to illustrate software and business applications.",
+    "tags": ["editorial", "software", "development", "nairobi"],
+    "source": {
+      "provider": "Pexels",
+      "photoId": "19805876",
+      "photographer": "Naboth Otieno",
+      "pageUrl": "https://www.pexels.com/photo/man-working-on-computer-in-an-office-19805876/",
+      "downloadUrl": "https://images.pexels.com/photos/19805876/pexels-photo-19805876.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "publishedAt": "2024-01-09",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    },
+    "replaces": {
+      "file": "2026/10/mdt-software.webp",
+      "original": "public/assets/d6129170-9fdc-40d0-a3d2-4dbf92090621.jpg"
+    }
+  },
+  "collaboration": {
+    "mediaId": "mdt-editorial-pexels-3184418",
+    "file": "2026/11/mdt-team-collaboration-3184418.webp",
+    "title": "Working together",
+    "alt": "Colleagues collaborating around an office table with laptops and documents",
+    "description": "Real office collaboration photography, used as illustrative stock rather than a portrait of MDT employees.",
+    "tags": ["editorial", "collaboration", "workspaces", "teamwork"],
+    "source": {
+      "provider": "Pexels",
+      "photoId": "3184418",
+      "photographer": "fauxels",
+      "pageUrl": "https://www.pexels.com/photo/photo-of-people-near-wooden-table-3184418/",
+      "downloadUrl": "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "publishedAt": "2019-11-05",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    },
+    "replaces": {
+      "file": "2026/10/mdt-collaboration.webp",
+      "original": "public/assets/f5614fd6-dac5-4d01-93ef-aab11c8746bb.jpg"
+    }
+  },
+  "repair": {
+    "mediaId": "mdt-editorial-pexels-6754846",
+    "file": "2026/11/mdt-computer-diagnostics-6754846.webp",
+    "title": "Computer repair and diagnostics",
+    "alt": "Technician testing an opened computer with a multimeter at a repair bench",
+    "description": "Real electronics diagnostics photograph for repair, maintenance and technical support.",
+    "tags": ["editorial", "repairs", "diagnostics", "support"],
+    "source": {
+      "provider": "Pexels",
+      "photoId": "6754846",
+      "photographer": "Tima Miroshnichenko",
+      "pageUrl": "https://www.pexels.com/photo/man-fixing-a-computer-6754846/",
+      "downloadUrl": "https://images.pexels.com/photos/6754846/pexels-photo-6754846.jpeg?auto=compress&cs=tinysrgb&w=2400",
+      "publishedAt": "2021-02-08",
+      "license": "Pexels License",
+      "licenseUrl": "https://www.pexels.com/license/"
+    },
+    "replaces": {
+      "file": "2026/10/mdt-repair.webp",
+      "original": "public/assets/2767f3e4-09b5-43dc-96cc-fb24b0861da1.jpg"
+    }
+  }
+}

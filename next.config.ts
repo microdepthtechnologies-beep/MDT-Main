@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
       { source: "/software-and-licenses", destination: "/software-licenses/", permanent: true },
       { source: "/services", destination: "/our-services/", permanent: true },
       { source: "/products", destination: "/shop/", permanent: true },
+      { source: "/request-quote", destination: "/quote/checkout/", permanent: true },
+      { source: "/request-a-quote", destination: "/quote/checkout/", permanent: true },
       { source: "/blog/page/:page(\\d+)", destination: "/blog/?page=:page", permanent: true },
       { source: "/sitemap_index.xml", destination: "/sitemap.xml", permanent: true },
     ];

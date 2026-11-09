@@ -76,6 +76,7 @@ export function AccountForm({ mode, callbackUrl = "/dashboard/", initialError = 
           <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? "Hide password" : "Show password"} aria-pressed={showPassword}>{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button>
         </div>
         {register && <p id="account-password-hint" className="account-field-hint">Use at least 8 characters.</p>}
+        {!register && <Link className="account-forgot" href="/auth/forgot-password/">Forgot password?</Link>}
       </div>
       {error && <p className="account-error" role="alert">{error}</p>}
       <button type="submit" className="account-submit" disabled={!!pending || created}>{pending === "email" ? <>{register ? "Creating your account…" : "Signing you in…"}<LoaderCircle className="filter-spinner" size={18} /></> : <>{register ? "Create your account" : "Sign in"}<ArrowRight size={18} /></>}</button>

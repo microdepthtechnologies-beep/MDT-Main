@@ -4,12 +4,17 @@ export type DashboardAccount = {
   company: string;
   phone: string;
   hasPassword: boolean;
+  canSales?: boolean;
 };
 
 export const quoteStages = {
   submitted: { label: "Submitted", description: "Your request is recorded. Our team will review the products and your requirements." },
   reviewed: { label: "In review", description: "Our team is reviewing availability and preparing the details for your quotation." },
-  quoted: { label: "Quoted", description: "Your quotation has been prepared. Check your email for details, or contact our team." },
+  quoted: { label: "Quoted", description: "Your quotation is ready. Review availability, prices and terms below, then accept or decline." },
+  accepted: { label: "Accepted", description: "You accepted this quotation. Our team will arrange payment and delivery with you." },
+  processing: { label: "In fulfilment", description: "Our team is preparing your products and coordinating delivery." },
+  fulfilled: { label: "Fulfilled", description: "Your request has been fulfilled. Thank you for choosing MDT." },
+  declined: { label: "Declined", description: "You declined this quotation. Contact us if your requirements change." },
   closed: { label: "Closed", description: "This request has been closed. Contact our team if you would like to revisit it." },
 } as const;
 
@@ -23,6 +28,8 @@ export type DashboardQuote = {
   phone: string;
   message: string;
   items: { name: string; slug: string; sku: string; configuration: string; quantity: number }[];
+  offer?: import("./quotation").IssuedQuotation;
+  activity?: { at: string; label: string }[];
 };
 
 export function accountInitials(name: string) {

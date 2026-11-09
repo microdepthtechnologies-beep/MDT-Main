@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRightIcon, ArrowUpRightIcon, MapPinIcon } from 'lucide-react';
 import { platforms } from '../data/company';
 import { solutions } from '../data/solutions';
-import { editorialMedia } from '../data/editorial-media';
+import { editorialMedia, editorialMediaAlt } from '../data/editorial-media';
 
 const ease = [0.23, 1, 0.32, 1] as const;
 
@@ -92,7 +92,7 @@ export function Hero() {
           <div className="relative aspect-[4/5] overflow-hidden rounded-[28px]">
             <Image
               src={editorialMedia.hero}
-              alt="Inspecting server racks in a data centre"
+              alt={editorialMediaAlt.hero}
               fill
               sizes="(max-width: 1024px) 90vw, 40vw"
               preload

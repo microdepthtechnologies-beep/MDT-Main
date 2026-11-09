@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowUpRight, LoaderCircle, Mail, Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { MediaImage } from "./MediaImage";
@@ -14,18 +14,23 @@ export function QuoteCheckoutClient({ user }: { user: { name?: string | null; em
   const [status, setStatus] = useState<"idle" | "submitting" | "done">("idle");
   const [number, setNumber] = useState("");
   const [error, setError] = useState("");
+  const [emailPending, setEmailPending] = useState(false);
+  const requestKey = useRef("");
 
   async function submit() {
-    if (items.length === 0) return;
+    if (items.length === 0 || status === "submitting") return;
     setStatus("submitting");
     setError("");
+    try {
+    if (!requestKey.current) requestKey.current = crypto.randomUUID();
     const res = await fetch("/api/quotes/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items, company, phone, message }),
+      body: JSON.stringify({ items, company, phone, message, requestKey: requestKey.current }),
     });
     const data = await res.json();
     if (res.ok) {
+      setEmailPending(!!data.emailPending);
       setNumber(data.number);
       setStatus("done");
       clear();
@@ -33,12 +38,16 @@ export function QuoteCheckoutClient({ user }: { user: { name?: string | null; em
       setError(data.error || "Could not submit your quote request.");
       setStatus("idle");
     }
+    } catch {
+      setError("We couldn’t confirm submission. Check My quotes before retrying to avoid a duplicate request.");
+      setStatus("idle");
+    }
   }
 
   if (status === "done") return <div className="quote-success">
     <div className="quote-success-mark"><Mail size={40} /></div>
-    <h2>Your request has been sent.</h2>
-    <p>Quote reference <strong>#{number}</strong> has been emailed to {user.email}. Our sales team will confirm availability and pricing and reply shortly.</p>
+    <h2>Your request is with our team.</h2>
+    <p>Quote reference <strong>#{number}</strong> is saved in your account. {emailPending ? "Your email notification could not be sent, but our sales team can already see your request." : `A confirmation has been emailed to ${user.email}.`} Follow availability, quotation and delivery updates in your dashboard.</p>
     <Link href="/dashboard/quotes/" className="button button-red">View your quotes <ArrowUpRight size={18} /></Link>
     <Link href="/shop/" className="text-link">Continue browsing</Link>
   </div>;
@@ -70,7 +79,7 @@ export function QuoteCheckoutClient({ user }: { user: { name?: string | null; em
         <label><span>Requirements <small>optional</small></span><textarea value={message} onChange={e => setMessage(e.target.value)} rows={4} placeholder="Quantity, timeline, delivery location, special requirements…" /></label>
         {error && <p className="form-error" role="alert">{error}</p>}
         <button type="button" className="button button-red" disabled={status === "submitting"} onClick={submit}>{status === "submitting" ? <><LoaderCircle size={17} className="filter-spinner" /> Sending…</> : <>Send quote request <ArrowUpRight size={18} /></>}</button>
-        <p className="quote-privacy-note">Prices are confirmed by our sales team and sent directly to you. They are never displayed on the website.</p>
+        <p className="quote-privacy-note">Your quotation is shared privately by email and in your account. Prices are never shown in the public catalogue.</p>
       </div>
     </div>
   </>;

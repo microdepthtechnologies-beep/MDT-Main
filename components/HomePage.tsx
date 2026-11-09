@@ -3,6 +3,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, CircleCheck, Mail, MapPin, Phone, 
 import type { siteContent } from "@/data/site-content";
 import { contact } from "@/data/company";
 import type { JournalPost } from "@/lib/journal";
+import type { Brand, Testimonial } from "@/lib/brands";
 import { organisationSchema, siteOrigin } from "@/lib/site-seo";
 import { StructuredData } from "./StructuredData";
 import { EnquiryForm } from "./EnquiryForm";
@@ -11,8 +12,17 @@ import { Reveal } from "./Reveal";
 import { SolutionStudio } from "./SolutionStudio";
 import { JournalCards } from "./JournalCards";
 import { LineHeading, MarketingLayout, SectionHeading } from "./MarketingLayout";
+import { BrandsCarousel } from "./BrandsCarousel";
+import { TestimonialsSection } from "./TestimonialsSection";
 
-export function HomePage({ content: c, posts }: { content: typeof siteContent.home; posts: JournalPost[] }) {
+interface HomePageProps {
+  content: typeof siteContent.home;
+  posts: JournalPost[];
+  brands: Brand[];
+  testimonials: Testimonial[];
+}
+
+export function HomePage({ content: c, posts, brands, testimonials }: HomePageProps) {
   return <MarketingLayout>
     <StructuredData value={organisationSchema} />
     <StructuredData value={{ "@context": "https://schema.org", "@type": "WebSite", "@id": `${siteOrigin}/#website`, url: siteOrigin, name: "Micro Depth Technologies", publisher: { "@id": `${siteOrigin}/#organization` } }} />
@@ -23,13 +33,14 @@ export function HomePage({ content: c, posts }: { content: typeof siteContent.ho
       </div>
       <div className="hq-hero-baseline site-width"><span>MICRO DEPTH TECHNOLOGIES</span><span>YOUR PARTNER IN TECHNOLOGY <span className="baseline-plus">+</span></span></div>
     </section>
-    <section id="partners" className="brand-ribbon" aria-label="Technology brands"><div className="site-width"><p>{c.brands.title}<br /><strong>{c.brands.subtitle}</strong></p><div className="brand-wordmarks">{c.brands.items.map((brand, index) => <span key={brand} className={`wordmark-${index}`}>{brand}</span>)}</div></div></section>
+    <BrandsCarousel brands={brands} />
     <Reveal className="site-width home-about"><section id="about"><div className="section-index"><span>{c.about.eyebrow}</span><ArrowUpRight size={22} /></div><div className="home-about-grid"><h2><LineHeading text={c.about.title} /></h2><div><p className="large-copy">{c.about.lead}</p><p>{c.about.description}</p><div className="about-pillars">{c.about.pillars.map((pillar, index) => <span key={pillar}>0{index + 1}<strong>{pillar}</strong></span>)}</div><Link href={c.about.linkHref} className="text-link">{c.about.linkLabel}<ArrowUpRight size={18} /></Link></div></div></section></Reveal>
     <section id="solutions" className="home-solutions"><div className="site-width"><SectionHeading eyebrow={c.services.eyebrow} title={c.services.title} description={c.services.description} /><SolutionStudio items={c.services.items} /></div></section>
     <section className="site-width home-collections"><SectionHeading eyebrow={c.collections.eyebrow} title={c.collections.title} description={c.collections.description}><Link href="/shop/" className="text-link">Explore all products <ArrowUpRight size={18} /></Link></SectionHeading><Reveal className="home-collection-grid">{c.collections.items.map((item, index) => <Link key={item.href} href={item.href} className={`home-collection ${index === 0 ? "home-collection-large" : ""}`}><MediaImage src={item.image} alt={item.imageAlt} fill sizes="(max-width:700px) 90vw, 50vw" className="object-cover" /><div><span className="eyebrow">{item.eyebrow}</span><h3><LineHeading text={item.title} /></h3><span className="collection-cta">{item.label}<ArrowUpRight size={20} /></span></div></Link>)}</Reveal></section>
     <section id="platforms" className="home-platforms"><div className="site-width"><SectionHeading eyebrow={c.platforms.eyebrow} title={c.platforms.title} description={c.platforms.description} /><Reveal className="platform-grid">{c.platforms.items.map((item, index) => <a key={item.href} href={item.href} target="_blank" rel="noreferrer" className={`platform-card ${index === 0 ? "retail-platform" : "repairs-platform"}`}><div className="platform-card-top">{index === 0 ? <Store size={30} strokeWidth={1.4} /> : <Wrench size={30} strokeWidth={1.4} />}<span>0{index + 1} / {item.domain}</span><ArrowUpRight size={26} /></div><h3><LineHeading text={item.title} /></h3><p>{item.description}</p><span className="platform-link">{item.label}<ArrowRight size={18} /></span><span className="platform-watermark" aria-hidden="true">{index === 0 ? "retail." : "repair."}</span></a>)}</Reveal></div></section>
     <section id="approach" className="site-width home-approach"><SectionHeading eyebrow={c.approach.eyebrow} title={c.approach.title}><Link href="/contact/" className="text-link">Let’s start a conversation <ArrowUpRight size={18} /></Link></SectionHeading><div className="approach-grid">{c.approach.steps.map((step, index) => <div key={step.title}><span className="approach-number">0{index + 1}<ArrowRight size={21} /></span><h3>{step.title}</h3><p>{step.description}</p></div>)}</div></section>
     {posts.length > 0 && <section className="site-width home-journal"><SectionHeading eyebrow={c.journal.eyebrow} title={c.journal.title} description={c.journal.description}><Link href="/blog/" className="text-link">Visit the journal <ArrowUpRight size={18} /></Link></SectionHeading><JournalCards posts={posts.slice(0, 3)} /></section>}
+    <TestimonialsSection testimonials={testimonials} />
     <section id="contact" className="home-contact"><div className="site-width home-contact-grid"><div><p className="eyebrow">{c.contact.eyebrow}</p><h2><LineHeading text={c.contact.title} /></h2><p>{c.contact.description}</p><div className="home-contact-links"><a href={`tel:${contact.phoneIntl}`}><Phone size={18} />{contact.phoneDisplay}</a><a href={`mailto:${contact.email}`}><Mail size={18} />{contact.email}</a><a href={contact.mapUrl} target="_blank" rel="noreferrer"><MapPin size={18} /><span>{contact.address}<br />{contact.addressLine2}</span></a></div><a href={contact.whatsapp} target="_blank" rel="noreferrer" className="contact-whatsapp">Prefer a quick chat? Find us on WhatsApp <ArrowUpRight size={16} /></a></div><EnquiryForm /></div></section>
   </MarketingLayout>;
 }

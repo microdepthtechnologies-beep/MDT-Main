@@ -52,16 +52,55 @@ h1, h2, h3 { font-family: var(--font-display), sans-serif; }
 .hero-red-note:hover > svg { transform: translate(6px,-5px); }
 .hq-hero-baseline { border-top: 1px solid #daddd3; display: flex; justify-content: space-between; padding-block: 18px; font-size: 9px; letter-spacing: .13em; color: #71796d; }
 .baseline-plus { color: var(--red); margin-left: 20px; }
-.brand-ribbon { background: #252c2b; color: white; padding-block: 30px; }
-.brand-ribbon > div { display: flex; align-items: center; gap: 50px; }
-.brand-ribbon p { font-size: 9px; letter-spacing: .12em; min-width: 145px; color: #b4bdb5; }
-.brand-ribbon p strong { color: white; font-size: 13px; font-weight: 400; letter-spacing: 0; display: block; margin-top: 4px; }
-.brand-wordmarks { display: flex; align-items: center; justify-content: space-between; flex: 1; gap: 30px; flex-wrap: wrap; }
-.brand-wordmarks > span { font-size: 25px; color: #e5e8e0; font-weight: 500; letter-spacing: -.04em; }
-.wordmark-0 { font-style: italic; border: 1px solid #8b978b; border-radius: 50%; padding: 3px 11px; }
-.wordmark-1 { font-weight: 650 !important; }
-.wordmark-2 { letter-spacing: .05em !important; }
-.wordmark-4 { font-size: 21px !important; font-weight: 400 !important; }
+/* ── Brands & Partners carousel ─────────────────────────────── */
+.brands-carousel-section { background: #18201e; color: white; padding-block: 36px 44px; overflow: hidden; }
+.brands-carousel-header { margin-bottom: 28px; }
+.brands-carousel-label { display: flex; align-items: center; gap: 12px; font-size: 10px; letter-spacing: .14em; color: #9eaaa0; text-transform: uppercase; }
+/* Fade edges via mask */
+.brands-carousel-wrap {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+/* Infinite marquee track – duplicated content for seamless loop */
+@keyframes brands-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.brands-track {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: max-content;
+  animation: brands-scroll 55s linear infinite;
+  will-change: transform;
+  padding-inline: 10px;
+}
+.brands-carousel-wrap:hover .brands-track { animation-play-state: paused; }
+/* Individual logo tile */
+.brand-logo-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 150px;
+  height: 68px;
+  padding: 12px 18px;
+  background: #ffffff;
+  border-radius: 8px;
+  transition: transform .25s ease, box-shadow .25s ease;
+  cursor: default;
+}
+.brand-logo-tile:hover { transform: scale(1.06); box-shadow: 0 6px 24px rgba(0,0,0,.35); }
+.brand-logo-img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  filter: grayscale(1) opacity(.65);
+  transition: filter .3s ease, opacity .3s ease;
+}
+.brand-logo-tile:hover .brand-logo-img { filter: grayscale(0) opacity(1); }
+.brand-logo-fallback { font-size: 13px; font-weight: 500; color: #444; }
 .home-about { padding-block: 95px; }
 .home-about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 90px; }
 .home-about h2, .home-section-heading h2 { font-size: clamp(30px, 3.6vw, 50px); line-height: 1.2; letter-spacing: -.055em; font-weight: 500; }
@@ -288,8 +327,6 @@ h1, h2, h3 { font-family: var(--font-display), sans-serif; }
   .hq-hero h1 { font-size: 64px; }
   .hero-note { left: -15px; padding: 16px; bottom: 125px; }
   .hero-red-note { right: 0; width: 210px; }
-  .brand-wordmarks { gap: 20px; }
-  .brand-wordmarks > span { font-size: 21px; }
   .home-about-grid, .home-contact-grid { gap: 50px; }
   .solution-studio { gap: 30px; }
   .solution-tabs button { font-size: 15px; }
@@ -307,8 +344,6 @@ h1, h2, h3 { font-family: var(--font-display), sans-serif; }
   .hero-note { left: -8px; bottom: 130px; font-size: 12px; padding: 15px; }
   .hero-note strong { font-size: 12px; }
   .hero-note span { font-size: 10px; }
-  .brand-ribbon > div { gap: 30px; }
-  .brand-wordmarks { gap: 22px 30px; justify-content: flex-start; }
   .home-contact h2 { font-size: 46px; }
   .shop-stage .catalogue-hero-grid { gap: 30px; }
   .shop-stage h1 { font-size: 43px; }
@@ -367,15 +402,8 @@ h1, h2, h3 { font-family: var(--font-display), sans-serif; }
   .hq-hero-baseline { font-size: 7px; gap: 20px; }
   .hq-hero-baseline > span:last-child { text-align: right; max-width: 120px; line-height: 1.7; }
   .baseline-plus { display: none; }
-  .brand-ribbon { padding-block: 28px; }
-  .brand-ribbon > div { display: block; }
-  .brand-ribbon p { display: flex; align-items: center; gap: 12px; margin-bottom: 23px; }
-  .brand-ribbon p br { display: none; }
-  .brand-ribbon p strong { margin: 0; }
-  .brand-wordmarks { display: grid; grid-template-columns: repeat(3,1fr); gap: 25px; text-align: center; }
-  .wordmark-0 { width: fit-content; justify-self: center; }
-  .brand-wordmarks > span { font-size: 22px; }
-  .wordmark-4 { font-size: 19px !important; }
+  .brands-carousel-section { padding-block: 28px 36px; }
+  .brand-logo-tile { width: 128px; height: 58px; padding: 10px 14px; }
   .home-about, .home-collections, .home-approach { padding-block: 50px; }
   .home-about h2, .home-section-heading h2 { font-size: clamp(28px,7.7vw,42px); line-height: 1.25; }
   .home-about-grid .large-copy { font-size: 21px; }

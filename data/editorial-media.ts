@@ -1,12 +1,11 @@
-// Optimised copies of the supplied design photography in the shared media library.
-// Deploy these with the other /wp-content/uploads assets.
-const root = "/wp-content/uploads/2026/10";
-export const editorialMedia = {
-  hero: `${root}/mdt-data-centre.webp`,
-  workspace: `${root}/mdt-workspace.webp`,
-  network: `${root}/mdt-network.webp`,
-  security: `${root}/mdt-security.webp`,
-  software: `${root}/mdt-software.webp`,
-  collaboration: `${root}/mdt-collaboration.webp`,
-  repair: `${root}/mdt-repair.webp`,
-};
+import assets from "./editorial-media.json";
+
+// One manifest supplies the frontend defaults and the MongoDB media importer.
+// Files are served locally; source URLs are provenance, never image hotlinks.
+type MediaKey = keyof typeof assets;
+export const editorialMedia = Object.fromEntries(
+  Object.entries(assets).map(([key, asset]) => [key, `/wp-content/uploads/${asset.file}`]),
+) as Record<MediaKey, string>;
+export const editorialMediaAlt = Object.fromEntries(
+  Object.entries(assets).map(([key, asset]) => [key, asset.alt]),
+) as Record<MediaKey, string>;

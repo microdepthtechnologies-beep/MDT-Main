@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "./auth";
 import { getDb } from "./mongodb";
 import { quoteStages, type DashboardAccount, type DashboardQuote, type QuoteStage } from "./dashboard-types";
+import { quoteActor, ownerFilter } from "./quote-access";
 
 export const getDashboardAccount = cache(async (): Promise<DashboardAccount> => {
   const session = await auth();
@@ -10,7 +11,7 @@ export const getDashboardAccount = cache(async (): Promise<DashboardAccount> => 
   const db = await getDb();
   const account = await db.collection("accounts").findOne(
     { email: session.user.email },
-    { projection: { name: 1, company: 1, phone: 1, passwordHash: 1 } },
+    { projection: { name: 1, company: 1, phone: 1, passwordHash: 1, role: 1 } },
   );
   return {
     name: account?.name || session.user.name || "Your account",
@@ -18,18 +19,20 @@ export const getDashboardAccount = cache(async (): Promise<DashboardAccount> => 
     company: account?.company || "",
     phone: account?.phone || "",
     hasPassword: !!account?.passwordHash,
+    canSales: account?.role === "sales" || account?.role === "admin",
   };
 });
 
 export const getDashboardQuotes = cache(async (): Promise<DashboardQuote[]> => {
-  const account = await getDashboardAccount();
+  const actor = await quoteActor();
   const db = await getDb();
   // An explicit customer-facing projection keeps internal pricing and sales notes out.
-  const rows = await db.collection("quoteRequests").find({ customerEmail: account.email }, {
+  const rows = await db.collection("quoteRequests").find(ownerFilter(actor), {
     projection: {
       _id: 0, number: 1, status: 1, createdAt: 1, updatedAt: 1,
       company: 1, phone: 1, message: 1,
       "items.name": 1, "items.slug": 1, "items.sku": 1, "items.configuration": 1, "items.quantity": 1,
+      offer: 1, "activity.at": 1, "activity.label": 1,
     },
   }).sort({ createdAt: -1 }).toArray();
   const date = (value: unknown) => {
@@ -41,6 +44,8 @@ export const getDashboardQuotes = cache(async (): Promise<DashboardQuote[]> => {
     status: Object.hasOwn(quoteStages, row.status) ? row.status as QuoteStage : "submitted",
     createdAt: date(row.createdAt), updatedAt: date(row.updatedAt || row.createdAt),
     company: String(row.company || ""), phone: String(row.phone || ""), message: String(row.message || ""),
+    offer: row.offer,
+    activity: (row.activity || []).filter((entry: { label: string }) => !/draft|email|assigned/i.test(entry.label)).map((entry: { at: Date; label: string }) => ({ at: date(entry.at), label: entry.label })),
     items: (Array.isArray(row.items) ? row.items : []).map(item => ({
       name: String(item.name || "Product"), slug: String(item.slug || ""),
       sku: String(item.sku || ""), configuration: String(item.configuration || ""),

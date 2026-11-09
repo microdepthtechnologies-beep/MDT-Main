@@ -19,7 +19,11 @@ export async function POST(req: Request) {
     const valid = await bcrypt.compare(current, account.passwordHash);
     if (!valid) return NextResponse.json({ error: "Current password is incorrect." }, { status: 400 });
     const passwordHash = await bcrypt.hash(next, 12);
-    await db.collection("accounts").updateOne({ email: session.user.email }, { $set: { passwordHash, updatedAt: new Date() } });
+    const updated = await db.collection("accounts").updateOne(
+      { _id: account._id, passwordHash: account.passwordHash },
+      { $set: { passwordHash, updatedAt: new Date() }, $unset: { resetTokenHash: "", resetExpiresAt: "" } },
+    );
+    if (!updated.modifiedCount) return NextResponse.json({ error: "Your password changed. Please sign in again." }, { status: 409 });
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Could not update password. Please try again." }, { status: 500 });

@@ -10,7 +10,7 @@ import { CatalogueBrowser, CatalogueResults } from "./CatalogueBrowser";
 import { CatalogueFiltersPanel } from "./CatalogueFilters";
 import { CatalogueEmpty, CataloguePagination, CatalogueTools } from "./CatalogueToolbar";
 import { Reveal } from "./Reveal";
-import { editorialMedia } from "@/data/editorial-media";
+import { editorialMedia, editorialMediaAlt } from "@/data/editorial-media";
 import { Fragment } from "react";
 
 const departments = [
@@ -58,8 +58,8 @@ export async function CataloguePage({ search, category }: { search: SearchValues
       <div className="catalogue-assurances"><div className="site-width"><span><ShieldCheck /> Genuine technology</span><span><Headphones /> Expert product advice</span><span><Network /> Supply, setup & support</span><span className="assurance-location">Your technology partner in Nairobi <ArrowUpRight size={15} /></span></div></div>
       {!category && <section className="site-width department-section" aria-label="Shop by category"><div className="section-caption"><h2>Find your starting point</h2><a href="#catalogue">All categories <ArrowDown size={14} /></a></div><div className="department-grid">{departments.map(({ slug, label, icon: Icon }) => { const c = categories.find(c => c.slug === slug); return c ? <Link key={slug} href={categoryLink(c)}><Icon size={27} strokeWidth={1.4} /><span>{label}</span><ArrowUpRight size={15} /></Link> : null; })}</div></section>}
       {!category && <Reveal className="site-width collection-stories">
-        <Link href="/product-category/pcs-desktops/" className="collection-story work-story"><MediaImage src={editorialMedia.workspace} alt="Technology for a productive workspace" fill sizes="(max-width:700px) 90vw, 55vw" className="object-cover" /><div><span className="eyebrow">01 / THE EVERYDAY, ELEVATED</span><h2>Make room<br />for better work.</h2><span>Explore computing <ArrowUpRight size={18} /></span></div></Link>
-        <Link href="/product-category/networking-infrastructure/" className="collection-story network-story"><MediaImage src={editorialMedia.network} alt="Connected network equipment" fill sizes="(max-width:700px) 90vw, 35vw" className="object-cover" /><div><span className="eyebrow">02 / BUILT TO CONNECT</span><h2>Big ambitions.<br />Solid foundations.</h2><span>Explore networking <ArrowUpRight size={18} /></span></div></Link>
+        <Link href="/product-category/pcs-desktops/" className="collection-story work-story"><MediaImage src={editorialMedia.workspace} alt={editorialMediaAlt.workspace} fill sizes="(max-width:700px) 90vw, 55vw" className="object-cover" /><div><span className="eyebrow">01 / THE EVERYDAY, ELEVATED</span><h2>Make room<br />for better work.</h2><span>Explore computing <ArrowUpRight size={18} /></span></div></Link>
+        <Link href="/product-category/networking-infrastructure/" className="collection-story network-story"><MediaImage src={editorialMedia.network} alt={editorialMediaAlt.network} fill sizes="(max-width:700px) 90vw, 35vw" className="object-cover" /><div><span className="eyebrow">02 / BUILT TO CONNECT</span><h2>Big ambitions.<br />Solid foundations.</h2><span>Explore networking <ArrowUpRight size={18} /></span></div></Link>
       </Reveal>}
       <section className="site-width catalogue-section" id="catalogue">
         <div className="catalogue-heading"><div><p className="eyebrow">{category ? "THE COLLECTION" : "SPECIFIED FOR YOUR BUSINESS"}</p><h2 id="catalogue-results-heading" tabIndex={-1}>{filters.q ? "Search results" : category ? `Explore ${category.name.toLowerCase()}` : "Explore our products"}<span className="heading-dot">.</span></h2></div><span className="catalogue-total">{total.toLocaleString()} products to explore</span></div>

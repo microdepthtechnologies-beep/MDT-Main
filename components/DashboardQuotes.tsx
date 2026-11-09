@@ -6,10 +6,12 @@ import { ArrowUpRight, ChevronDown, FileText, Search, SlidersHorizontal, X } fro
 import { contact } from "@/data/company";
 import { quoteDate, quoteStages, quoteUnits, type DashboardQuote } from "@/lib/dashboard-types";
 import { DashboardHeading, NewQuoteLink, QuoteBadge, QuotesEmpty } from "./DashboardUI";
+import { CustomerQuotation } from "./CustomerQuotation";
 
 const filters = [
   { value: "all", label: "All requests" }, { value: "active", label: "In progress" },
   { value: "quoted", label: "Quoted" }, { value: "closed", label: "Closed" },
+  { value: "accepted", label: "Accepted" }, { value: "processing", label: "In fulfilment" }, { value: "fulfilled", label: "Fulfilled" }, { value: "declined", label: "Declined" },
 ];
 export function DashboardQuotes({ quotes, initialQuery = "", initialStatus = "all" }: { quotes: DashboardQuote[]; initialQuery?: string; initialStatus?: string }) {
   const [query, setQuery] = useState(initialQuery);
@@ -28,6 +30,7 @@ export function DashboardQuotes({ quotes, initialQuery = "", initialStatus = "al
             <summary><div className="workspace-quote-name"><span className="workspace-document-icon"><FileText size={20} strokeWidth={1.5} /></span><div><strong>{quote.number}</strong><span>{quote.items.length} {quote.items.length === 1 ? "product" : "products"} · {quoteUnits(quote)} {quoteUnits(quote) === 1 ? "unit" : "units"}</span></div></div><time dateTime={quote.createdAt || undefined}>{quoteDate(quote.createdAt)}</time><QuoteBadge status={quote.status} /><ChevronDown size={18} className="workspace-quote-chevron" /></summary>
             <div className="workspace-quote-detail">
               <div className="workspace-quote-update"><QuoteBadge status={quote.status} /><p>{quoteStages[quote.status].description}</p><small>Updated {quoteDate(quote.updatedAt)}</small></div>
+              {quote.offer && <CustomerQuotation quote={quote} />}
               <div className="workspace-request-products"><h3>Requested products</h3>{quote.items.map((item, index) => <div className="workspace-request-product" key={`${item.slug}-${index}`}><span className="workspace-product-number">{String(index + 1).padStart(2, "0")}</span><div>{item.slug ? <Link href={`/product/${encodeURIComponent(item.slug)}/`}>{item.name} <ArrowUpRight size={13} /></Link> : <strong>{item.name}</strong>}{item.sku && <small>SKU: {item.sku}</small>}{item.configuration && <p>{item.configuration}</p>}</div><span>Qty <strong>{item.quantity}</strong></span></div>)}</div>
               {(quote.message || quote.company || quote.phone) && <div className="workspace-request-notes"><h3>Your request details</h3>{quote.message && <p>{quote.message}</p>}{(quote.company || quote.phone) && <span>{[quote.company, quote.phone].filter(Boolean).join(" · ")}</span>}</div>}
               <div className="workspace-request-bottom"><span>Quotations are shared directly by our sales team.</span><a href={`mailto:${contact.email}?subject=${encodeURIComponent(`Question about quote ${quote.number}`)}`} className="workspace-text-link">Ask about this request <ArrowUpRight size={15} /></a></div>
@@ -36,6 +39,6 @@ export function DashboardQuotes({ quotes, initialQuery = "", initialStatus = "al
         </div>}
       </>}
     </section>
-    <div className="workspace-quote-help"><FileText size={19} strokeWidth={1.5} /><p>Your dashboard tracks quote requests. For order or delivery updates, <a href={`mailto:${contact.email}`}>contact our team</a> with your quote reference.</p></div>
+    <div className="workspace-quote-help"><FileText size={19} strokeWidth={1.5} /><p>Your quotations and fulfilment updates appear here automatically. For anything else, <a href={`mailto:${contact.email}`}>contact our team</a> with your quote reference.</p></div>
   </>;
 }

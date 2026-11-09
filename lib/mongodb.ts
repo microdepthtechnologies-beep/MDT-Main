@@ -9,7 +9,7 @@ declare global {
 
 function createClient(): Promise<MongoClient> {
   const client = new MongoClient(uri, {
-    tls: true,
+    // mongodb+srv enables TLS by default; respect URI options for local replica sets.
     serverSelectionTimeoutMS: 15000,
     connectTimeoutMS: 15000,
     socketTimeoutMS: 45000,

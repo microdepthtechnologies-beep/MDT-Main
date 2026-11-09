@@ -1,5 +1,5 @@
 import type { Solution } from '../types/content';
-import { editorialMedia } from './editorial-media';
+import { editorialMedia, editorialMediaAlt } from './editorial-media';
 
 export const solutions: Solution[] = [
 {
@@ -17,7 +17,7 @@ export const solutions: Solution[] = [
 
   image: editorialMedia.network,
 
-  imageAlt: 'Organised network switch with patch cables in a server rack',
+  imageAlt: editorialMediaAlt.network,
   link: { label: 'Shop networking', href: 'https://mdtretail.co.ke/' }
 },
 {
@@ -35,7 +35,7 @@ export const solutions: Solution[] = [
 
   image: editorialMedia.security,
 
-  imageAlt: 'Security analyst monitoring surveillance screens',
+  imageAlt: editorialMediaAlt.security,
   link: { label: 'Shop security', href: 'https://mdtretail.co.ke/' }
 },
 {
@@ -53,7 +53,7 @@ export const solutions: Solution[] = [
 
   image: editorialMedia.workspace,
 
-  imageAlt: 'Laptop, monitor, keyboard and printer arranged on a desk',
+  imageAlt: editorialMediaAlt.workspace,
   link: { label: 'Browse MDT Retail', href: 'https://mdtretail.co.ke/' }
 },
 {
@@ -71,7 +71,7 @@ export const solutions: Solution[] = [
 
   image: editorialMedia.software,
 
-  imageAlt: 'Developer working on two monitors in a Nairobi office',
+  imageAlt: editorialMediaAlt.software,
   link: { label: 'Shop software', href: 'https://mdtretail.co.ke/' }
 },
 {
@@ -89,7 +89,7 @@ export const solutions: Solution[] = [
 
   image: editorialMedia.collaboration,
 
-  imageAlt: 'Boardroom meeting with a video conferencing display',
+  imageAlt: editorialMediaAlt.collaboration,
   link: { label: 'Shop audio-visual', href: 'https://mdtretail.co.ke/' }
 },
 {
@@ -107,6 +107,6 @@ export const solutions: Solution[] = [
 
   image: editorialMedia.repair,
 
-  imageAlt: 'Technician repairing a laptop motherboard',
+  imageAlt: editorialMediaAlt.repair,
   link: { label: 'Book a repair', href: 'https://www.mdtrepairs.co.ke/' }
 }];
