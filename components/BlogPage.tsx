@@ -5,7 +5,7 @@ import type { siteContent } from "@/data/site-content";
 import { articleDate, type JournalPost } from "@/lib/journal";
 import { JournalCards } from "./JournalCards";
 import { MediaImage } from "./MediaImage";
-import { LineHeading, MarketingCTA, MarketingLayout } from "./MarketingLayout";
+import { LineHeading, MarketingLayout } from "./MarketingLayout";
 
 export function BlogPage({ content: c, posts, query = "", page = 1, category }: {
   content: typeof siteContent.blog; posts: JournalPost[]; query?: string; page?: number; category?: string;
@@ -29,6 +29,6 @@ export function BlogPage({ content: c, posts, query = "", page = 1, category }: 
       <div className="journal-toolbar"><nav aria-label="Article topics"><Link href={withQuery("/blog/")} aria-current={!category ? "page" : undefined}>All stories</Link>{topics.map(([slug, name]) => <Link key={slug} href={withQuery(`/category/${slug}/`)} aria-current={category === slug ? "page" : undefined}>{name}</Link>)}</nav><form action={base} role="search"><label htmlFor="journal-search" className="sr-only">Search articles</label><input id="journal-search" name="q" type="search" placeholder="Find an article…" defaultValue={query} /><button type="submit" aria-label="Search articles"><Search size={19} /></button></form></div>
       {grid.length ? <JournalCards posts={grid} /> : !featured && <div className="journal-empty"><Search size={32} strokeWidth={1.3} /><h3>{query ? "Let’s try another search." : "More insights are on the way."}</h3><p>{query ? "Try a different keyword, or return to all stories." : "Explore our services or speak to our team about your technology requirements."}</p><Link className="text-link" href={query ? base : "/our-services/"}>{query ? "Clear search" : "Explore our services"}<ArrowUpRight size={17} /></Link></div>}
       {pages > 1 && <nav className="journal-pagination" aria-label="Article pagination">{page > 1 ? <Link href={pageUrl(page - 1)}><ArrowLeft size={16} />Previous</Link> : <span />}<span>Page {page} of {pages}</span>{page < pages ? <Link href={pageUrl(page + 1)}>Next<ArrowRight size={16} /></Link> : <span />}</nav>}
-    </section><MarketingCTA data={c.cta} />
+    </section>
   </MarketingLayout>;
 }

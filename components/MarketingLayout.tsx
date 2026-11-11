@@ -16,6 +16,11 @@ export function LineHeading({ text }: { text: string }) {
   return <>{text.split("\n").map((line, index, lines) => <span key={index}>{line}{index < lines.length - 1 && <br />}</span>)}</>;
 }
 
+// Number the rendered order, including when published copy contains an old prefix.
+export function sectionLabel(number: number, label: string) {
+  return `${String(number).padStart(2, "0")} / ${label.replace(/^\s*\d+\s*\/\s*/, "")}`;
+}
+
 export type MarketingHeroData = { eyebrow: string; title: string; description: string; image: string; imageAlt: string; note: string; primaryLabel: string; primaryHref: string };
 export function MarketingHero({ data, kind }: { data: MarketingHeroData; kind: "about" | "services" | "software" | "detail" }) {
   return <section className={`site-width marketing-hero marketing-hero-${kind}`}>

@@ -1,19 +1,85 @@
 import Link from "next/link";
-import { ArrowUpRight, Check, KeyRound, Layers, Plus } from "lucide-react";
+import Image from "next/image";
+import { AppWindow, Building2, Users, ShieldCheck, PenTool, ChartNoAxesCombined, MessagesSquare, Cloud, Workflow, CreditCard, Phone, ExternalLink } from "lucide-react";
 import type { siteContent } from "@/data/site-content";
-import type { Product } from "@/lib/catalogue";
-import { ProductCard } from "./ProductCard";
-import { MarketingCTA, MarketingFAQs, MarketingHero, MarketingLayout, SectionHeading } from "./MarketingLayout";
+import { SOFTWARE_CATEGORIES, type SoftwareClient } from "@/lib/software-clients";
+import { MarketingHero, MarketingFAQs, MarketingCTA, MarketingLayout, SectionHeading } from "./MarketingLayout";
 import { Reveal } from "./Reveal";
 
-export function SoftwarePage({ content: c, products, catalogueHref }: { content: typeof siteContent.software; products: Product[]; catalogueHref?: string }) {
+const categoryIcons = {
+  os: AppWindow, erp: Building2, crm: Users, security: ShieldCheck,
+  design: PenTool, datal: ChartNoAxesCombined, communication: MessagesSquare,
+  cloud: Cloud, automation: Workflow, payment: CreditCard, voice: Phone,
+};
+function SoftwareIcon({ id }: { id: string }) {
+  const Icon = categoryIcons[id as keyof typeof categoryIcons] ?? AppWindow;
+  return <Icon size={20} strokeWidth={1.5} aria-hidden="true" />;
+}
+
+function ClientLogo({ client }: { client: SoftwareClient }) {
+  if (!client.imageUrl) return <span className="sw-client-name">{client.title}</span>;
+  return <Image src={client.imageUrl} alt={client.title} width={80} height={32} className="sw-client-logo" unoptimized />;
+}
+
+export function SoftwarePage({ content: c, clientsByCategory }: {
+  content: typeof siteContent.software;
+  clientsByCategory: Map<string, SoftwareClient[]>;
+}) {
   return <MarketingLayout breadcrumbs={[{ name: "Software & Licenses", path: "/software-licenses/" }]}>
     <MarketingHero data={c.hero} kind="software" />
-    <section className="site-width software-intro" id="software-solutions"><SectionHeading {...c.intro} /><div className="software-solution-grid">{c.categories.map((item, index) => <Reveal key={item.id}><article><div><span>0{index + 1}</span><Plus size={20} /></div><h2>{item.title}</h2><p>{item.text}</p><ul>{item.bullets.map(bullet => <li key={bullet}><Check size={13} />{bullet}</li>)}</ul></article></Reveal>)}</div></section>
-    <section className="software-products"><div className="site-width"><SectionHeading eyebrow={c.products.eyebrow} title={c.products.title} description={products.length ? c.products.description : undefined}>{catalogueHref && <Link href={catalogueHref} className="text-link">Browse software products <ArrowUpRight size={17} /></Link>}</SectionHeading>
-      {products.length ? <div className="product-grid software-product-grid">{products.map(product => <ProductCard key={product.wpId} p={product} />)}</div> : <div className="software-product-enquiry"><div className="software-licence-art" aria-hidden="true"><KeyRound size={36} strokeWidth={1.3} /><span>YOUR SOFTWARE REQUIREMENTS</span><strong>The right licence.<br />For the way you work.</strong><div><span>Users</span><span>Devices</span><span>Renewals</span></div></div><div><span className="eyebrow">TAILORED TO YOUR REQUIREMENTS</span><h3>{c.products.emptyTitle}</h3><p>{c.products.emptyText}</p><Link href={c.products.emptyHref} className="button button-red">{c.products.emptyLabel}<ArrowUpRight size={18} /></Link></div></div>}
-    </div></section>
-    <section className="site-width software-checklist"><SectionHeading eyebrow={c.checklist.eyebrow} title={c.checklist.title} description={c.checklist.description} /><div>{c.checklist.items.map((item, index) => <div key={item.title}><span className="software-checklist-icon">{index === 0 ? <Layers size={24} strokeWidth={1.4} /> : index === 1 ? <KeyRound size={24} strokeWidth={1.4} /> : <Check size={24} strokeWidth={1.4} />}</span><h3>{item.title}</h3><p>{item.text}</p></div>)}</div></section>
-    <MarketingFAQs data={c.faqs} /><MarketingCTA data={c.cta} />
+
+    {/* 01 / Introduction */}
+    <section className="site-width software-intro" id="software-solutions">
+      <SectionHeading {...c.intro} />
+      <nav className="sw-overview-grid" aria-label="Software categories">
+        {SOFTWARE_CATEGORIES.map(cat => (
+          <a key={cat.id} href={`#sw-${cat.id}`} className="sw-overview-chip">
+            <SoftwareIcon id={cat.id} />
+            <span>{cat.fullLabel}</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    {/* Per-category sections */}
+    {SOFTWARE_CATEGORIES.map((cat, index) => {
+      const clients = clientsByCategory.get(cat.id) ?? [];
+      return (
+        <section key={cat.id} id={`sw-${cat.id}`} style={{scrollMarginTop:"110px"}}><Reveal className={`sw-category-section ${index % 2 === 0 ? "sw-cat-light" : "sw-cat-dark"}`}>
+          <div className="site-width sw-cat-inner">
+            <div className="sw-cat-header">
+              <div>
+                <p className="eyebrow"><SoftwareIcon id={cat.id} />{`${String(index + 2).padStart(2, "0")} / ${cat.label.toUpperCase()}`}</p>
+                <h2>{cat.fullLabel}</h2>
+                <p className="sw-cat-description">{cat.description}</p>
+              </div>
+            </div>
+            {clients.length > 0 ? (
+              <div className="sw-client-grid">
+                {clients.map(client => (
+                  <div key={client.wpId} className="sw-client-card">
+                    <div className="sw-client-logo-wrap"><ClientLogo client={client} /></div>
+                    <span className="sw-client-title">{client.title}</span>
+                    {client.website && (
+                      <a href={client.website} target="_blank" rel="noreferrer" className="sw-client-link" aria-label={`Visit ${client.title}`}>
+                        <ExternalLink size={12} />
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="sw-cat-empty">
+                <SoftwareIcon id={cat.id} />
+                <p>We source and support leading {cat.fullLabel.toLowerCase()} solutions. <Link href="/contact/">Talk to our team</Link> about your requirements.</p>
+              </div>
+            )}
+          </div>
+        </Reveal></section>
+      );
+    })}
+
+    <MarketingFAQs data={c.faqs} />
+    <MarketingCTA data={c.cta} />
   </MarketingLayout>;
 }

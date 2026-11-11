@@ -3,6 +3,41 @@ import { test, expect } from "@playwright/test";
 const pages = ["/", "/about/", "/our-services/", "/software-licenses/", "/blog/", "/contact/"];
 const article = "/2026/09/28/11-branch-network-refresh-for-a-regional-sacco/";
 
+test("dark theme keeps branding readable and sections follow the displayed order", async ({ page }) => {
+  for (const path of ["/", "/about/"]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    const numbers = await page.locator("main .eyebrow, main .section-index > span").evaluateAll(elements =>
+      elements.map(element => element.textContent?.match(/^(\d+)\s*\//)?.[1]).filter(Boolean).map(Number),
+    );
+    expect(numbers).toEqual(numbers.map((_, index) => index + 1));
+    expect(await page.locator(".site-header .brand-logo").evaluate(element => getComputedStyle(element).backgroundColor)).toBe("rgb(255, 255, 255)");
+  }
+  await page.goto("/");
+  const sections = await page.locator("main section[id]").evaluateAll(elements => elements.map(element => element.id));
+  expect(sections.indexOf("approach")).toBeLessThan(sections.indexOf("platforms"));
+  expect(sections.indexOf("about")).toBeGreaterThan(sections.indexOf("platforms"));
+  await expect(page.locator(".hq-hero-actions a")).toHaveCount(1);
+  await page.setViewportSize({ width: 320, height: 800 });
+  await expect(page.locator('.utility-bar a[href="mailto:sales@mdt.co.ke"]')).toBeVisible();
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await expect(page.getByRole("button", { name: "Close navigation" })).toBeVisible();
+  await page.getByRole("button", { name: "Close navigation" }).click();
+  await expect(page.locator(".mobile-nav-dialog")).not.toBeVisible();
+});
+
+test("software category navigation uses icons and has no category quote actions", async ({ page }) => {
+  await page.goto("/software-licenses/");
+  const navigation = page.getByRole("navigation", { name: "Software categories" });
+  await expect(navigation.locator("a")).toHaveCount(11);
+  await expect(navigation.locator("a svg")).toHaveCount(11);
+  await expect(page.locator(".sw-cat-header .button")).toHaveCount(0);
+  await expect(page.locator('main a[href*="/quote/checkout/"]')).toHaveCount(0);
+  await navigation.getByRole("link", { name: "Data Analytics Software" }).click();
+  await expect(page).toHaveURL(/#sw-datal$/);
+  await expect(page.locator("#sw-datal h2")).toBeInViewport();
+});
+
 test("marketing pages have canonical metadata, semantic content and price-free structured data", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));

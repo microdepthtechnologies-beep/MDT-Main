@@ -525,3 +525,35 @@
 @media (prefers-reduced-motion: reduce) {
   .marketing-main *, .marketing-main *::before, .marketing-main *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }
+
+/* ── Software catalogue (11-category layout) ───────────────── */
+.sw-overview-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+.sw-overview-chip { display: inline-flex; align-items: center; gap: 9px; padding: 10px 18px; border: 1px solid #ddd; border-radius: 30px; font-size: 13px; transition: border-color .2s, background .2s; }
+.sw-overview-chip:hover { border-color: #df1b23; background: #fff5f5; color: #df1b23; }
+.sw-chip-icon { font-size: 16px; line-height: 1; }
+.sw-category-section { padding-block: 65px; }
+.sw-cat-light { background: #fff; }
+.sw-cat-dark { background: #f7f6f3; }
+.sw-cat-inner { max-width: 1200px; }
+.sw-cat-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 40px; flex-wrap: wrap; }
+.sw-cat-header h2 { font-size: clamp(26px, 2.8vw, 38px); line-height: 1.2; margin: 14px 0 10px; letter-spacing: -.04em; }
+.sw-cat-description { font-size: 15px; color: #707070; line-height: 1.75; max-width: 480px; }
+.sw-client-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+.sw-client-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 18px 16px; background: #fff; border: 1px solid #e8e6e0; border-radius: 10px; text-align: center; transition: border-color .2s, box-shadow .2s; position: relative; }
+.sw-cat-dark .sw-client-card { background: #fff; }
+.sw-client-card:hover { border-color: #c5c3bd; box-shadow: 0 6px 24px rgba(0,0,0,.07); }
+.sw-client-logo-wrap { height: 44px; display: flex; align-items: center; justify-content: center; }
+.sw-client-logo { object-fit: contain; max-height: 44px; filter: grayscale(.3); }
+.sw-client-title { font-size: 12px; font-weight: 500; color: #444; line-height: 1.4; }
+.sw-client-name { font-size: 13px; font-weight: 600; color: #333; }
+.sw-client-link { position: absolute; top: 8px; right: 8px; color: #bbb; display: grid; place-items: center; }
+.sw-client-link:hover { color: #df1b23; }
+.sw-cat-empty { display: flex; align-items: center; gap: 20px; padding: 32px; background: #fff; border: 1px dashed #ddd; border-radius: 10px; }
+.sw-cat-empty-icon { font-size: 32px; }
+.sw-cat-empty p { font-size: 15px; color: #707070; line-height: 1.7; }
+.sw-cat-empty a { color: #df1b23; }
+@media (max-width: 800px) {
+  .sw-cat-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .sw-client-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+  .sw-category-section { padding-block: 45px; }
+}

@@ -5,13 +5,13 @@ import { useEffect, useRef, type ReactNode } from "react";
 export function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!ref.current || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!ref.current || !("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const observer = new IntersectionObserver(entries => {
       for (const entry of entries) if (entry.isIntersecting) {
         entry.target.classList.add("reveal-entered");
         observer.unobserve(entry.target);
       }
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08 });
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);

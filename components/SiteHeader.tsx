@@ -2,13 +2,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
-import { ArrowUpRight, Menu, Phone, Search, User, X } from "lucide-react";
+import { ArrowUpRight, Mail, Menu, Phone, Search, User, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { contact } from "@/data/company";
 import { QuoteCartButton } from "./QuoteCart";
 
 const links = [
-  ["Home", "/"], ["About us", "/about/"], ["Products", "/shop/"],
+  ["Home", "/"], ["About us", "/about/"], ["Hardware", "/shop/"],
   ["Software & Licenses", "/software-licenses/"], ["Our services", "/our-services/"], ["Blog", "/blog/"],
 ];
 export function SiteHeader() {
@@ -22,7 +22,11 @@ export function SiteHeader() {
       <a className="skip-link" href="#main-content">Skip to content</a>
       <div className="utility-bar"><div className="site-width">
         <span>MICRO DEPTH TECHNOLOGIES <span className="utility-divider">/</span> Nairobi, Kenya</span>
-        <a href={`tel:${contact.phoneIntl}`}><Phone size={12} /> Let’s talk technology <span>{contact.phoneDisplay}</span></a>
+        <div className="utility-bar-contacts">
+          <a href={`mailto:${contact.email}`}><Mail size={11} />{contact.email}</a>
+          <span className="utility-divider">·</span>
+          <a href={`tel:${contact.phoneIntl}`}><Phone size={11} />{contact.phoneDisplay}</a>
+        </div>
       </div></div>
       <header className="site-header">
         <div className="site-width header-inner">

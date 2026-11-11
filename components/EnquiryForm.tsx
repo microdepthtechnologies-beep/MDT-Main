@@ -41,7 +41,7 @@ export function EnquiryForm({ initialInterest = "" }: { initialInterest?: string
   'mt-2 w-full rounded-xl border bg-white px-4 py-3 text-ink placeholder:text-ink/35 transition-colors duration-150 focus:border-ink focus:outline-none';
 
   return (
-    <div className="relative rounded-[24px] bg-white p-7 text-ink lg:p-9">
+    <div className="enquiry-panel relative rounded-[24px] p-7 text-ink lg:p-9">
       <AnimatePresence mode="wait" initial={false}>
         {status === 'success' ?
         <motion.div

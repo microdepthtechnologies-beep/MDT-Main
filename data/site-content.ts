@@ -7,21 +7,27 @@ import { processSteps } from "./company";
 export const siteContent = {
   home: {
     seo: { title: "ICT Products, Solutions & IT Support in Kenya | Micro Depth Technologies", description: "Equip your business with Micro Depth Technologies. Explore ICT hardware, software licences, networking, security and IT support from our Nairobi team." },
-    hero: { eyebrow: "NAIROBI ROOTS. FORWARD THINKING.", title: "Technology.\nPeople.\nPossibilities.", description: "The right technology can change everything. We bring the expertise, equipment and human support to make it happen.", image: images.hero, imageAlt: descriptions.hero, primaryLabel: "Explore our services", primaryHref: "/our-services/", secondaryLabel: "Discover our products", secondaryHref: "/shop/", caption: "THE DETAILS MAKE THE DIFFERENCE.", noteTitle: "From idea to everyday.", noteText: "Consulting · Supply · Support" },
+    hero: { eyebrow: "NAIROBI ROOTS. FORWARD THINKING.", title: "Technology that\nworks for you.", description: "Hardware, software and IT expertise for your business. From choosing the right tools to keeping them working, MDT brings it all together.", image: images.hero, imageAlt: descriptions.hero, primaryLabel: "Let’s talk technology", primaryHref: "/contact/", secondaryLabel: "Browse hardware", secondaryHref: "/shop/", caption: "MICRO DEPTH TECHNOLOGIES", noteTitle: "From idea to everyday.", noteText: "Consulting · Supply · Support" },
     brands: { title: "GOOD COMPANY.", subtitle: "Great technology.", items: ["HP", "Lenovo", "Cisco", "Dell", "Microsoft", "Logitech"] },
-    about: { eyebrow: "01 / THE BIGGER PICTURE", title: "Your ambition.\nOur attention\nto every detail.", lead: "A capable team needs capable technology. And a partner who understands both.", description: "At Micro Depth Technologies, we connect the dots between your business and the technology that moves it forward. From equipping a single desk to building the infrastructure behind an entire organisation, we help you make the right decisions—and make them work.", pillars: ["Consult.", "Supply.", "Support."], linkLabel: "Get to know MDT", linkHref: "/about/" },
+    about: { eyebrow: "04 / THE BIGGER PICTURE", title: "Your ambition.\nOur attention.", lead: "One partner for the technology your business depends on.", description: "Based in Westlands, Nairobi, we help organisations equip their teams, connect their workplaces and support everyday operations. Practical advice. Thoughtful implementation. People you can call.", pillars: ["Consult.", "Supply.", "Support."], linkLabel: "Get to know MDT", linkHref: "/about/" },
     services: { eyebrow: "02 / BUILT AROUND YOU", title: "Good technology.\nEven better together.", description: "Products are only part of the story. Put the right expertise behind them.", items: solutions },
-    collections: { eyebrow: "03 / THE MDT COLLECTION", title: "Tools for what’s next.", description: "For the work you do. And the work you’re growing into.", items: [
-      { eyebrow: "COMPUTING & WORKSPACES", title: "Make your\neveryday exceptional.", image: images.workspace, imageAlt: descriptions.workspace, href: "/product-category/pcs-desktops/", label: "Explore computing" },
-      { eyebrow: "AUDIO, VISUAL & COLLABORATION", title: "Bring every\nidea closer.", image: images.collaboration, imageAlt: descriptions.collaboration, href: "/product-category/audio-visual-solutions/", label: "Explore collaboration" },
+    collections: { eyebrow: "02 / WHAT WE DO", title: "Everything you need.\nWorking together.", description: "Equip your team. Connect your systems. Keep your business moving.", items: [
+      { eyebrow: "HARDWARE", title: "Equip your\neveryday.", image: images.workspace, imageAlt: descriptions.workspace, href: "/shop/", label: "Explore hardware" },
+      { eyebrow: "SOFTWARE & LICENSES", title: "Tools that\nfit your business.", image: images.software, imageAlt: descriptions.software, href: "/software-licenses/", label: "Explore software" },
+      { eyebrow: "ICT SERVICES", title: "Expertise you\ncan depend on.", image: images.network, imageAlt: descriptions.network, href: "/our-services/", label: "Explore services" },
     ] },
-    platforms: { eyebrow: "04 / THE MDT FAMILY", title: "One MDT.\nMore ways forward.", description: "Shop, solve, repair. The right team is always within reach.", items: [
+    platforms: { eyebrow: "03 / CONNECTED PLATFORMS", title: "More ways to\nwork with MDT.", description: "Dedicated spaces to shop for technology or arrange a repair.", items: [
       { title: "Everyday technology.\nA few clicks away.", description: "Explore hardware, accessories and software through our dedicated retail platform.", label: "Visit MDT Retail", href: "https://mdtretail.co.ke/", domain: "mdtretail.co.ke" },
       { title: "Give your technology\na second chapter.", description: "Find specialist diagnostics, repairs, upgrades and maintenance through MDT Repairs.", label: "Visit MDT Repairs", href: "https://www.mdtrepairs.co.ke/", domain: "mdtrepairs.co.ke" },
     ] },
-    approach: { eyebrow: "05 / HOW WE MAKE IT HAPPEN", title: "A clear path.\nFrom “what if” to “it works”.", steps: processSteps },
+    approach: { eyebrow: "01 / HOW WE MAKE IT HAPPEN", title: "From your first idea\nto everyday support.", steps: [
+      { title: "Discover", description: "We listen to your needs and understand your current setup." },
+      { title: "Design", description: "We recommend the right equipment, software and scope." },
+      { title: "Deploy", description: "We supply, install and configure your solution." },
+      { title: "Support", description: "We stay available for maintenance, renewals and repairs." },
+    ] },
     journal: { eyebrow: "06 / THE MDT JOURNAL", title: "A little insight.\nA better next move.", description: "Ideas, industry developments and projects from the world of business technology." },
-    contact: { eyebrow: "07 / YOUR NEXT CHAPTER", title: "Let’s make\ngood things\nhappen.", description: "Tell us what you’re working towards. We’ll help you get there." },
+    contact: { eyebrow: "06 / LET’S TALK", title: "What’s next\nfor your business?", description: "A new project, a better setup or a problem to solve. Start here." },
   },
   about: {
     seo: { title: "About Micro Depth Technologies | Your ICT Partner in Kenya", description: "Meet Micro Depth Technologies, a Nairobi ICT company connecting businesses with the right hardware, software, infrastructure and ongoing technical support." },

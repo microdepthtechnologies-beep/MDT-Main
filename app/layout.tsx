@@ -6,6 +6,7 @@ import "./palette.css";
 import "./catalogue-controls.css";
 import "./account.css";
 import "./marketing.css";
+import "./dark-theme.css";
 import { Providers } from "@/components/Providers";
 
 const sans = Jost({ variable: "--font-body", subsets: ["latin"], display: "swap" });
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable} h-full antialiased`}>
+    <html lang="en" data-theme="dark" className={`${sans.variable} ${display.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
         <Providers><div id="main-content" className="flex-1 flex flex-col">{children}</div></Providers>
       </body>
