@@ -1,0 +1,7 @@
+2026-09-28T08:21:02+00:00 INFO Email "ywraq_email" for order #13066 sent CONTEXT: {"email_type":"ywraq_email","status":"sent","recipient":"dismas","order":13066}
+2026-09-28T08:34:14+00:00 INFO Email "customer_new_account" for user #74325 sent CONTEXT: {"email_type":"customer_new_account","status":"sent","recipient":"derrickgtu03","user":74325}
+2026-09-28T13:00:39+00:00 INFO Email "customer_new_account" for user #74326 sent CONTEXT: {"email_type":"customer_new_account","status":"sent","recipient":"derrickgatu03","user":74326}
+2026-09-28T13:00:40+00:00 INFO Email "ywraq_email" for order #13096 sent CONTEXT: {"email_type":"ywraq_email","status":"sent","recipient":"dismas","order":13096}
+2026-09-28T13:04:31+00:00 INFO Email "customer_new_account" for user #74327 sent CONTEXT: {"email_type":"customer_new_account","status":"sent","recipient":"derrickmaina590","user":74327}
+2026-09-28T13:04:32+00:00 INFO Email "ywraq_email" for order #13097 sent CONTEXT: {"email_type":"ywraq_email","status":"sent","recipient":"dismas","order":13097}
+2026-09-28T14:21:03+00:00 INFO Email "customer_new_account" for user #74328 sent CONTEXT: {"email_type":"customer_new_account","status":"sent","recipient":"derrickmaina590","user":74328}
