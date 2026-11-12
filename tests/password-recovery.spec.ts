@@ -153,4 +153,6 @@ test("recovery pages are responsive and support request, validation, failure and
   // Real endpoints reject malformed input before touching MongoDB or SMTP.
   expect((await request.post("/api/auth/forgot-password/", { data: { email: { $ne: null } } })).status()).toBe(400);
   expect((await request.post("/api/auth/reset-password/", { data: { token: "invalid", password: "New password" } })).status()).toBe(400);
+  expect((await request.post("/api/auth/register/", { data: { name: { $ne: null }, email: "bad", password: "password" } })).status()).toBe(400);
+  expect((await request.post("/api/auth/register/", { data: { name: "Test User", email: "test@example.test", password: "é".repeat(37) } })).status()).toBe(400);
 });

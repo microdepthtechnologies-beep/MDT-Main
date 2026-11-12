@@ -54,7 +54,8 @@ export function validateQuotation(input: unknown, items: RequestItem[], sending 
   });
   if (q.currency !== "KES" || !integer(q.deliveryFee, 100_000_000) || typeof q.taxRate !== "number" || !Number.isFinite(q.taxRate) || q.taxRate < 0 || q.taxRate > 100) throw new Error("Check currency, delivery charge and tax rate.");
   const validUntil = text(q.validUntil, 10);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(validUntil) || new Date(validUntil).toISOString().slice(0, 10) !== validUntil) throw new Error("Enter a valid quotation expiry date.");
+  const expiry = /^\d{4}-\d{2}-\d{2}$/.test(validUntil) ? new Date(`${validUntil}T00:00:00.000Z`) : null;
+  if (!expiry || Number.isNaN(expiry.getTime()) || expiry.toISOString().slice(0, 10) !== validUntil) throw new Error("Enter a valid quotation expiry date.");
   if (sending && offerExpired({ validUntil })) throw new Error("Choose an expiry date that has not passed.");
   const quotation: Quotation = { lines, currency: "KES", deliveryFee: q.deliveryFee as number, taxRate: q.taxRate, validUntil, leadTime: text(q.leadTime, 500), terms: text(q.terms, 2000), note: text(q.note, 2000) };
   if (!Number.isSafeInteger(quotationTotals(quotation).total)) throw new Error("The quotation total is too large.");
