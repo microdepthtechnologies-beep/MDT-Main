@@ -54,9 +54,6 @@
 :root[data-theme="dark"] .header-search input { background: transparent; }
 :root[data-theme="dark"] .mobile-account-links { border-color: var(--border); }
 :root[data-theme="dark"] .utility-bar-contacts .utility-divider { margin-inline: 0; }
-:root[data-theme="dark"] .footer-intro { padding-block: 44px; }
-:root[data-theme="dark"] .footer-intro h2 { font-size: clamp(28px, 3vw, 42px); }
-
 /* Public pages: quieter surfaces, clear hierarchy, one red accent. */
 :root[data-theme="dark"] .marketing-main { --marketing-line: var(--border); color: var(--text-primary); }
 :root[data-theme="dark"] :is(

@@ -2,56 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Check, ChevronDown, ChevronRight, LoaderCircle, Search, SlidersHorizontal, X } from "lucide-react";
-import type { Category } from "@/lib/catalogue";
+import { ArrowRight, ArrowUpRight, ChevronDown, LoaderCircle, Search, SlidersHorizontal, X } from "lucide-react";
 import { clearedRefinements, refinementCount } from "@/lib/catalogue-filters";
 import { BrowseLink, revealResults, useBrowse } from "./CatalogueBrowser";
-
-function ancestors(category: Category, all: Category[]) {
-  const chain: Category[] = [];
-  const seen = new Set<number>();
-  let current: Category | undefined = category;
-  while (current && !seen.has(current.wpTermId)) {
-    seen.add(current.wpTermId);
-    chain.unshift(current);
-    current = all.find(c => c.wpTermId === current?.parentWpTermId);
-  }
-  return chain;
-}
-
-function CategoryNavigator() {
-  const { categories, filters, facets, locked } = useBrowse();
-  const [query, setQuery] = useState("");
-  const id = useId();
-  const scope = categories.find(c => c.slug === locked);
-  const selected = categories.find(c => c.slug === filters.category) || scope;
-  const chain = selected ? ancestors(selected, categories) : [];
-  const candidates = scope ? categories.filter(c => ancestors(c, categories).some(p => p.slug === locked)) : categories;
-  const search = query.trim().toLocaleLowerCase();
-  const matching = search
-    ? candidates.filter(c => ancestors(c, categories).map(p => p.name).join(" ").toLocaleLowerCase().includes(search))
-    : candidates.filter(c => c.parentWpTermId === (selected?.wpTermId || 0));
-  const results = matching.filter(c => (facets.categories[c.slug] || 0) > 0);
-  const shown = results.slice(0, 60);
-  return <div className="category-navigator">
-    <div className="facet-search"><Search size={15} /><label className="sr-only" htmlFor={id}>Find a category</label><input id={id} value={query} onChange={e => setQuery(e.target.value)} placeholder="Find a category…" autoComplete="off" />{query && <button type="button" aria-label="Clear category search" onClick={() => setQuery("")}><X size={14} /></button>}</div>
-    {selected && <nav className="filter-category-trail" aria-label="Category filter path">
-      <BrowseLink to={scope ? "/shop/" : undefined} changes={{ category: "" }} onClick={() => setQuery("")}>All products</BrowseLink>
-      {chain.filter(c => !scope || ancestors(c, categories).some(p => p.slug === locked)).map(c =>
-        <span key={c.slug}><ChevronRight size={11} /><BrowseLink changes={{ category: c.slug === locked ? "" : c.slug }} aria-current={c.slug === selected.slug ? "true" : undefined} onClick={() => setQuery("")}>{c.name}</BrowseLink></span>)}
-    </nav>}
-    {!search && <div className="category-current"><Check size={14} /><span>{selected ? `All ${selected.name}` : "All products"}</span><span>{(selected ? facets.categories[selected.slug] || 0 : facets.categoryTotal).toLocaleString()}</span></div>}
-    <div className="facet-option-list category-option-list">
-      {shown.map(c => <BrowseLink className="category-choice" key={c.slug} changes={{ category: c.slug === locked ? "" : c.slug }} onClick={() => setQuery("")}>
-        <span><strong>{c.name}</strong>{search && <small>{ancestors(c, categories).slice(0, -1).map(p => p.name).join(" / ") || "Main category"}</small>}</span>
-        <span className="facet-count">{(facets.categories[c.slug] || 0).toLocaleString()}</span><ChevronRight size={13} />
-      </BrowseLink>)}
-    </div>
-    {!shown.length && <p className="facet-hint">{search ? "No matching categories. Try a shorter name or remove a filter." : matching.length ? "No subcategories match these filters." : "You’re viewing the most specific category."}</p>}
-    {results.length > 60 && <p className="facet-hint">Type a more specific name to narrow {results.length} categories.</p>}
-    {selected && <BrowseLink className="category-back" to={selected.slug === locked ? "/shop/" : undefined} changes={{ category: selected.slug === locked || chain.at(-2)?.slug === locked ? "" : chain.at(-2)?.slug || "" }} onClick={() => setQuery("")}><ArrowLeft size={13} />{selected.slug === locked ? "Browse all categories" : "Back one level"}</BrowseLink>}
-  </div>;
-}
 
 function BrandChoices() {
   const { filters, facets, update } = useBrowse();
@@ -111,7 +64,6 @@ function PriceRange() {
 function FilterSections() {
   const { filters, facets, update } = useBrowse();
   return <div className="filter-sections">
-    <details className="facet-group" open><summary><span>Category</span><ChevronDown size={15} /></summary><CategoryNavigator /></details>
     <details className="facet-group" open><summary><span>Brands {filters.brand.length > 0 && <b>{filters.brand.length}</b>}</span><ChevronDown size={15} /></summary><BrandChoices /></details>
     <details className="facet-group" open={!!(filters.min || filters.max)}><summary><span>{facets.price.priced || filters.min || filters.max ? <>Price range <small>KES</small></> : <>Pricing <small>On request</small></>}</span><ChevronDown size={15} /></summary><PriceRange key={`${filters.min}:${filters.max}`} /></details>
     <div className="stock-refinement"><label className="stock-switch"><span><strong>In stock only</strong><small>{facets.stock.available.toLocaleString()} available under these filters</small></span><input type="checkbox" role="switch" aria-label="In stock only" checked={filters.instock} onChange={e => update({ instock: e.target.checked })} /></label></div>

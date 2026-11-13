@@ -19,7 +19,7 @@ export function ProductCard({ p }: { p: Product }) {
     <article className="product-card">
       <div className={`product-card-visual product-tone-${p.wpId % 3}`}>
         <Link className="product-card-image" href={`/product/${p.slug}/`} tabIndex={-1} aria-hidden="true">
-          <MediaImage src={p.featuredImage?.url || ""} alt="" fill sizes="(max-width: 540px) 45vw, (max-width: 1000px) 29vw, 25vw" className="object-contain" />
+          <MediaImage src={p.featuredImage?.url || ""} alt="" fill sizes="(max-width: 700px) 45vw, (max-width: 950px) 22vw, (max-width: 1180px) 18vw, 20vw" className="object-contain" />
         </Link>
         {p.type === "variable" && <span className="product-badge">Choose your configuration</span>}
         <ProductQuickView product={{ wpId: p.wpId, name: p.name, slug: p.slug, sku: p.sku, featuredImage: p.featuredImage, attributes: p.attributes, stock: p.stock }} />

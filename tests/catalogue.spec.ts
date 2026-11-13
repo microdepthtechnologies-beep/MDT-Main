@@ -2,25 +2,67 @@ import { test, expect } from "@playwright/test";
 
 const product = "/product/hp-240-14-g9-notebook-pc/";
 
-test("shop landing puts product search and department browsing first", async ({ page }) => {
+test("shop landing puts the 11 departments and product grid first", async ({ page }) => {
+  const categoryLabels = [
+    "Audio-Visual", "Laptops & Desktops", "Networking", "Point of Sale",
+    "Power solutions", "Printers & Scanners", "Security solutions",
+    "Servers & Storage", "Smart devices", "Software & licenses", "Telephony",
+  ];
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/shop/");
-    await expect(page.getByRole("heading", { level: 1, name: /shop technology/i })).toBeVisible();
-    await expect(page.getByRole("navigation", { name: "Shop categories" })).toBeVisible();
-    await expect(page.getByRole("searchbox", { name: "Search products, brands, or models" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Shop all products" })).toBeVisible();
+    const categories = page.getByRole("navigation", { name: "Shop categories" });
+    await expect(categories).toBeVisible();
+    await expect(categories.getByRole("link")).toHaveCount(11);
+    for (const label of categoryLabels) {
+      await expect(categories.getByRole("link", { name: label, exact: true })).toBeVisible();
+    }
+    await expect(page.locator(".catalogue-assurances")).toHaveCount(0);
+    await expect(page.getByRole("heading", { level: 1, name: /shop technology/i })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "Browse products" })).toBeVisible();
+    await expect(page.getByRole("searchbox", { name: "Search the collection" })).toHaveCount(0);
+    const expectedColumns = width <= 700 ? 2 : 4;
+    await expect.poll(() => page.locator(".catalogue-section .product-grid:not(.product-list)").evaluate(el =>
+      getComputedStyle(el).gridTemplateColumns.split(" ").length
+    )).toBe(expectedColumns);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `shop at ${width}px`).toBe(true);
   }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const categoryNav = page.locator(".shop-category-nav");
+  const laptopToggle = categoryNav.getByRole("button", { name: "Browse Laptops & Desktops subcategories" });
+  await laptopToggle.click();
+  const laptopMenu = page.getByRole("group", { name: "Laptops & Desktops categories" });
+  await expect(laptopToggle).toHaveAttribute("aria-expanded", "true");
+  await expect(laptopMenu.getByRole("link", { name: "All Laptops & Desktops", exact: true })).toBeVisible();
+  expect(await laptopMenu.getByRole("link").count()).toBeGreaterThan(1);
+  await laptopToggle.click();
+  await expect(laptopMenu).toHaveCount(0);
+  await page.evaluate(() => window.scrollTo(0, 900));
+  await expect.poll(() => categoryNav.evaluate(el => {
+    const navTop = el.getBoundingClientRect().top;
+    const headerBottom = document.querySelector(".site-header")!.getBoundingClientRect().bottom;
+    return navTop >= headerBottom - 1;
+  })).toBe(true);
+
   await page.locator(".header-theme-toggle").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await expect(page.locator(".shop-stage")).toHaveCSS("background-color", "rgb(245, 245, 242)");
-  await expect(page.locator(".shop-stage h1")).toHaveCSS("color", "rgb(34, 35, 35)");
+  await expect(categoryNav).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(categoryNav.getByRole("link").first()).toHaveCSS("color", "rgb(34, 35, 35)");
+  await laptopToggle.click();
+  await expect(laptopMenu).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(laptopMenu.getByRole("link").first()).toHaveCSS("color", "rgb(34, 35, 35)");
+  await page.keyboard.press("Escape");
+  await expect(laptopToggle).toBeFocused();
   await page.locator(".header-theme-toggle").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await laptopToggle.click();
+  await expect(laptopMenu).toHaveCSS("background-color", "rgb(12, 12, 13)");
+  await expect(laptopMenu.getByRole("link").first()).toHaveCSS("color", "rgb(245, 244, 241)");
+  await page.keyboard.press("Escape");
 
-  await page.getByRole("searchbox", { name: "Search products, brands, or models" }).fill("ThinkPad");
-  await page.locator(".shop-search").getByRole("button", { name: "Search" }).click();
+  await page.getByRole("button", { name: "Search products" }).click();
+  await page.getByRole("searchbox", { name: "Search products" }).fill("ThinkPad");
+  await page.locator("#header-search").getByRole("button", { name: "Search" }).click();
   await expect(page).toHaveURL(/q=ThinkPad/);
 });
 
@@ -61,13 +103,17 @@ test("empty searches and special characters are safe; pagination preserves filte
 
 test("category links include the hierarchy and images load", async ({ page }) => {
   await page.goto("/shop/");
-  await page.getByRole("link", { name: "Computing", exact: true }).click();
+  await page.getByRole("link", { name: "Laptops & Desktops", exact: true }).click();
   await expect(page).toHaveURL(/\/product-category\/pcs-desktops\/$/);
   await expect(page.locator(".product-card").first()).toBeVisible();
-  const child = page.locator(".subcategory-links a").first();
+  const categories = page.getByRole("navigation", { name: "Shop categories" });
+  await categories.getByRole("button", { name: "Browse Laptops & Desktops subcategories" }).click();
+  const child = page.getByRole("group", { name: "Laptops & Desktops categories" }).getByRole("link").nth(1);
   await expect(child).toHaveAttribute("href", /\/product-category\/pcs-desktops\/.+\/$/);
   await child.click();
-  await expect(page.locator("h1")).toBeVisible();
+  await expect(page.locator(".catalogue-hero")).toHaveCount(0);
+  await expect(page.getByText("THE MDT PRODUCT COLLECTION", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.locator(".product-card-image").first().scrollIntoViewIfNeeded();
   await expect(page.locator(".product-card-image img").first()).toBeVisible();
   await expect.poll(() => page.locator(".product-card-image img").first().evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
@@ -212,22 +258,42 @@ test("multiple brands compose instantly and survive history, pagination and relo
   await expect(sidebar.getByRole("checkbox", { name: "Dell", exact: true })).toBeChecked();
 });
 
-test("category archives narrow to children and can broaden without losing other choices", async ({ page }) => {
+test("category archives use header menus and leave only refinements in the sidebar", async ({ page }) => {
   await page.goto("/product-category/pcs-desktops/?brand=HP&view=list");
-  await expect(page.locator(".subcategory-links a").first()).toHaveAttribute("href", /brand=HP.*view=list/);
+  const categories = page.getByRole("navigation", { name: "Shop categories" });
+  await expect(categories.getByRole("link")).toHaveCount(11);
   const sidebar = page.locator(".catalogue-sidebar");
-  const child = sidebar.locator(".category-choice").first();
+  await expect(sidebar.getByText("Category", { exact: true })).toHaveCount(0);
+  await expect(sidebar.locator(".facet-group")).toHaveCount(2);
+  await expect(sidebar.locator(".facet-group").first()).toContainText("Brands");
+  await categories.getByRole("button", { name: "Browse Laptops & Desktops subcategories" }).click();
+  const menu = page.getByRole("group", { name: "Laptops & Desktops categories" });
+  await expect(menu.getByRole("link", { name: "All Laptops & Desktops", exact: true })).toBeVisible();
+  const child = menu.getByRole("link").nth(1);
   const href = await child.getAttribute("href");
-  const childSlug = new URL(href!, "http://localhost").searchParams.get("category");
-  expect(childSlug).toBeTruthy();
+  const childPath = new URL(href!, "http://localhost").pathname;
   await child.click();
-  await expect(page).toHaveURL(url => url.pathname === "/product-category/pcs-desktops/" && url.searchParams.get("category") === childSlug);
+  await expect(page).toHaveURL(url => url.pathname === childPath && url.searchParams.get("brand") === "HP" && url.searchParams.get("view") === "list");
   await expect(page.locator(".product-list")).toBeVisible();
-  await expect(page).toHaveURL(/brand=HP/);
-  await sidebar.getByRole("navigation", { name: "Category filter path" }).getByRole("link", { name: "All products", exact: true }).click();
-  await expect(page).toHaveURL(url => url.pathname === "/shop/" && !url.searchParams.has("category"));
-  await expect(page).toHaveURL(/brand=HP/);
+  await page.getByRole("navigation", { name: "Shop categories" }).getByRole("link", { name: "Laptops & Desktops", exact: true }).click();
+  await expect(page).toHaveURL(url => url.pathname === "/product-category/pcs-desktops/" && url.searchParams.get("brand") === "HP" && url.searchParams.get("view") === "list");
   await expect(page.locator(".product-list")).toBeVisible();
+});
+
+test("category archives keep four product columns and smaller product imagery", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/product-category/pcs-desktops/");
+  const grid = page.locator(".catalogue-section .product-grid:not(.product-list)");
+  await expect(grid).toBeVisible();
+  await expect.poll(() => grid.evaluate(el => getComputedStyle(el).gridTemplateColumns.split(" ").length)).toBe(4);
+  const imagePadding = await grid.locator(".product-card-image").first().evaluate(container => {
+    const image = document.createElement("img");
+    container.appendChild(image);
+    const padding = getComputedStyle(image).paddingLeft;
+    image.remove();
+    return padding;
+  });
+  expect(imagePadding).toBe("34px");
 });
 
 test("live search keeps focus and scroll position; reset cancels a queued query", async ({ page }) => {
@@ -245,7 +311,7 @@ test("live search keeps focus and scroll position; reset cancels a queued query"
   await expect(page).toHaveURL(/\/shop\/$/);
   // Wait past the debounce interval to prove reset cannot resurrect the draft.
   await page.waitForTimeout(650);
-  await expect(search).toHaveValue("");
+  await expect(search).toHaveCount(0);
   await expect(page).toHaveURL(/\/shop\/$/);
 });
 

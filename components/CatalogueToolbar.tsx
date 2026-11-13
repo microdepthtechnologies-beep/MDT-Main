@@ -59,11 +59,11 @@ function ActiveFilters() {
   )}<BrowseLink className="clear-filters" changes={clearedRefinements}>Clear all</BrowseLink></div>;
 }
 
-export function CatalogueTools() {
+export function CatalogueTools({ hideSearch = false }: { hideSearch?: boolean }) {
   const { filters, total, pending, update } = useBrowse();
   const id = useId();
   return <div className="catalogue-browse-tools" id="catalogue-tools">
-    <CatalogueSearch />
+    {!hideSearch && <CatalogueSearch />}
     <div className="catalogue-toolbar">
       <p className="results-count" role="status" aria-live="polite" aria-atomic="true">{pending ? <><LoaderCircle className="filter-spinner" size={14} />Updating products…</> : total ? <>Showing <strong>{(filters.page - 1) * 24 + 1}–{Math.min(filters.page * 24, total)}</strong> of {total.toLocaleString()}</> : "No matching products"}</p>
       <MobileFilters />
