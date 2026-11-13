@@ -204,6 +204,7 @@ test.describe("sales quotation workflow", () => {
     expect(() => validateQuotation({ ...draft, lines: [{ ...draft.lines[0], unitPrice: -10 }, draft.lines[1]] }, items, true)).toThrow();
     expect(() => validateQuotation({ ...draft, lines: [{ ...draft.lines[0], quantity: 3 }, draft.lines[1]] }, items, true)).toThrow();
     expect(() => validateQuotation({ ...draft, lines: [{ ...draft.lines[0], unitPrice: 0 }, draft.lines[1]] }, items, true)).toThrow();
+    expect(() => validateQuotation({ ...draft, validUntil: "2026-99-99" }, items, true)).toThrow("Enter a valid quotation expiry date.");
     expect(quotationTotals(draft).total).toBe(29116000);
   });
 });

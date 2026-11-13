@@ -1,0 +1,8 @@
+2026-10-04T15:24:56+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}
+2026-10-04T15:24:56+00:00 NOTICE Email "customer_new_account" for user #74349 not sent: email type is disabled CONTEXT: {"email_type":"customer_new_account","status":"disabled","recipient":"derrick.maina","user":74349}
+2026-10-04T21:19:22+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}
+2026-10-04T21:19:22+00:00 NOTICE Email "customer_new_account" for user #74350 not sent: email type is disabled CONTEXT: {"email_type":"customer_new_account","status":"disabled","recipient":"derrick.gatu","user":74350}
+2026-10-04T21:24:57+00:00 INFO Email "ywraq_email" for order #13457 sent CONTEXT: {"email_type":"ywraq_email","status":"sent","recipient":"dismas","order":13457}
+2026-10-04T21:24:58+00:00 INFO Email "ywraq_email_customer" for order #13457 sent CONTEXT: {"email_type":"ywraq_email_customer","status":"sent","recipient":"derrick.gatu","order":13457}
+2026-10-04T21:30:02+00:00 INFO Email "customer_new_account" for user #74350 sent CONTEXT: {"email_type":"customer_new_account","status":"sent","recipient":"derrick.gatu","user":74350}
+2026-10-04T21:30:02+00:00 INFO Email "" sent CONTEXT: {"email_type":"","status":"sent","recipient":"guest"}
