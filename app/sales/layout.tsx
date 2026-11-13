@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { quoteActor, QuoteError } from "@/lib/quote-access";
 import { DashboardShell } from "@/components/DashboardShell";
 import { QuoteLiveUpdates } from "@/components/QuoteLiveUpdates";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import "../dashboard/dashboard.css";
 import "./sales.css";
 
@@ -14,7 +15,7 @@ export default async function SalesLayout({ children }: { children: React.ReactN
   try { actor = await quoteActor(true); }
   catch (error) {
     if (error instanceof QuoteError && error.status === 401) redirect("/auth/signin/?callbackUrl=/sales/");
-    if (error instanceof QuoteError && error.status === 403) return <main className="site-width sales-access"><p className="eyebrow">MDT / TEAM ACCESS</p><h1>This workspace is for your sales team.</h1><p>Your account needs sales or administrator access. Contact your site administrator to get set up.</p><Link href="/dashboard/" className="button button-red">Back to my account</Link></main>;
+    if (error instanceof QuoteError && error.status === 403) return <main className="site-width sales-access"><ThemeToggle /><p className="eyebrow">MDT / TEAM ACCESS</p><h1>This workspace is for your sales team.</h1><p>Your account needs sales or administrator access. Contact your site administrator to get set up.</p><Link href="/dashboard/" className="button button-red">Back to my account</Link></main>;
     throw error;
   }
   return <DashboardShell name={actor.name} email={actor.email} sales><QuoteLiveUpdates />{children}</DashboardShell>;

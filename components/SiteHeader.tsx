@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import { ArrowUpRight, Mail, Menu, Phone, Search, User, X } from "lucide-react";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 import { contact } from "@/data/company";
 import { QuoteCartButton } from "./QuoteCart";
 
@@ -38,6 +39,7 @@ export function SiteHeader() {
             <button className="icon-button" aria-label={searchOpen ? "Close search" : "Search products"} aria-expanded={searchOpen} aria-controls="header-search" onClick={() => setSearchOpen(!searchOpen)}>{searchOpen ? <X size={20} /> : <Search size={20} />}</button>
             <QuoteCartButton />
             <Link className="icon-button account-button" href="/dashboard" aria-label="My account"><User size={20} /></Link>
+            <ThemeToggle className="header-theme-toggle" />
             <Link className="button button-dark header-contact" href="/quote/checkout/">Request a quote <ArrowUpRight size={16} /></Link>
             <button className="icon-button mobile-menu-button" aria-label="Open navigation" onClick={() => drawer.current?.showModal()}><Menu size={24} /></button>
           </div>
@@ -51,6 +53,7 @@ export function SiteHeader() {
       <dialog ref={drawer} className="mobile-nav-dialog" aria-label="Site navigation" onClick={e => { if (e.target === e.currentTarget) drawer.current?.close(); }}>
         <div className="dialog-heading"><Logo /><button className="icon-button" aria-label="Close navigation" onClick={() => drawer.current?.close()}><X /></button></div>
         <nav aria-label="Mobile navigation">{links.map(([label, href]) => <Link key={href} href={href} aria-current={activeLink(href) ? "page" : undefined} onClick={() => drawer.current?.close()}>{label}<ArrowUpRight size={20} /></Link>)}</nav>
+        <div className="mobile-theme-control"><span>Appearance</span><ThemeToggle /></div>
         <div className="mobile-account-links"><Link href="/dashboard/" onClick={() => drawer.current?.close()}>My account</Link><Link href="/quote/checkout/" onClick={() => drawer.current?.close()}>Your quote cart</Link></div>
         <Link className="button button-red" href="/contact/" onClick={() => drawer.current?.close()}>Talk to an expert <ArrowUpRight size={18} /></Link>
         <a className="mobile-nav-phone" href={`tel:${contact.phoneIntl}`}><Phone size={17} /> {contact.phoneDisplay}</a>

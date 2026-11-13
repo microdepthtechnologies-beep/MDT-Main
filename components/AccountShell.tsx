@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Check, FileText, Headphones, Layers } from "lucide-react";
 import type { ReactNode } from "react";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 import { contact } from "@/data/company";
 
 export function AccountShell({ children, register = false, recovery }: { children: ReactNode; register?: boolean; recovery?: "request" | "reset" }) {
@@ -9,6 +10,7 @@ export function AccountShell({ children, register = false, recovery }: { childre
     <header className="account-header">
       <Link href="/" aria-label="Micro Depth Technologies home"><Logo /></Link>
       <Link href="/shop/" className="account-back"><ArrowLeft size={16} /> Back to catalogue</Link>
+      <ThemeToggle />
     </header>
     <main className="account-layout">
       <aside className="account-story" aria-label="Your MDT account">

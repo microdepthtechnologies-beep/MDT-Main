@@ -7,10 +7,13 @@ import "./catalogue-controls.css";
 import "./account.css";
 import "./marketing.css";
 import "./dark-theme.css";
+import "./light-theme.css";
 import { Providers } from "@/components/Providers";
 
 const sans = Jost({ variable: "--font-body", subsets: ["latin"], display: "swap" });
 const display = Sora({ variable: "--font-display", subsets: ["latin"], display: "swap" });
+const themeInitScript =
+  `(function(){try{var theme=localStorage.getItem("mdt-theme");if(theme==="light"||theme==="dark")document.documentElement.dataset.theme=theme}catch(e){}})()`;
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +27,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark" className={`${sans.variable} ${display.variable} h-full antialiased`}>
+    <html lang="en" data-theme="dark" suppressHydrationWarning className={`${sans.variable} ${display.variable} h-full antialiased`}>
+      <head><script dangerouslySetInnerHTML={{ __html: themeInitScript }} /></head>
       <body className="min-h-full flex flex-col font-sans">
         <Providers><div id="main-content" className="flex-1 flex flex-col">{children}</div></Providers>
       </body>

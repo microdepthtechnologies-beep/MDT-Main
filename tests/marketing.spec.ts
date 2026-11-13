@@ -26,6 +26,39 @@ test("dark theme keeps branding readable and sections follow the displayed order
   await expect(page.locator(".mobile-nav-dialog")).not.toBeVisible();
 });
 
+test("theme toggle changes the page theme and persists the preference", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  const accountButton = page.getByRole("link", { name: "My account" });
+  const desktopToggle = page.locator(".header-theme-toggle");
+  const quoteButton = page.getByRole("link", { name: "Request a quote" });
+  await expect(desktopToggle).toHaveCSS("border-width", "0px");
+  const headerPositions = await Promise.all([accountButton, desktopToggle, quoteButton].map(element =>
+    element.evaluate(node => node.getBoundingClientRect().x),
+  ));
+  expect(headerPositions[0]).toBeLessThan(headerPositions[1]);
+  expect(headerPositions[1]).toBeLessThan(headerPositions[2]);
+
+  await desktopToggle.click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.locator(".hq-hero")).toHaveCSS("background-color", "rgb(245, 245, 242)");
+
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open navigation" }).click();
+  await page.getByRole("button", { name: "Switch to light mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+
+  await page.goto("/auth/signin/");
+  await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
 test("software category navigation uses icons and has no category quote actions", async ({ page }) => {
   await page.goto("/software-licenses/");
   const navigation = page.getByRole("navigation", { name: "Software categories" });

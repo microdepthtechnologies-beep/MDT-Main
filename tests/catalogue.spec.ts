@@ -1,6 +1,29 @@
 import { test, expect } from "@playwright/test";
 
 const product = "/product/hp-240-14-g9-notebook-pc/";
+
+test("shop landing puts product search and department browsing first", async ({ page }) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/shop/");
+    await expect(page.getByRole("heading", { level: 1, name: /shop technology/i })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Shop categories" })).toBeVisible();
+    await expect(page.getByRole("searchbox", { name: "Search products, brands, or models" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Shop all products" })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `shop at ${width}px`).toBe(true);
+  }
+  await page.locator(".header-theme-toggle").click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.locator(".shop-stage")).toHaveCSS("background-color", "rgb(245, 245, 242)");
+  await expect(page.locator(".shop-stage h1")).toHaveCSS("color", "rgb(34, 35, 35)");
+  await page.locator(".header-theme-toggle").click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+  await page.getByRole("searchbox", { name: "Search products, brands, or models" }).fill("ThinkPad");
+  await page.locator(".shop-search").getByRole("button", { name: "Search" }).click();
+  await expect(page).toHaveURL(/q=ThinkPad/);
+});
+
 test("catalogue search, sorting and filter state work together", async ({ page }) => {
   await page.goto("/shop/?q=Epson&category=projectors");
   await expect(page.locator(".product-card").first()).toBeVisible();

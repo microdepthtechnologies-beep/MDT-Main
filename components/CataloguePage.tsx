@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, AudioLines, Headphones, Laptop, Network, Printer, Server, ShieldCheck, Zap } from "lucide-react";
+import { ArrowDown, ArrowUpRight, AudioLines, Headphones, Laptop, Network, Printer, Search, Server, ShieldCheck, Zap } from "lucide-react";
 import { categoryChain, categoryHref, getCatalogue, getProduct, type Category } from "@/lib/catalogue";
-import { catalogueUrl, refinementCount, type SearchValues } from "@/lib/catalogue-filters";
+import { catalogueUrl, type SearchValues } from "@/lib/catalogue-filters";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { ProductCard } from "./ProductCard";
@@ -9,9 +9,6 @@ import { MediaImage } from "./MediaImage";
 import { CatalogueBrowser, CatalogueResults } from "./CatalogueBrowser";
 import { CatalogueFiltersPanel } from "./CatalogueFilters";
 import { CatalogueEmpty, CataloguePagination, CatalogueTools } from "./CatalogueToolbar";
-import { Reveal } from "./Reveal";
-import { editorialMedia, editorialMediaAlt } from "@/data/editorial-media";
-import { Fragment } from "react";
 
 const departments = [
   { slug: "pcs-desktops", label: "Computing", icon: Laptop },
@@ -32,37 +29,49 @@ export async function CataloguePage({ search, category }: { search: SearchValues
   const controls = { base, filters, categories, facets, total, pages, locked: category?.slug };
   const categoryLink = (item: Category) => catalogueUrl(categoryHref(item, categories), filters, { category: "" });
   const children = category ? categories.filter(c => c.parentWpTermId === category.wpTermId && c.count > 0) : [];
-  const hasFilters = !!filters.q || refinementCount(filters) > 0;
   return <>
     <SiteHeader />
+    {!category && <nav className="shop-category-nav" aria-label="Shop categories">
+      <div className="site-width shop-category-nav-inner">
+        <span>Shop by</span>
+        <div>{departments.map(({ slug, label, icon: Icon }) => {
+          const item = categories.find(c => c.slug === slug);
+          return item ? <Link key={slug} href={categoryLink(item)}><Icon size={16} strokeWidth={1.7} />{label}</Link> : null;
+        })}</div>
+      </div>
+    </nav>}
     <main>
       <section className={`catalogue-hero shop-stage ${category ? "category-hero" : ""}`}>
         <div className="site-width">
           <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span>{category ? <><Link href={catalogueUrl("/shop/", filters, { category: "" })}>Products</Link>{categoryChain(category, categories).map(c => <span className="breadcrumb-part" key={c.slug}>/<Link href={categoryLink(c)} aria-current={c.slug === category.slug ? "page" : undefined}>{c.name}</Link></span>)}</> : <span aria-current="page">Products</span>}</nav>
           <div className="catalogue-hero-grid">
             <div className="catalogue-hero-copy">
-              <p className="eyebrow"><span className="red-dash" /> THE MDT PRODUCT COLLECTION</p>
-              <h1>{category ? category.name : <>Your next move.<br /><span>Better equipped.</span></>}</h1>
-              <p className="hero-description">{category ? category.description || `Explore ${category.name.toLowerCase()} for your business. Get the right specification, with advice and support from the MDT team.` : "Equip your people. Connect your business. Discover technology selected for the way you work — backed by people who understand it."}</p>
-              <div className="hero-links"><a className="button button-red" href="#catalogue">Explore {category ? "products" : "the collection"} <ArrowDown size={16} /></a><Link className="text-link" href="/#solutions">Explore our services <ArrowUpRight size={16} /></Link></div>
+              <p className="eyebrow"><span className="red-dash" /> {category ? "THE MDT PRODUCT COLLECTION" : "SHOP / BUSINESS TECHNOLOGY"}</p>
+              <h1>{category ? category.name : <>Shop technology<br /><span>for your business.</span></>}</h1>
+              <p className="hero-description">{category ? category.description || `Explore ${category.name.toLowerCase()} for your business. Get the right specification, with advice and support from the MDT team.` : "Find the right laptops, networking, printing and business essentials. Browse products, check availability and build your quote list."}</p>
+              <div className="hero-links">
+                {!category && <form className="shop-search" action="/shop/" role="search">
+                  <Search size={19} aria-hidden="true" />
+                  <label className="sr-only" htmlFor="shop-search">Search products, brands, or models</label>
+                  <input id="shop-search" name="q" type="search" defaultValue={filters.q} maxLength={160} placeholder="Search products, brands, or models" />
+                  <button className="button button-red" type="submit">Search</button>
+                </form>}
+                <a className="button button-red" href="#catalogue">{category ? "Shop this category" : "Shop all products"} <ArrowDown size={16} /></a>
+                {category && <Link className="text-link" href="/#contact">Need buying advice? <ArrowUpRight size={16} /></Link>}
+              </div>
             </div>
             {!category && spotlight?.featuredImage && <Link href={`/product/${spotlight.slug}/`} className="hero-product">
-              <span className="hero-product-kicker"><span className="status-dot" /> IN FOCUS / BUSINESS COMPUTING</span>
+              <span className="hero-product-kicker"><span className="status-dot" /> FEATURED PRODUCT / BUSINESS COMPUTING</span>
               <div className="hero-product-image"><MediaImage src={spotlight.featuredImage.url} alt={spotlight.name} fill preload sizes="(max-width: 700px) 85vw, 45vw" className="object-contain" /></div>
-              <div className="hero-product-label"><div><span>TAKE YOUR WORK FURTHER</span><strong>{spotlight.name}</strong></div><span className="hero-product-arrow"><ArrowUpRight size={24} /></span></div>
+              <div className="hero-product-label"><div><span>PRICE ON REQUEST · SHOP NOW</span><strong>{spotlight.name}</strong></div><span className="hero-product-arrow"><ArrowUpRight size={24} /></span></div>
             </Link>}
             {category && <div className="category-hero-note"><span className="eyebrow">FROM SPECIFICATION TO SUPPORT</span><p>The equipment is<br />just the beginning.</p><Link href="/#contact">Let’s discuss your project <ArrowUpRight size={18} /></Link></div>}
           </div>
         </div>
       </section>
       <div className="catalogue-assurances"><div className="site-width"><span><ShieldCheck /> Genuine technology</span><span><Headphones /> Expert product advice</span><span><Network /> Supply, setup & support</span><span className="assurance-location">Your technology partner in Nairobi <ArrowUpRight size={15} /></span></div></div>
-      {!category && <section className="site-width department-section" aria-label="Shop by category"><div className="section-caption"><h2>Find your starting point</h2><a href="#catalogue">All categories <ArrowDown size={14} /></a></div><div className="department-grid">{departments.map(({ slug, label, icon: Icon }) => { const c = categories.find(c => c.slug === slug); return c ? <Link key={slug} href={categoryLink(c)}><Icon size={27} strokeWidth={1.4} /><span>{label}</span><ArrowUpRight size={15} /></Link> : null; })}</div></section>}
-      {!category && <Reveal className="site-width collection-stories">
-        <Link href="/product-category/pcs-desktops/" className="collection-story work-story"><MediaImage src={editorialMedia.workspace} alt={editorialMediaAlt.workspace} fill sizes="(max-width:700px) 90vw, 55vw" className="object-cover" /><div><span className="eyebrow">01 / THE EVERYDAY, ELEVATED</span><h2>Make room<br />for better work.</h2><span>Explore computing <ArrowUpRight size={18} /></span></div></Link>
-        <Link href="/product-category/networking-infrastructure/" className="collection-story network-story"><MediaImage src={editorialMedia.network} alt={editorialMediaAlt.network} fill sizes="(max-width:700px) 90vw, 35vw" className="object-cover" /><div><span className="eyebrow">02 / BUILT TO CONNECT</span><h2>Big ambitions.<br />Solid foundations.</h2><span>Explore networking <ArrowUpRight size={18} /></span></div></Link>
-      </Reveal>}
-      <section className="site-width catalogue-section" id="catalogue">
-        <div className="catalogue-heading"><div><p className="eyebrow">{category ? "THE COLLECTION" : "SPECIFIED FOR YOUR BUSINESS"}</p><h2 id="catalogue-results-heading" tabIndex={-1}>{filters.q ? "Search results" : category ? `Explore ${category.name.toLowerCase()}` : "Explore our products"}<span className="heading-dot">.</span></h2></div><span className="catalogue-total">{total.toLocaleString()} products to explore</span></div>
+      <section className={`site-width catalogue-section${category ? "" : " storefront-catalogue"}`} id="catalogue">
+        <div className="catalogue-heading"><div><p className="eyebrow">{category ? "THE COLLECTION" : "BROWSE THE MDT STORE"}</p><h2 id="catalogue-results-heading" tabIndex={-1}>{filters.q ? "Search results" : category ? `Explore ${category.name.toLowerCase()}` : "Shop all products"}<span className="heading-dot">.</span></h2></div><span className="catalogue-total">{total.toLocaleString()} products to explore</span></div>
         {children.length > 0 && <div className="subcategory-links">{children.map(c => <Link key={c.slug} href={categoryLink(c)}>{c.name}<ArrowUpRight size={14} /></Link>)}</div>}
         <CatalogueBrowser {...controls}>
         <div className="catalogue-layout">
@@ -70,7 +79,7 @@ export async function CataloguePage({ search, category }: { search: SearchValues
           <div className="catalogue-results">
             <CatalogueTools />
             <CatalogueResults>
-              {products.length ? <div className={`product-grid ${filters.view === "list" ? "product-list" : ""}`}>{products.map((p, i) => <Fragment key={p.wpId}><ProductCard p={p} />{i === 5 && products.length > 8 && !hasFilters && !category && filters.page === 1 && filters.sort === "recommended" && <aside className="collection-interlude"><span className="interlude-icon" aria-hidden="true"><Network size={44} strokeWidth={1} /></span><div><span className="eyebrow">PRODUCTS + PEOPLE</span><h3>The right kit.<br />The right people behind it.</h3><p>Building a workspace? Let’s put the whole picture together.</p></div><Link href="/#contact" className="interlude-link">Plan it with MDT <ArrowUpRight size={20} /></Link></aside>}</Fragment>)}</div> : <CatalogueEmpty />}
+              {products.length ? <div className={`product-grid ${filters.view === "list" ? "product-list" : ""}`}>{products.map(p => <ProductCard p={p} key={p.wpId} />)}</div> : <CatalogueEmpty />}
               <CataloguePagination />
             </CatalogueResults>
           </div>
