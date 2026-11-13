@@ -58,30 +58,29 @@ const asStrings = (v: unknown): string[] =>
 const asNumbers = (v: unknown): number[] =>
   Array.isArray(v) ? v.map(Number).filter(Number.isFinite) : [];
 
-// wpIds of clients mapped to each software category term.
-// Derived from wpur_term_relationships.jsonl — kept as the source for migrated data.
+// Snapshot of migrated client relationships so the mapping is available in deployments,
+// which do not include the sibling migration extraction directory.
+const MIGRATED_CLIENT_IDS_BY_TERM: Record<number, number[]> = {
+  289: [2649, 2653, 2654],
+  291: [2659, 2667, 2668, 2669, 2670, 2671, 2672],
+  292: [2669, 2673, 2678, 2679],
+  293: [2702, 2725, 2726, 2727, 2728, 2729, 2730, 2731, 2732, 2733, 2734, 2735, 2736, 2737, 2738, 2739, 2740, 2741, 2742, 2743, 2744, 2745],
+  294: [2680, 2686, 2687, 2688, 2689],
+  295: [2690, 2696, 2697, 2698, 2699, 2701],
+  296: [2760, 2761],
+  297: [2762, 2764, 2769, 2770, 2771],
+  298: [2772, 2776],
+  299: [2777, 2782],
+  300: [2783],
+};
+
 let _clientsByCategory: Map<number, number[]> | null = null;
 
-async function getClientsByTerm(): Promise<Map<number, number[]>> {
+function getClientsByTerm(): Map<number, number[]> {
   if (_clientsByCategory) return _clientsByCategory;
-  const fs = await import("node:fs/promises");
-  const path = await import("node:path");
-  const allTermIds = SOFTWARE_CATEGORIES.flatMap(c => c.termIds);
-  const relPath = path.resolve(process.cwd(), "../migration/extracted/wpur_term_relationships.jsonl");
-  let raw: string;
-  try { raw = await fs.readFile(relPath, "utf8"); } catch { return new Map(); }
   const map = new Map<number, number[]>();
-  for (const line of raw.split("\n")) {
-    if (!line.trim()) continue;
-    try {
-      const { object_id, term_taxonomy_id } = JSON.parse(line);
-      const tid = Number(term_taxonomy_id);
-      if (allTermIds.includes(tid)) {
-        const existing = map.get(tid) ?? [];
-        existing.push(Number(object_id));
-        map.set(tid, existing);
-      }
-    } catch { /* skip malformed lines */ }
+  for (const [termId, clientIds] of Object.entries(MIGRATED_CLIENT_IDS_BY_TERM)) {
+    map.set(Number(termId), [...clientIds]);
   }
   _clientsByCategory = map;
   return map;
@@ -93,7 +92,7 @@ export interface SoftwarePageData {
 }
 
 export async function getSoftwarePageData(): Promise<SoftwarePageData> {
-  const termMap = await getClientsByTerm();
+  const termMap = getClientsByTerm();
   const db = await getDb();
   const docs = await db.collection("clients")
     .find({ status: "publish" })
