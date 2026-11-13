@@ -1,6 +1,6 @@
 import { SoftwarePage } from "@/components/SoftwarePage";
 import { getSiteContent } from "@/lib/site-content";
-import { getSoftwareClientsByCategory } from "@/lib/software-clients";
+import { getSoftwarePageData } from "@/lib/software-clients";
 import { pageMetadata } from "@/lib/site-seo";
 export const dynamic = "force-dynamic";
 export async function generateMetadata() {
@@ -8,9 +8,9 @@ export async function generateMetadata() {
   return pageMetadata(c.seo.title, c.seo.description, "/software-licenses/", c.hero.image);
 }
 export default async function Page() {
-  const [content, clientsByCategory] = await Promise.all([
+  const [content, { categories, clientsByCategory }] = await Promise.all([
     getSiteContent("software"),
-    getSoftwareClientsByCategory(),
+    getSoftwarePageData(),
   ]);
-  return <SoftwarePage content={content} clientsByCategory={clientsByCategory} />;
+  return <SoftwarePage content={content} categories={categories} clientsByCategory={clientsByCategory} />;
 }

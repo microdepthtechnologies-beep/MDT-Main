@@ -33,6 +33,13 @@ test("software category navigation uses icons and has no category quote actions"
   await expect(navigation.locator("a svg")).toHaveCount(11);
   await expect(page.locator(".sw-cat-header .button")).toHaveCount(0);
   await expect(page.locator('main a[href*="/quote/checkout/"]')).toHaveCount(0);
+  const clientCards = page.locator(".sw-client-card");
+  const cardCount = await clientCards.count();
+  if (cardCount > 0) {
+    await expect(clientCards.first()).toHaveAttribute("href", /^mailto:sales@mdt\.co\.ke\?subject=/);
+    const href = await clientCards.first().getAttribute("href");
+    expect(decodeURIComponent(href ?? "")).toContain("Quotation request:");
+  }
   await navigation.getByRole("link", { name: "Data Analytics Software" }).click();
   await expect(page).toHaveURL(/#sw-datal$/);
   await expect(page.locator("#sw-datal h2")).toBeInViewport();

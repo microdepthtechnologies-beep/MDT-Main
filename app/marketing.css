@@ -539,15 +539,17 @@
 .sw-cat-header h2 { font-size: clamp(26px, 2.8vw, 38px); line-height: 1.2; margin: 14px 0 10px; letter-spacing: -.04em; }
 .sw-cat-description { font-size: 15px; color: #707070; line-height: 1.75; max-width: 480px; }
 .sw-client-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
-.sw-client-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 18px 16px; background: #fff; border: 1px solid #e8e6e0; border-radius: 10px; text-align: center; transition: border-color .2s, box-shadow .2s; position: relative; }
+.sw-client-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 18px 16px; background: #fff; border: 1px solid #e8e6e0; border-radius: 10px; text-align: center; transition: border-color .2s, box-shadow .2s, transform .25s; position: relative; color: inherit; text-decoration: none; }
 .sw-cat-dark .sw-client-card { background: #fff; }
-.sw-client-card:hover { border-color: #c5c3bd; box-shadow: 0 6px 24px rgba(0,0,0,.07); }
+.sw-client-card:hover { border-color: #df1b23; box-shadow: 0 6px 24px rgba(0,0,0,.07); transform: translateY(-2px); }
+.sw-client-card:focus-visible { outline: 2px solid #df1b23; outline-offset: 2px; }
 .sw-client-logo-wrap { height: 44px; display: flex; align-items: center; justify-content: center; }
 .sw-client-logo { object-fit: contain; max-height: 44px; filter: grayscale(.3); }
 .sw-client-title { font-size: 12px; font-weight: 500; color: #444; line-height: 1.4; }
 .sw-client-name { font-size: 13px; font-weight: 600; color: #333; }
-.sw-client-link { position: absolute; top: 8px; right: 8px; color: #bbb; display: grid; place-items: center; }
-.sw-client-link:hover { color: #df1b23; }
+.sw-client-enquire { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #b5b3ae; transition: color .2s; }
+.sw-client-enquire svg { flex-shrink: 0; }
+.sw-client-card:hover .sw-client-enquire, .sw-client-card:focus-visible .sw-client-enquire { color: #df1b23; }
 .sw-cat-empty { display: flex; align-items: center; gap: 20px; padding: 32px; background: #fff; border: 1px dashed #ddd; border-radius: 10px; }
 .sw-cat-empty-icon { font-size: 32px; }
 .sw-cat-empty p { font-size: 15px; color: #707070; line-height: 1.7; }

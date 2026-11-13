@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { AppWindow, Building2, Users, ShieldCheck, PenTool, ChartNoAxesCombined, MessagesSquare, Cloud, Workflow, CreditCard, Phone, ExternalLink } from "lucide-react";
+import { AppWindow, Building2, Users, ShieldCheck, PenTool, ChartNoAxesCombined, MessagesSquare, Cloud, Workflow, CreditCard, Phone, Mail } from "lucide-react";
 import type { siteContent } from "@/data/site-content";
-import { SOFTWARE_CATEGORIES, type SoftwareClient } from "@/lib/software-clients";
+import { contact } from "@/data/company";
+import { type SoftwareCategory, type SoftwareClient } from "@/lib/software-clients";
 import { MarketingHero, MarketingFAQs, MarketingCTA, MarketingLayout, SectionHeading } from "./MarketingLayout";
 import { Reveal } from "./Reveal";
 
@@ -21,8 +22,25 @@ function ClientLogo({ client }: { client: SoftwareClient }) {
   return <Image src={client.imageUrl} alt={client.title} width={80} height={32} className="sw-client-logo" unoptimized />;
 }
 
-export function SoftwarePage({ content: c, clientsByCategory }: {
+function enquiryHref(client: SoftwareClient, cat: SoftwareCategory) {
+  const subject = `Quotation request: ${client.title}`;
+  const body = [
+    "Hello MDT team,",
+    "",
+    `I would like a quotation for ${client.title} (${cat.fullLabel}).`,
+    "",
+    "Number of licences/users:",
+    "Company:",
+    "Notes:",
+    "",
+    "Thank you.",
+  ].join("\n");
+  return `mailto:${contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+export function SoftwarePage({ content: c, categories, clientsByCategory }: {
   content: typeof siteContent.software;
+  categories: SoftwareCategory[];
   clientsByCategory: Map<string, SoftwareClient[]>;
 }) {
   return <MarketingLayout breadcrumbs={[{ name: "Software & Licenses", path: "/software-licenses/" }]}>
@@ -32,7 +50,7 @@ export function SoftwarePage({ content: c, clientsByCategory }: {
     <section className="site-width software-intro" id="software-solutions">
       <SectionHeading {...c.intro} />
       <nav className="sw-overview-grid" aria-label="Software categories">
-        {SOFTWARE_CATEGORIES.map(cat => (
+        {categories.map(cat => (
           <a key={cat.id} href={`#sw-${cat.id}`} className="sw-overview-chip">
             <SoftwareIcon id={cat.id} />
             <span>{cat.fullLabel}</span>
@@ -42,7 +60,7 @@ export function SoftwarePage({ content: c, clientsByCategory }: {
     </section>
 
     {/* Per-category sections */}
-    {SOFTWARE_CATEGORIES.map((cat, index) => {
+    {categories.map((cat, index) => {
       const clients = clientsByCategory.get(cat.id) ?? [];
       return (
         <section key={cat.id} id={`sw-${cat.id}`} style={{scrollMarginTop:"110px"}}><Reveal className={`sw-category-section ${index % 2 === 0 ? "sw-cat-light" : "sw-cat-dark"}`}>
@@ -57,15 +75,13 @@ export function SoftwarePage({ content: c, clientsByCategory }: {
             {clients.length > 0 ? (
               <div className="sw-client-grid">
                 {clients.map(client => (
-                  <div key={client.wpId} className="sw-client-card">
+                  <a key={client.wpId} href={enquiryHref(client, cat)} className="sw-client-card"
+                     aria-label={`Request a quotation for ${client.title} by email`}
+                     title={`Request a quotation for ${client.title}`}>
                     <div className="sw-client-logo-wrap"><ClientLogo client={client} /></div>
                     <span className="sw-client-title">{client.title}</span>
-                    {client.website && (
-                      <a href={client.website} target="_blank" rel="noreferrer" className="sw-client-link" aria-label={`Visit ${client.title}`}>
-                        <ExternalLink size={12} />
-                      </a>
-                    )}
-                  </div>
+                    <span className="sw-client-enquire"><Mail size={11} /> Enquire</span>
+                  </a>
                 ))}
               </div>
             ) : (
