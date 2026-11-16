@@ -74,7 +74,7 @@ export const servicePages: Record<string, ServiceContent> = {
   },
   "customer-electronics": {
     path: "/customer-electronics/", title: "Consumer electronics", description: "Everyday technology for connected people, productive spaces and better experiences.", image: images.workspace, imageAlt: descriptions.workspace,
-    paragraphs: ["Explore personal and workplace electronics through MDT’s product catalogue.", "From display and audio requirements to connected accessories, our team can help identify options for your intended use."],
+    paragraphs: ["Explore personal and workplace electronics through MDT’s hardware catalogue.", "From display and audio requirements to connected accessories, our team can help identify options for your intended use."],
     capabilities: [{ title: "Displays & visual technology", text: "Screen and display requirements for work and shared spaces." }, { title: "Audio equipment", text: "Speakers, headsets and audio tools for communication and everyday use." }, { title: "Connected accessories", text: "Useful accessories that complement your existing devices." }, { title: "Product guidance", text: "Compare compatibility, specifications and support requirements before requesting a quote." }], catalogueHref: "/shop/",
   },
 };

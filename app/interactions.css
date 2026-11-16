@@ -1,0 +1,95 @@
+/* A shared interaction language: a red underline, a soft tint and moving
+   arrows. Decorative effects never change a link's layout or hit area. */
+:root { --link-accent: var(--red); --link-tint: #df1b230c; }
+:root[data-theme="dark"] { --link-accent: var(--accent-text); --link-tint: #ff858a14; }
+
+/* Use ::before so the current page's red dot stays visible. */
+.site-header .desktop-nav a::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: calc(50% - 14px);
+  height: 2px;
+  border-radius: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+}
+:root[data-theme] .site-header .desktop-nav a:is(:hover, :focus-visible) { color: var(--link-accent); }
+.site-header .desktop-nav a:is(:hover, :focus-visible)::before { transform: scaleX(1); }
+
+/* An underline follows the content width, including wrapped contact links. */
+:root[data-theme] :is(
+  .footer-columns a:not(.footer-brand > a:first-child),
+  .footer-bottom a, .utility-bar-contacts a, .text-link, .mobile-account-links a
+) {
+  width: fit-content;
+  max-width: 100%;
+  background-image: linear-gradient(var(--link-accent), var(--link-accent));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 1px;
+  text-decoration: none;
+}
+:root[data-theme] :is(
+  .footer-columns a:not(.footer-brand > a:first-child),
+  .footer-bottom a, .utility-bar-contacts a, .text-link, .mobile-account-links a
+):is(:hover, :focus-visible) {
+  color: var(--link-accent);
+  background-size: 100% 1px;
+}
+:root[data-theme] .site-header :is(.icon-button, .quote-cart-button, .theme-toggle):is(:hover, :focus-visible) {
+  color: var(--link-accent);
+  background: var(--link-tint);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--link-accent) 22%, transparent);
+}
+:root[data-theme] .site-header .header-contact:is(:hover, :focus-visible) {
+  background: #bb151d;
+  color: #fff;
+  box-shadow: 0 5px 18px #df1b232b;
+}
+:root[data-theme] .mobile-nav-dialog nav a:is(:hover, :focus-visible, :active) {
+  color: var(--link-accent);
+  background: var(--link-tint);
+  box-shadow: inset 3px 0 0 var(--red);
+}
+.mobile-nav-dialog nav a { border-radius: 4px; }
+
+/* Give keyboard users the same emphasis, with an explicit focus outline. */
+:root[data-theme] :is(.site-header, .site-footer, .utility-bar, .mobile-nav-dialog) :is(a, button):focus-visible,
+:root[data-theme] .text-link:focus-visible {
+  outline: 2px solid var(--link-accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.desktop-nav a, .footer-columns a, .footer-bottom a, .utility-bar-contacts a,
+    .text-link, .mobile-account-links a, .mobile-nav-dialog nav a) {
+    transition: color .2s ease, background-size .28s ease, background-color .2s ease, box-shadow .2s ease;
+  }
+  .site-header .desktop-nav a::before { transition: transform .28s cubic-bezier(.22,.68,.2,1); }
+  .site-header :is(.icon-button, .quote-cart-button, .theme-toggle, .header-contact) {
+    transition: color .2s ease, background-color .2s ease, box-shadow .25s ease;
+  }
+  :is(.site-header, .site-footer, .mobile-nav-dialog, .text-link) a > svg,
+  .site-header button > svg { transition: transform .25s ease; }
+  :is(.site-footer a, .mobile-nav-dialog nav a, .text-link):focus-visible > .lucide-arrow-up-right,
+  .site-header .header-contact:focus-visible > svg { transform: translate(2px, -2px); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  :is(.site-footer a, .mobile-nav-dialog nav a, .text-link):hover > .lucide-arrow-up-right {
+    transform: translate(2px, -2px);
+  }
+  .site-header :is(.icon-button, .quote-cart-button, .theme-toggle):hover > svg { transform: translateY(-2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.site-header, .site-footer, .utility-bar, .mobile-nav-dialog) :is(a, button, svg),
+  .site-header .desktop-nav a::before, .text-link, .text-link > svg {
+    transition: none;
+  }
+  :is(.site-header, .site-footer, .mobile-nav-dialog) a:is(:hover, :focus-visible),
+  :is(.site-header, .site-footer, .mobile-nav-dialog) :is(a, button):is(:hover, :focus-visible) > svg,
+  .text-link:is(:hover, :focus-visible) > svg { transform: none; }
+}

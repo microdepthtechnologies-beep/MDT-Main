@@ -26,7 +26,9 @@ export function SiteHeader() {
         <div className="utility-bar-contacts">
           <a href={`mailto:${contact.email}`}><Mail size={11} />{contact.email}</a>
           <span className="utility-divider">·</span>
-          <a href={`tel:${contact.phoneIntl}`}><Phone size={11} />{contact.phoneDisplay}</a>
+          <a href={`tel:${contact.phoneIntl}`} aria-label="Call our mobile line"><Phone size={11} />{contact.phoneDisplay}</a>
+          <span className="utility-divider">·</span>
+          <a href={`tel:${contact.landlineIntl}`} aria-label="Call our landline"><Phone size={11} />{contact.landlineDisplay}</a>
         </div>
       </div></div>
       <header className="site-header">
@@ -56,7 +58,8 @@ export function SiteHeader() {
         <div className="mobile-theme-control"><span>Appearance</span><ThemeToggle /></div>
         <div className="mobile-account-links"><Link href="/dashboard/" onClick={() => drawer.current?.close()}>My account</Link><Link href="/quote/checkout/" onClick={() => drawer.current?.close()}>Your quote cart</Link></div>
         <Link className="button button-red" href="/contact/" onClick={() => drawer.current?.close()}>Talk to an expert <ArrowUpRight size={18} /></Link>
-        <a className="mobile-nav-phone" href={`tel:${contact.phoneIntl}`}><Phone size={17} /> {contact.phoneDisplay}</a>
+        <a className="mobile-nav-phone" href={`tel:${contact.phoneIntl}`} aria-label="Call our mobile line"><Phone size={17} /> {contact.phoneDisplay}</a>
+        <a className="mobile-nav-phone" href={`tel:${contact.landlineIntl}`} aria-label="Call our landline"><Phone size={17} /> {contact.landlineDisplay}</a>
       </dialog>
     </>
   );

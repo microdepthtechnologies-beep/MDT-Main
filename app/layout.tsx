@@ -8,6 +8,8 @@ import "./account.css";
 import "./marketing.css";
 import "./dark-theme.css";
 import "./light-theme.css";
+import "./compact.css";
+import "./interactions.css";
 import { Providers } from "@/components/Providers";
 
 const sans = Jost({ variable: "--font-body", subsets: ["latin"], display: "swap" });
