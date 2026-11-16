@@ -40,7 +40,7 @@ export function ProductExperience({ product: p, summary, categoryLink }: { produ
         <span className="quote-note"><Mail size={13} /> You can also add items to your quote cart and send one request.</span>
       </div>
       <div className="product-reassurance"><ShieldCheck size={20} strokeWidth={1.5} /><div><strong>More than the box.</strong><p>Ask us about installation, configuration and ongoing support for your equipment.</p></div></div>
-      <div className="product-quick-links"><a href={`tel:${contact.phoneIntl}`}><Phone size={14} /> {contact.phoneDisplay}</a>{categoryLink && <Link href={categoryLink}>Explore this category <ArrowUpRight size={14} /></Link>}</div>
+      <div className="product-quick-links"><a href={`tel:${contact.phoneIntl}`} aria-label="Call our mobile line"><Phone size={14} /> {contact.phoneDisplay}</a><a href={`tel:${contact.landlineIntl}`} aria-label="Call our landline"><Phone size={14} /> {contact.landlineDisplay}</a>{categoryLink && <Link href={categoryLink}>Explore this category <ArrowUpRight size={14} /></Link>}</div>
       {variant && <p className="configuration-confirmation"><Check size={15} /> Your selected configuration is included in your enquiry.</p>}
     </div>
   </div>;

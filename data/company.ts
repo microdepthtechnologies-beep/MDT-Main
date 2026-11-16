@@ -4,6 +4,8 @@ export const contact = {
   email: 'sales@mdt.co.ke',
   phoneDisplay: '0748 489 784',
   phoneIntl: '+254748489784',
+  landlineDisplay: '0185 279 412',
+  landlineIntl: '+254185279412',
   whatsapp: 'https://wa.me/254748489784',
   address: 'Sound Plaza, 3rd Floor, Suite D6',
   addressLine2: 'Woodvale Grove, Westlands, Nairobi',

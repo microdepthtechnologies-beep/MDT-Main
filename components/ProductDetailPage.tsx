@@ -33,7 +33,7 @@ export default async function ProductDetailPage({ params }: Props) {
     <SiteHeader />
     <main className="product-detail-page">
       <div className="site-width">
-        <nav className="breadcrumbs product-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/shop/">Products</Link>{category && <><span>/</span><Link href={categoryHref(category, categories)}>{category.name}</Link></>}<span>/</span><span aria-current="page">{p.name}</span></nav>
+        <nav className="breadcrumbs product-breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/shop/">Hardware</Link>{category && <><span>/</span><Link href={categoryHref(category, categories)}>{category.name}</Link></>}<span>/</span><span aria-current="page">{p.name}</span></nav>
         <ProductExperience product={p} summary={contentHtml(p.shortDescription)} categoryLink={category ? categoryHref(category, categories) : undefined} />
         <nav className="product-section-nav" aria-label="Product information"><a href="#overview">Overview <ArrowRight size={14} /></a><a href="#specifications">Specifications <ArrowRight size={14} /></a><a href="#product-support">Services & support <ArrowRight size={14} /></a></nav>
         <section id="overview" className="product-information-section"><div><p className="eyebrow">01 / THE DETAILS</p><h2>A closer look.</h2></div><div className="content-copy" dangerouslySetInnerHTML={{ __html: contentHtml(p.description || p.shortDescription || "<p>Talk to our team for detailed product information and help choosing the right configuration.</p>") }} /></section>

@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 import { useRef, useState, type ReactNode } from "react";
 import { ArrowUpRight, ChevronRight, FileText, Headphones, LayoutDashboard, Layers as LayersIcon, LoaderCircle, LogOut, Menu, ShieldCheck, ShoppingBag, UserRound, X } from "lucide-react";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 import { contact } from "@/data/company";
 import { accountInitials } from "@/lib/dashboard-types";
 
@@ -63,7 +64,7 @@ export function DashboardShell({ name, email, children, sales = false, canSales 
     <div className="workspace-body">
       <header className="workspace-topbar">
         <div className="workspace-breadcrumb"><button className="workspace-icon workspace-menu-toggle" aria-label="Open account menu" aria-haspopup="dialog" onClick={() => drawer.current?.showModal()}><Menu size={23} /></button><span>{sales ? "Sales" : "My account"}</span><ChevronRight size={13} /><strong>{current?.label || (sales ? "Quotation" : "Overview")}</strong></div>
-        <div className="workspace-top-actions"><Link href="/shop/" className="workspace-catalogue-link">Explore catalogue <ArrowUpRight size={15} /></Link><Link href="/quote/checkout/" className="workspace-cart-link"><ShoppingBag size={18} /><span>Quote cart</span></Link><Link href="/dashboard/profile/" aria-label="Your profile" className="workspace-avatar workspace-top-avatar">{accountInitials(name)}</Link></div>
+        <div className="workspace-top-actions"><Link href="/shop/" className="workspace-catalogue-link">Explore catalogue <ArrowUpRight size={15} /></Link><Link href="/quote/checkout/" className="workspace-cart-link"><ShoppingBag size={18} /><span>Quote cart</span></Link><ThemeToggle /><Link href="/dashboard/profile/" aria-label="Your profile" className="workspace-avatar workspace-top-avatar">{accountInitials(name)}</Link></div>
       </header>
       <main id="workspace-content" tabIndex={-1} className="workspace-content">{children}</main>
       <footer className="workspace-footer"><span>Micro Depth Technologies <span>/</span> Built around your business.</span><a href={`tel:${contact.phoneIntl}`}>Let’s talk <ArrowUpRight size={13} /></a></footer>

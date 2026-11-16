@@ -105,7 +105,9 @@
   .account-footer { flex-direction: column; gap: 10px; align-items: flex-start; font-size: 11px; padding-block: 22px; }
 }
 @media (max-width: 360px) {
+  .account-header { gap: 6px; }
   .account-header .brand-logo { width: 108px; }
+  .account-header .theme-toggle { flex-basis: 36px; width: 36px; height: 36px; }
   .account-form-panel { padding: 30px 20px; }
   .account-form-wrap h1 { font-size: 30px; }
   .account-private { font-size: 10px; gap: 5px; }

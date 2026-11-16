@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { AppWindow, Building2, Users, ShieldCheck, PenTool, ChartNoAxesCombined, MessagesSquare, Cloud, Workflow, CreditCard, Phone, Mail } from "lucide-react";
 import type { siteContent } from "@/data/site-content";
 import { contact } from "@/data/company";
@@ -20,6 +21,15 @@ function SoftwareIcon({ id }: { id: string }) {
 function ClientLogo({ client }: { client: SoftwareClient }) {
   if (!client.imageUrl) return <span className="sw-client-name">{client.title}</span>;
   return <Image src={client.imageUrl} alt={client.title} width={80} height={32} className="sw-client-logo" unoptimized />;
+}
+
+// Spread tiles across the fewest rows, with row lengths differing by at most
+// one. Seven items become 4 + 3 rather than 6 + 1; thirteen become 5 + 4 + 4.
+function columnsInRow(total: number, index: number, maximum: number) {
+  const rows = Math.ceil(total / maximum);
+  const columns = Math.floor(total / rows);
+  const fullerRows = total % rows;
+  return index < fullerRows * (columns + 1) ? columns + 1 : columns;
 }
 
 function enquiryHref(client: SoftwareClient, cat: SoftwareCategory) {
@@ -51,9 +61,10 @@ export function SoftwarePage({ content: c, categories, clientsByCategory }: {
       <SectionHeading {...c.intro} />
       <nav className="sw-overview-grid" aria-label="Software categories">
         {categories.map(cat => (
-          <a key={cat.id} href={`#sw-${cat.id}`} className="sw-overview-chip">
+          <a key={cat.id} href={`#sw-${cat.id}`} className="sw-overview-chip" aria-label={cat.fullLabel} title={cat.fullLabel}>
             <SoftwareIcon id={cat.id} />
-            <span>{cat.fullLabel}</span>
+            <span className="sw-category-label-full">{cat.fullLabel}</span>
+            <span className="sw-category-label-short" aria-hidden="true">{cat.label}</span>
           </a>
         ))}
       </nav>
@@ -70,12 +81,18 @@ export function SoftwarePage({ content: c, categories, clientsByCategory }: {
                 <p className="eyebrow"><SoftwareIcon id={cat.id} />{`${String(index + 2).padStart(2, "0")} / ${cat.label.toUpperCase()}`}</p>
                 <h2>{cat.fullLabel}</h2>
                 <p className="sw-cat-description">{cat.description}</p>
+                {clients.length > 0 && <span className="sw-cat-count">{clients.length} {clients.length === 1 ? "solution" : "solutions"}</span>}
               </div>
             </div>
             {clients.length > 0 ? (
               <div className="sw-client-grid">
-                {clients.map(client => (
+                {clients.map((client, clientIndex) => (
                   <a key={client.wpId} href={enquiryHref(client, cat)} className="sw-client-card"
+                     style={{
+                       "--tile-columns-wide": columnsInRow(clients.length, clientIndex, 6),
+                       "--tile-columns-medium": columnsInRow(clients.length, clientIndex, 4),
+                       "--tile-columns-small": columnsInRow(clients.length, clientIndex, 2),
+                     } as CSSProperties}
                      aria-label={`Request a quotation for ${client.title} by email`}
                      title={`Request a quotation for ${client.title}`}>
                     <div className="sw-client-logo-wrap"><ClientLogo client={client} /></div>

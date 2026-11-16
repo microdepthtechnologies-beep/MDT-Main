@@ -16,7 +16,7 @@ export const organisationSchema = {
   "@context": "https://schema.org", "@type": "Organization", "@id": `${siteOrigin}/#organization`,
   name: "Micro Depth Technologies Limited", alternateName: "MDT", url: siteOrigin,
   logo: `${siteOrigin}/wp-content/uploads/2024/09/MDT-Logo-Red-1680px-613px.webp`,
-  email: contact.email, telephone: contact.phoneIntl, sameAs: [contact.linkedin],
+  email: contact.email, telephone: [contact.phoneIntl, contact.landlineIntl], sameAs: [contact.linkedin],
   address: { "@type": "PostalAddress", streetAddress: `${contact.address}, ${contact.addressLine2}`, addressLocality: "Nairobi", addressCountry: "KE" },
 };
 
