@@ -17,6 +17,7 @@ export function normaliseFilters(raw: SearchValues) {
       .map(value => value.trim().slice(0, 160)).filter(Boolean))].slice(0, 20).sort(),
     min, max,
     instock: single("instock") === "1",
+    browse: single("browse") === "all" ? "all" : "",
     view: single("view") === "list" ? "list" : "grid",
     sort: sortOptions.some(([value]) => value === single("sort")) ? single("sort") : "recommended",
     page: Math.max(1, Math.min(100000, Math.floor(Number(single("page"))) || 1)),

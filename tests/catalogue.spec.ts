@@ -28,7 +28,7 @@ test("shop landing puts the 11 departments and product grid first", async ({ pag
     }
     await expect(page.getByRole("searchbox", { name: "Search the collection" })).toHaveCount(0);
     const expectedColumns = width <= 700 ? 2 : 4;
-    await expect.poll(() => page.locator(".catalogue-section .product-grid:not(.product-list)").evaluate(el =>
+    await expect.poll(() => page.locator(".catalogue-section .product-grid:not(.product-list)").first().evaluate(el =>
       getComputedStyle(el).gridTemplateColumns.split(" ").length
     )).toBe(expectedColumns);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `shop at ${width}px`).toBe(true);
@@ -72,6 +72,30 @@ test("shop landing puts the 11 departments and product grid first", async ({ pag
   await expect(page).toHaveURL(/q=ThinkPad/);
 });
 
+test("shop displays category previews with responsive limits and links to the full collection", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/shop/");
+  const sections = page.locator(".department-products");
+  await expect(sections).toHaveCount(11);
+  const desktopCounts = await sections.evaluateAll(elements => elements.map(section => section.querySelectorAll(".product-card").length));
+  expect(desktopCounts.every(count => count > 0 && count <= 8)).toBe(true);
+  expect(desktopCounts.filter(count => count === 8).length).toBeGreaterThan(0);
+  const firstSection = sections.first();
+  const firstProducts = await firstSection.locator(".product-card h3").allTextContents();
+  await firstSection.locator(".product-card").first().getByRole("button", { name: /^Quick look at/ }).click();
+  await expect(page.locator(".quick-view-dialog[open]").getByRole("heading", { name: firstProducts[0], exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Close quick look" }).click();
+  await page.setViewportSize({ width: 390, height: 900 });
+  for (let i = 0; i < desktopCounts.length; i++) {
+    await expect(sections.nth(i).locator(".product-card:visible")).toHaveCount(Math.min(4, desktopCounts[i]));
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await firstSection.getByRole("link", { name: "View all Audio-Visual" }).click();
+  await expect(page).toHaveURL(/\/product-category\/audio-visual-solutions\/$/);
+  await expect(page.locator(".department-products")).toHaveCount(0);
+  expect((await page.locator(".product-card h3").allTextContents()).slice(0, firstProducts.length)).toEqual(firstProducts);
+});
+
 test("catalogue search, sorting and filter state work together", async ({ page }) => {
   await page.goto("/shop/?q=Epson&category=projectors");
   await expect(page.locator(".product-card").first()).toBeVisible();
@@ -101,6 +125,7 @@ test("empty searches and special characters are safe; pagination preserves filte
   await page.goto("/shop/?q=no-such-product-mdt-test");
   await expect(page.getByRole("heading", { name: "Let’s try another search." })).toBeVisible();
   await page.getByRole("link", { name: "Clear filters", exact: true }).click();
+  await page.getByRole("link", { name: /Browse all .* products/ }).click();
   await page.getByRole("link", { name: "Next page", exact: true }).click();
   await expect(page).toHaveURL(/page=2/);
   await expect(page.locator(".results-count")).toContainText("25–48");

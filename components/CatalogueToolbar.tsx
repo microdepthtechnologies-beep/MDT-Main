@@ -59,13 +59,13 @@ function ActiveFilters() {
   )}<BrowseLink className="clear-filters" changes={clearedRefinements}>Clear all</BrowseLink></div>;
 }
 
-export function CatalogueTools({ hideSearch = false }: { hideSearch?: boolean }) {
+export function CatalogueTools({ hideSearch = false, featured = false }: { hideSearch?: boolean; featured?: boolean }) {
   const { filters, total, pending, update } = useBrowse();
   const id = useId();
   return <div className="catalogue-browse-tools" id="catalogue-tools">
     {!hideSearch && <CatalogueSearch />}
     <div className="catalogue-toolbar">
-      <p className="results-count" role="status" aria-live="polite" aria-atomic="true">{pending ? <><LoaderCircle className="filter-spinner" size={14} />Updating products…</> : total ? <>Showing <strong>{(filters.page - 1) * 24 + 1}–{Math.min(filters.page * 24, total)}</strong> of {total.toLocaleString()}</> : "No matching products"}</p>
+      <p className="results-count" role="status" aria-live="polite" aria-atomic="true">{pending ? <><LoaderCircle className="filter-spinner" size={14} />Updating products…</> : featured ? <BrowseLink changes={{ browse: "all" }}>Browse all {total.toLocaleString()} products <ArrowRight size={14} /></BrowseLink> : total ? <>Showing <strong>{(filters.page - 1) * 24 + 1}–{Math.min(filters.page * 24, total)}</strong> of {total.toLocaleString()}</> : "No matching products"}</p>
       <CatalogueFilters />
       <div className="catalogue-sort"><label htmlFor={id}>Sort by</label><div><select id={id} value={filters.sort} onChange={e => update({ sort: e.target.value })}>{sortOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><ChevronDown size={14} /></div></div>
       <div className="catalogue-view" aria-label="Product layout"><BrowseLink changes={{ view: "grid", page: filters.page }} aria-label="Grid view" aria-current={filters.view === "grid" ? "true" : undefined}><Grid2X2 size={16} /></BrowseLink><BrowseLink changes={{ view: "list", page: filters.page }} aria-label="List view" aria-current={filters.view === "list" ? "true" : undefined}><List size={18} /></BrowseLink></div>

@@ -4,23 +4,16 @@ import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { AudioLines, ChevronDown, KeyRound, Laptop, Network, Phone, Printer, Receipt, Server, ShieldCheck, Smartphone, Zap } from "lucide-react";
+import { shopDepartments } from "@/data/shop-departments";
 
 type SubcategoryLink = { label: string; href: string };
 type DepartmentLink = { href: string; current: boolean; subcategories: SubcategoryLink[] };
 
-const departments = [
-  { slug: "audio-visual-solutions", label: "Audio-Visual", icon: AudioLines },
-  { slug: "pcs-desktops", label: "Laptops & Desktops", icon: Laptop },
-  { slug: "networking-infrastructure", label: "Networking", icon: Network },
-  { slug: "pos", label: "Point of Sale", icon: Receipt },
-  { slug: "power-solutions", label: "Power solutions", icon: Zap },
-  { slug: "printers-and-scanners", label: "Printers & Scanners", icon: Printer },
-  { slug: "security-solutions", label: "Security solutions", icon: ShieldCheck },
-  { slug: "servers-storage", label: "Servers & Storage", icon: Server },
-  { slug: "smart-devices", label: "Smart devices", icon: Smartphone },
-  { slug: "software-products", label: "Software & licenses", icon: KeyRound },
-  { slug: "telephone-infrastructure", label: "Telephony", icon: Phone },
-];
+const icons = {
+  "audio-visual-solutions": AudioLines, "pcs-desktops": Laptop, "networking-infrastructure": Network,
+  pos: Receipt, "power-solutions": Zap, "printers-and-scanners": Printer, "security-solutions": ShieldCheck,
+  "servers-storage": Server, "smart-devices": Smartphone, "software-products": KeyRound, "telephone-infrastructure": Phone,
+};
 
 export type ShopCategoryNavigation = Record<string, DepartmentLink>;
 
@@ -69,7 +62,7 @@ export function ShopCategoryNav({ links }: { links: ShopCategoryNavigation }) {
     setOpenDepartment(slug);
   }
 
-  const active = departments.find(department => department.slug === openDepartment);
+  const active = shopDepartments.find(department => department.slug === openDepartment);
   const activeLinks = openDepartment ? links[openDepartment] : undefined;
   const menu = active && activeLinks && typeof document !== "undefined" ? createPortal(
     <div
@@ -92,7 +85,8 @@ export function ShopCategoryNav({ links }: { links: ShopCategoryNavigation }) {
     <nav ref={navRef} className="shop-category-nav" aria-label="Shop categories">
       <div className="site-width shop-category-nav-inner">
         <div className="shop-category-links">
-          {departments.map(({ slug, label, icon: Icon }) => {
+          {shopDepartments.map(({ slug, label }) => {
+            const Icon = icons[slug];
             const department = links[slug];
             if (!department) return null;
             const menuId = `shop-category-menu-${slug}`;

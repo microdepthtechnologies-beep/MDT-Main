@@ -1,5 +1,8 @@
-import { categoryChain, categoryHref, getCatalogue, type Category } from "@/lib/catalogue";
-import { catalogueUrl, type SearchValues } from "@/lib/catalogue-filters";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { categoryChain, categoryHref, getCatalogue, getDepartmentProducts, type Category } from "@/lib/catalogue";
+import { catalogueUrl, refinementCount, type SearchValues } from "@/lib/catalogue-filters";
+import { shopDepartments } from "@/data/shop-departments";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { ProductCard } from "./ProductCard";
@@ -7,20 +10,6 @@ import { CatalogueBrowser, CatalogueResults } from "./CatalogueBrowser";
 import { CatalogueEmpty, CataloguePagination, CatalogueTools } from "./CatalogueToolbar";
 import { ShopCategoryNav, type ShopCategoryNavigation } from "./ShopCategoryNav";
 import { ProductQuickView } from "./ProductQuickView";
-
-const departments = [
-  { slug: "audio-visual-solutions" },
-  { slug: "pcs-desktops" },
-  { slug: "networking-infrastructure" },
-  { slug: "pos" },
-  { slug: "power-solutions" },
-  { slug: "printers-and-scanners" },
-  { slug: "security-solutions" },
-  { slug: "servers-storage" },
-  { slug: "smart-devices" },
-  { slug: "software-products" },
-  { slug: "telephone-infrastructure" },
-];
 
 export async function CataloguePage({ search, category }: { search: SearchValues; category?: Category }) {
   const data = await getCatalogue(search, category);
@@ -31,7 +20,7 @@ export async function CataloguePage({ search, category }: { search: SearchValues
   const categoryPaths = categories.map(item => ({ item, chain: categoryChain(item, categories) }));
   const selectedCategory = category || categories.find(c => c.slug === filters.category);
   const selectedChain = selectedCategory ? categoryChain(selectedCategory, categories) : [];
-  const departmentLinks: ShopCategoryNavigation = Object.fromEntries(departments.flatMap(({ slug }) => {
+  const departmentLinks: ShopCategoryNavigation = Object.fromEntries(shopDepartments.flatMap(({ slug }) => {
     const item = categories.find(c => c.parentWpTermId === 0 && c.slug === slug);
     if (!item) return [];
     const subcategories = categoryPaths
@@ -44,6 +33,12 @@ export async function CataloguePage({ search, category }: { search: SearchValues
       subcategories,
     }]];
   }));
+  const featuredDepartments = !category && !filters.q && refinementCount(filters) === 0 && !filters.browse && filters.page === 1 && filters.sort === "recommended" && filters.view === "grid"
+    ? shopDepartments.flatMap(department => {
+      const item = categories.find(c => c.parentWpTermId === 0 && c.slug === department.slug);
+      return item ? [{ ...department, category: item }] : [];
+    }) : null;
+  const departmentProducts = featuredDepartments ? await getDepartmentProducts(featuredDepartments.map(item => item.category), categories) : [];
   return <>
     <SiteHeader />
     <ShopCategoryNav links={departmentLinks} />
@@ -53,10 +48,15 @@ export async function CataloguePage({ search, category }: { search: SearchValues
         <CatalogueBrowser {...controls}>
         <div className="catalogue-layout">
           <div className="catalogue-results">
-            <CatalogueTools hideSearch={!category && !filters.category} />
+            <CatalogueTools hideSearch={!category && !filters.category} featured={!!featuredDepartments} />
             <CatalogueResults>
-              {products.length ? <div className={`product-grid ${filters.view === "list" ? "product-list" : ""}`}>{products.map(p => <ProductCard p={p} key={p.wpId} />)}</div> : <CatalogueEmpty />}
-              <CataloguePagination />
+              {featuredDepartments ? featuredDepartments.map((department, index) => <section className="department-products" key={department.slug} aria-labelledby={`department-${department.slug}`}>
+                <div className="section-caption"><h2 id={`department-${department.slug}`}>{department.label}</h2><Link href={categoryLink(department.category)} className="text-link">View all <span className="sr-only">{department.label}</span><ArrowRight size={16} /></Link></div>
+                {departmentProducts[index].length ? <div className="product-grid">{departmentProducts[index].map(p => <ProductCard p={p} key={p.wpId} />)}</div> : <p>No products are currently available in this category.</p>}
+              </section>) : <>
+                {products.length ? <div className={`product-grid ${filters.view === "list" ? "product-list" : ""}`}>{products.map(p => <ProductCard p={p} key={p.wpId} />)}</div> : <CatalogueEmpty />}
+                <CataloguePagination />
+              </>}
             </CatalogueResults>
           </div>
         </div>

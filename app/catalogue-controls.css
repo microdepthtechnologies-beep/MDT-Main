@@ -1,6 +1,15 @@
 /* One persistent set of controls, with touch targets and neutral MDT surfaces. */
 .catalogue-browser { --browse-offset: 100px; }
 .catalogue-browser .catalogue-layout { grid-template-columns: minmax(0,1fr); }
+.department-products { margin-bottom: 48px; }
+.department-products .section-caption h2 { font-size: clamp(22px, 2vw, 28px); font-weight: 600; letter-spacing: -.04em; }
+.department-products .section-caption a { white-space: nowrap; font-size: 13px; }
+.department-products > p { color: var(--muted); font-size: 14px; }
+.results-count > a { display: inline-flex; align-items: center; gap: 7px; }
+@media (max-width: 700px) {
+  .department-products .product-card:nth-child(n+5) { display: none; }
+  .department-products { margin-bottom: 36px; }
+}
 .catalogue-browser .mobile-filter-button { display: inline-flex; min-height: 42px; background: var(--charcoal); color: white; border-color: var(--charcoal); border-radius: 6px; font-size: 13px; }
 .mobile-filter-button .filter-count { background: white; color: var(--charcoal); margin: 0 0 0 2px; }
 .product-card-image { width: 100%; }

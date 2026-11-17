@@ -78,6 +78,18 @@ export const getProduct = cache(async (slug: string) => {
   return doc ? cleanProduct(doc) : null;
 });
 
+export async function getDepartmentProducts(departments: Category[], categories: Category[]) {
+  const db = await getDb();
+  const col = db.collection<Product>("products");
+  return Promise.all(departments.map(async category => {
+    const products = await col.find(
+      { status: "publish", "categories.slug": { $in: descendants(category, categories) } },
+      { projection: { description: 0, shortDescription: 0, gallery: 0, variations: 0, seo: 0 } },
+    ).sort({ featured: -1, "featuredImage.url": -1, wpId: -1 }).limit(8).toArray();
+    return products.map(cleanProduct);
+  }));
+}
+
 export async function getCatalogue(raw: SearchValues, lockedCategory?: Category) {
   const filters = normaliseFilters(raw);
   const [db, categories] = await Promise.all([getDb(), getCategories()]);

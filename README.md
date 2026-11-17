@@ -273,6 +273,10 @@ Product details, configurations and quote requests are available in the shop's
 quick view. Links to `/shop/?product=<slug>` open a product directly; legacy
 `/product/<slug>/` links redirect there.
 
+The unfiltered shop previews up to eight products per department (four on
+phones). Each department links to its full collection; the browse-all link,
+filters and search open the full catalogue results.
+
 ## Verification
 
 Run `npm run lint` and `npm run build`. With the application running on port 3000,
