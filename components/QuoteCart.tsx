@@ -24,7 +24,7 @@ function QuoteCartDialog({ onClose }: { onClose: () => void }) {
         <div className="quote-cart-items">
           {items.map(item => <div key={item.wpId} className="quote-cart-item">
             <div className="quote-cart-thumb"><MediaImage src={item.image || ""} alt="" width={64} height={64} className="object-contain" /></div>
-            <div className="quote-cart-info"><Link href={`/product/${item.slug}/`} onClick={onClose}>{item.name}</Link><span>{item.brand}{item.sku && ` · Model ${item.sku}`}{item.configuration && ` · ${item.configuration}`}</span></div>
+            <div className="quote-cart-info"><Link href={`/shop/?product=${encodeURIComponent(item.slug)}`} onClick={onClose}>{item.name}</Link><span>{item.brand}{item.sku && ` · Model ${item.sku}`}{item.configuration && ` · ${item.configuration}`}</span></div>
             <div className="quote-cart-qty"><button type="button" aria-label="Decrease quantity" onClick={() => update(item.wpId, item.quantity - 1)}><Minus size={14} /></button><span>{item.quantity}</span><button type="button" aria-label="Increase quantity" onClick={() => update(item.wpId, item.quantity + 1)}><Plus size={14} /></button></div>
             <button type="button" className="quote-cart-remove" aria-label="Remove item" onClick={() => remove(item.wpId)}><Trash2 size={16} /></button>
           </div>)}

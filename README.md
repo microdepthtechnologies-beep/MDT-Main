@@ -267,6 +267,12 @@ The original `migration/transform-import.js` is a full replacement import that
 clears collections. Do not use it for incremental media updates. If intentionally
 restoring the WordPress snapshot, rerun `media:sync -- --apply` afterwards.
 
+## Product quick view
+
+Product details, configurations and quote requests are available in the shop's
+quick view. Links to `/shop/?product=<slug>` open a product directly; legacy
+`/product/<slug>/` links redirect there.
+
 ## Verification
 
 Run `npm run lint` and `npm run build`. With the application running on port 3000,

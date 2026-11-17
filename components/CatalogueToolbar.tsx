@@ -5,7 +5,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown, Grid2X2, List, LoaderCircle, Search, X } from "lucide-react";
 import { clearedRefinements, sortOptions, type FilterChanges } from "@/lib/catalogue-filters";
 import { BrowseLink, useBrowse } from "./CatalogueBrowser";
-import { MobileFilters } from "./CatalogueFilters";
+import { CatalogueFilters } from "./CatalogueFilters";
 
 function CatalogueSearch() {
   const { base, filters, update, searchReset } = useBrowse();
@@ -66,7 +66,7 @@ export function CatalogueTools({ hideSearch = false }: { hideSearch?: boolean })
     {!hideSearch && <CatalogueSearch />}
     <div className="catalogue-toolbar">
       <p className="results-count" role="status" aria-live="polite" aria-atomic="true">{pending ? <><LoaderCircle className="filter-spinner" size={14} />Updating products…</> : total ? <>Showing <strong>{(filters.page - 1) * 24 + 1}–{Math.min(filters.page * 24, total)}</strong> of {total.toLocaleString()}</> : "No matching products"}</p>
-      <MobileFilters />
+      <CatalogueFilters />
       <div className="catalogue-sort"><label htmlFor={id}>Sort by</label><div><select id={id} value={filters.sort} onChange={e => update({ sort: e.target.value })}>{sortOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><ChevronDown size={14} /></div></div>
       <div className="catalogue-view" aria-label="Product layout"><BrowseLink changes={{ view: "grid", page: filters.page }} aria-label="Grid view" aria-current={filters.view === "grid" ? "true" : undefined}><Grid2X2 size={16} /></BrowseLink><BrowseLink changes={{ view: "list", page: filters.page }} aria-label="List view" aria-current={filters.view === "list" ? "true" : undefined}><List size={18} /></BrowseLink></div>
     </div>

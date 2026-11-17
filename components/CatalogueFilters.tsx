@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight, ChevronDown, LoaderCircle, Search, SlidersHorizontal, X } from "lucide-react";
 import { clearedRefinements, refinementCount } from "@/lib/catalogue-filters";
 import { BrowseLink, revealResults, useBrowse } from "./CatalogueBrowser";
@@ -70,32 +70,16 @@ function FilterSections() {
   </div>;
 }
 
-export function CatalogueFiltersPanel() {
-  const { filters, searchReset } = useBrowse();
-  return <aside className="catalogue-sidebar enhanced-sidebar" aria-label="Product filters">
-    <div className="filter-title"><div><SlidersHorizontal size={16} /><h2>Refine your search</h2></div>{(refinementCount(filters) > 0 || filters.q) && <BrowseLink className="facet-reset" changes={clearedRefinements}>Reset filters</BrowseLink>}</div>
-    <p className="filter-intro">Find the right fit. Results update as you choose.</p>
-    <FilterSections key={searchReset} />
-    <div className="filter-assistance"><span>Need a second opinion?</span><Link href="/#contact">Ask an MDT expert <ArrowUpRight size={14} /></Link></div>
-  </aside>;
-}
-
-export function MobileFilters() {
+export function CatalogueFilters() {
   const { filters, pending, total, searchReset } = useBrowse();
   const dialog = useRef<HTMLDialogElement>(null);
   const title = useId();
-  useEffect(() => {
-    const media = matchMedia("(min-width: 951px)");
-    const closeOnDesktop = () => { if (media.matches) dialog.current?.close(); };
-    media.addEventListener("change", closeOnDesktop);
-    return () => media.removeEventListener("change", closeOnDesktop);
-  }, []);
   const count = refinementCount(filters);
   return <>
-    <button className="button mobile-filter-button" aria-label="Filters" aria-haspopup="dialog" onClick={() => dialog.current?.showModal()}><SlidersHorizontal size={16} />Filters{count > 0 && <span className="filter-count">{count}</span>}</button>
+    <button className="button mobile-filter-button" aria-haspopup="dialog" onClick={() => dialog.current?.showModal()}><SlidersHorizontal size={16} />Refine your search{count > 0 && <span className="filter-count">{count}</span>}</button>
     <dialog ref={dialog} className="filter-dialog enhanced-filter-dialog" aria-labelledby={title} onClick={e => { if (e.target === e.currentTarget) dialog.current?.close(); }}>
       <div className="filter-dialog-shell">
-        <div className="filter-dialog-top"><div><span className="eyebrow">MAKE IT YOUR COLLECTION</span><h2 id={title}>Find your right fit<span>.</span></h2><p>Results update as you choose.</p></div><button className="icon-button" aria-label="Close filters" onClick={() => dialog.current?.close()}><X size={23} /></button></div>
+        <div className="filter-dialog-top"><div><h2 id={title}>Refine your search</h2><p>Results update as you choose.</p></div><button className="icon-button" aria-label="Close filters" onClick={() => dialog.current?.close()}><X size={23} /></button></div>
         <div className="filter-dialog-scroll">
           {(count > 0 || filters.q) && <div className="mobile-refinement-summary"><span>{count} {count === 1 ? "filter" : "filters"} selected</span><BrowseLink changes={clearedRefinements} className="facet-reset">Reset filters</BrowseLink></div>}
           <FilterSections key={searchReset} />

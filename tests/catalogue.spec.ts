@@ -19,7 +19,13 @@ test("shop landing puts the 11 departments and product grid first", async ({ pag
     }
     await expect(page.locator(".catalogue-assurances")).toHaveCount(0);
     await expect(page.getByRole("heading", { level: 1, name: /shop technology/i })).toHaveCount(0);
-    await expect(page.getByRole("heading", { name: "Browse products" })).toBeVisible();
+    await expect(page.getByText("BROWSE THE MDT STORE", { exact: true })).toHaveCount(0);
+    await expect(page.locator(".catalogue-heading, .procurement-section, .catalogue-sidebar")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Refine your search" })).toBeVisible();
+    await expect(page.locator(".filter-dialog")).not.toBeVisible();
+    if (width === 1440) {
+      expect(await categories.locator(".shop-category-links").evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+    }
     await expect(page.getByRole("searchbox", { name: "Search the collection" })).toHaveCount(0);
     const expectedColumns = width <= 700 ? 2 : 4;
     await expect.poll(() => page.locator(".catalogue-section .product-grid:not(.product-list)").evaluate(el =>
@@ -69,11 +75,13 @@ test("shop landing puts the 11 departments and product grid first", async ({ pag
 test("catalogue search, sorting and filter state work together", async ({ page }) => {
   await page.goto("/shop/?q=Epson&category=projectors");
   await expect(page.locator(".product-card").first()).toBeVisible();
-  const sidebar = page.locator(".catalogue-sidebar");
-  await sidebar.getByRole("checkbox", { name: "Epson", exact: true }).check();
-  await sidebar.getByLabel("In stock only").check();
+  await page.getByRole("button", { name: "Refine your search" }).click();
+  const filters = page.locator(".filter-dialog");
+  await filters.getByRole("checkbox", { name: "Epson", exact: true }).check();
+  await filters.getByLabel("In stock only").check();
   await expect(page).toHaveURL(/brand=Epson/);
   await expect(page).toHaveURL(/instock=1/);
+  await filters.getByRole("button", { name: "Close filters" }).click();
   await expect(page.locator(".product-card h3").first()).toContainText("Epson");
   await page.getByLabel("Sort by", { exact: true }).selectOption("name");
   await expect(page).toHaveURL(/sort=name/);
@@ -121,7 +129,9 @@ test("category links include the hierarchy and images load", async ({ page }) =>
 
 test("gallery, configurations and enquiry links use the selected product", async ({ page }) => {
   await page.goto(product);
-  await expect(page.locator("h1")).toContainText("HP 240");
+  await expect(page).toHaveURL(/\/shop\/\?product=hp-240-14-g9-notebook-pc/);
+  const quickView = page.locator(".quick-view-dialog[open]");
+  await expect(quickView.getByRole("heading", { name: /HP 240/ })).toBeVisible();
   const thumbnails = page.locator(".gallery-thumbnails button");
   if (await thumbnails.count() > 1) {
     await thumbnails.nth(1).click();
@@ -138,12 +148,27 @@ test("gallery, configurations and enquiry links use the selected product", async
   expect(email).toContain("mailto:sales@mdt.co.ke");
   expect(decodeURIComponent(email || "")).toContain("Configuration:");
   await expect(page.getByRole("link", { name: "Discuss on WhatsApp" })).toHaveAttribute("href", /^https:\/\/wa\.me\/254748489784\?text=/);
+  await quickView.getByRole("button", { name: "Add to quote cart" }).click();
+  await expect(quickView.getByRole("status")).toContainText("Added to your quote cart");
+  await expect(quickView.getByRole("link", { name: "Review your request" })).toHaveAttribute("href", "/quote/checkout/");
+  await quickView.getByRole("button", { name: "Close quick look" }).click();
+  await expect(page).toHaveURL(/\/shop\/$/);
+  await page.getByRole("button", { name: "Quote cart", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Your quote cart" })).toContainText("HP 240");
+});
+
+test("quick view reports missing products and can be closed", async ({ page }) => {
+  await page.goto("/shop/?product=does-not-exist-mdt-test");
+  const dialog = page.locator(".quick-view-dialog[open]");
+  await expect(dialog.getByRole("alert")).toContainText("no longer available");
+  await dialog.getByRole("button", { name: "Close quick look" }).click();
+  await expect(page).toHaveURL(/\/shop\/$/);
 });
 
 test("mobile filters and navigation are keyboard accessible", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/shop/");
-  await page.getByRole("button", { name: "Filters", exact: true }).click();
+  await page.getByRole("button", { name: "Refine your search" }).click();
   const dialog = page.locator(".filter-dialog");
   await expect(dialog).toBeVisible();
   await dialog.getByLabel("Find a brand", { exact: true }).fill("HP");
@@ -183,12 +208,13 @@ test("quick look opens the chosen product and list view preserves browsing state
   await page.goto("/shop/?q=HP&sort=name");
   const card = page.locator(".product-card").first();
   const title = await card.locator("h3").innerText();
-  const href = await card.locator("h3 a").getAttribute("href");
   await card.getByRole("button", { name: /^Quick look at/ }).click();
   const dialog = page.locator(".quick-view-dialog[open]");
-  await expect(dialog.getByRole("heading", { level: 2 })).toHaveText(title);
-  await expect(dialog.getByRole("link", { name: "Explore this product" })).toHaveAttribute("href", href!);
-  await expect.poll(() => dialog.locator("img").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  await expect(dialog.getByRole("heading", { name: title, exact: true })).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Add to quote cart" })).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Request a quotation" })).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "Specifications" })).toBeVisible();
+  await expect.poll(() => dialog.locator(".gallery-stage img").evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
   await expect(card.getByRole("button", { name: /^Quick look at/ })).toBeFocused();
@@ -231,7 +257,8 @@ test("service explorer works with keyboard and loads local imagery with reduced 
 test("multiple brands compose instantly and survive history, pagination and reload", async ({ page }) => {
   await page.goto("/shop/?category=pcs-desktops");
   await page.evaluate(() => { (window as Window & { browseSession?: string }).browseSession = "same-document"; });
-  const sidebar = page.locator(".catalogue-sidebar");
+  await page.getByRole("button", { name: "Refine your search" }).click();
+  const sidebar = page.locator(".filter-dialog");
   await sidebar.getByRole("checkbox", { name: "HP", exact: true }).check();
   await sidebar.getByRole("checkbox", { name: "Dell", exact: true }).check();
   await expect(page).toHaveURL(url => url.searchParams.getAll("brand").sort().join() === "Dell,HP");
@@ -241,19 +268,24 @@ test("multiple brands compose instantly and survive history, pagination and relo
   expect(brands.every(brand => /^(HP|Dell)$/i.test(brand))).toBe(true);
   expect(await page.evaluate(() => (window as Window & { browseSession?: string }).browseSession)).toBe("same-document");
 
+  await sidebar.getByRole("button", { name: "Close filters" }).click();
   await page.getByRole("link", { name: "Next page", exact: true }).click();
   await expect(page).toHaveURL(/page=2/);
   await expect(page.locator(".results-count")).toContainText("25–48");
   await expect(page.getByRole("link", { name: "Remove HP filter", exact: true })).toBeVisible();
   await page.goBack();
   await expect(page).not.toHaveURL(/page=2/);
+  await page.getByRole("button", { name: "Refine your search" }).click();
   await expect(sidebar.getByRole("checkbox", { name: "HP", exact: true })).toBeChecked();
   await expect(sidebar.getByRole("checkbox", { name: "Dell", exact: true })).toBeChecked();
+  await sidebar.getByRole("button", { name: "Close filters" }).click();
   await page.getByRole("link", { name: "Remove Dell filter", exact: true }).click();
   await expect(page).not.toHaveURL(/brand=Dell/);
   await page.goBack();
+  await page.getByRole("button", { name: "Refine your search" }).click();
   await expect(sidebar.getByRole("checkbox", { name: "Dell", exact: true })).toBeChecked();
   await page.reload();
+  await page.getByRole("button", { name: "Refine your search" }).click();
   await expect(sidebar.getByRole("checkbox", { name: "HP", exact: true })).toBeChecked();
   await expect(sidebar.getByRole("checkbox", { name: "Dell", exact: true })).toBeChecked();
 });
@@ -262,10 +294,12 @@ test("category archives use header menus and leave only refinements in the sideb
   await page.goto("/product-category/pcs-desktops/?brand=HP&view=list");
   const categories = page.getByRole("navigation", { name: "Shop categories" });
   await expect(categories.getByRole("link")).toHaveCount(11);
-  const sidebar = page.locator(".catalogue-sidebar");
+  await page.getByRole("button", { name: "Refine your search" }).click();
+  const sidebar = page.locator(".filter-dialog");
   await expect(sidebar.getByText("Category", { exact: true })).toHaveCount(0);
   await expect(sidebar.locator(".facet-group")).toHaveCount(2);
   await expect(sidebar.locator(".facet-group").first()).toContainText("Brands");
+  await sidebar.getByRole("button", { name: "Close filters" }).click();
   await categories.getByRole("button", { name: "Browse Laptops & Desktops subcategories" }).click();
   const menu = page.getByRole("group", { name: "Laptops & Desktops categories" });
   await expect(menu.getByRole("link", { name: "All Laptops & Desktops", exact: true })).toBeVisible();
@@ -318,7 +352,7 @@ test("live search keeps focus and scroll position; reset cancels a queued query"
 test("price validation and mobile drawer remain usable at the smallest viewport", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 640 });
   await page.goto("/shop/?min=0&max=10000");
-  const trigger = page.getByRole("button", { name: "Filters", exact: true });
+  const trigger = page.getByRole("button", { name: "Refine your search" });
   await trigger.click();
   const dialog = page.locator(".filter-dialog");
   const min = dialog.getByLabel("Minimum (KES)");

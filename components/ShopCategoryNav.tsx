@@ -91,7 +91,6 @@ export function ShopCategoryNav({ links }: { links: ShopCategoryNavigation }) {
   return <>
     <nav ref={navRef} className="shop-category-nav" aria-label="Shop categories">
       <div className="site-width shop-category-nav-inner">
-        <span>Shop by</span>
         <div className="shop-category-links">
           {departments.map(({ slug, label, icon: Icon }) => {
             const department = links[slug];

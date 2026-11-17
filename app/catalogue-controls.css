@@ -1,6 +1,17 @@
 /* One persistent set of controls, with touch targets and neutral MDT surfaces. */
 .catalogue-browser { --browse-offset: 100px; }
-.catalogue-browser .catalogue-layout { grid-template-columns: 265px minmax(0,1fr); gap: 36px; align-items: start; }
+.catalogue-browser .catalogue-layout { grid-template-columns: minmax(0,1fr); }
+.catalogue-browser .mobile-filter-button { display: inline-flex; min-height: 42px; background: var(--charcoal); color: white; border-color: var(--charcoal); border-radius: 6px; font-size: 13px; }
+.mobile-filter-button .filter-count { background: white; color: var(--charcoal); margin: 0 0 0 2px; }
+.product-card-image { width: 100%; }
+.product-card h3 button { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 48px; text-align: left; }
+.product-card h3 button:hover { color: var(--red); }
+.product-list .product-card h3 button { min-height: unset; }
+.quick-view-dialog .product-detail-grid { padding-top: 24px; }
+.quick-view-dialog .product-detail-info h2 { font-size: clamp(25px, 2.3vw, 34px); font-weight: 600; line-height: 1.25; letter-spacing: -.045em; overflow-wrap: anywhere; }
+.quick-view-status { padding: 32px 0; }
+.quick-view-details { border-top: 1px solid var(--border); padding: 24px 0; }
+.quick-view-details h2 { font-size: 22px; margin-bottom: 16px; }
 .enhanced-sidebar { position: sticky; top: var(--browse-offset); max-height: calc(100dvh - 125px); overflow-y: auto; padding: 0 14px 8px 2px; scrollbar-width: thin; scrollbar-color: #c8c8c8 transparent; }
 .enhanced-sidebar .filter-title { gap: 12px; padding-bottom: 14px; border: 0; flex-wrap: wrap; }
 .enhanced-sidebar .filter-title > div { display: flex; align-items: center; gap: 10px; }
@@ -125,7 +136,6 @@
 .enhanced-filter-dialog .stock-refinement { margin-bottom: 20px; }
 
 @media (max-width: 1180px) and (min-width: 951px) {
-  .catalogue-browser .catalogue-layout { grid-template-columns: 235px minmax(0,1fr); gap: 28px; }
   .enhanced-sidebar { padding-right: 10px; }
 }
 @media (max-width: 950px) {

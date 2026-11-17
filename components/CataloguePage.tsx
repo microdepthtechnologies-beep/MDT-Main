@@ -1,14 +1,12 @@
-import Link from "next/link";
-import { ArrowUpRight, Network } from "lucide-react";
 import { categoryChain, categoryHref, getCatalogue, type Category } from "@/lib/catalogue";
 import { catalogueUrl, type SearchValues } from "@/lib/catalogue-filters";
 import { SiteHeader } from "./SiteHeader";
 import { SiteFooter } from "./SiteFooter";
 import { ProductCard } from "./ProductCard";
 import { CatalogueBrowser, CatalogueResults } from "./CatalogueBrowser";
-import { CatalogueFiltersPanel } from "./CatalogueFilters";
 import { CatalogueEmpty, CataloguePagination, CatalogueTools } from "./CatalogueToolbar";
 import { ShopCategoryNav, type ShopCategoryNavigation } from "./ShopCategoryNav";
+import { ProductQuickView } from "./ProductQuickView";
 
 const departments = [
   { slug: "audio-visual-solutions" },
@@ -51,10 +49,9 @@ export async function CataloguePage({ search, category }: { search: SearchValues
     <ShopCategoryNav links={departmentLinks} />
     <main>
       <section className={`site-width catalogue-section${category ? "" : " storefront-catalogue"}`} id="catalogue">
-        <div className="catalogue-heading"><div><p className="eyebrow">{category ? "THE COLLECTION" : "BROWSE THE MDT STORE"}</p><h1 id="catalogue-results-heading" tabIndex={-1}>{filters.q ? "Search results" : category ? `Explore ${category.name.toLowerCase()}` : "Browse products"}<span className="heading-dot">.</span></h1></div><span className="catalogue-total">{total.toLocaleString()} products to explore</span></div>
+        <h1 className="sr-only" id="catalogue-results-heading" tabIndex={-1}>{filters.q ? "Search results" : category ? `Explore ${category.name.toLowerCase()}` : "Browse products"}</h1>
         <CatalogueBrowser {...controls}>
         <div className="catalogue-layout">
-          <CatalogueFiltersPanel />
           <div className="catalogue-results">
             <CatalogueTools hideSearch={!category && !filters.category} />
             <CatalogueResults>
@@ -64,8 +61,8 @@ export async function CataloguePage({ search, category }: { search: SearchValues
           </div>
         </div>
         </CatalogueBrowser>
+        {typeof search.product === "string" && search.product && <ProductQuickView key={search.product} slug={search.product} autoOpen />}
       </section>
-      <section className="site-width procurement-section"><div className="procurement-mark" aria-hidden="true"><Network size={48} strokeWidth={1} /></div><div><p className="eyebrow">MORE THAN A PRODUCT SUPPLIER</p><h2>One device. A whole office.<br />We see the bigger picture.</h2><p>Bring us your requirements. We’ll help with specification, sourcing, installation and the support that follows.</p></div><Link className="button button-dark" href="/#contact">Discuss your project <ArrowUpRight size={18} /></Link></section>
     </main>
     <SiteFooter />
   </>;

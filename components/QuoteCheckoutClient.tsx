@@ -65,7 +65,7 @@ export function QuoteCheckoutClient({ user }: { user: { name?: string | null; em
         <div className="quote-items">
           {items.map(item => <div key={item.wpId} className="quote-item">
             <div className="quote-item-thumb"><MediaImage src={item.image || ""} alt="" width={80} height={80} className="object-contain" /></div>
-            <div className="quote-item-info"><Link href={`/product/${item.slug}/`}>{item.name}</Link><span>{item.brand}{item.sku && ` · Model ${item.sku}`}{item.configuration && ` · ${item.configuration}`}</span></div>
+            <div className="quote-item-info"><Link href={`/shop/?product=${encodeURIComponent(item.slug)}`}>{item.name}</Link><span>{item.brand}{item.sku && ` · Model ${item.sku}`}{item.configuration && ` · ${item.configuration}`}</span></div>
             <div className="quote-item-qty"><button type="button" onClick={() => update(item.wpId, item.quantity - 1)}><Minus size={14} /></button><span>{item.quantity}</span><button type="button" onClick={() => update(item.wpId, item.quantity + 1)}><Plus size={14} /></button></div>
             <button type="button" className="quote-item-remove" aria-label="Remove" onClick={() => remove(item.wpId)}><Trash2 size={18} /></button>
           </div>)}
