@@ -58,7 +58,6 @@ const asStrings = (v: unknown): string[] =>
 const asNumbers = (v: unknown): number[] =>
   Array.isArray(v) ? v.map(Number).filter(Number.isFinite) : [];
 
-<<<<<<< Updated upstream
 // Snapshot of migrated client relationships so the mapping is available in deployments,
 // which do not include the sibling migration extraction directory.
 const MIGRATED_CLIENT_IDS_BY_TERM: Record<number, number[]> = {
@@ -75,10 +74,6 @@ const MIGRATED_CLIENT_IDS_BY_TERM: Record<number, number[]> = {
   300: [2783],
 };
 
-=======
-// wpIds of clients mapped to each software category term.
-// Derived from wpur_term_relationships.jsonl — kept as the source for migrated data.
->>>>>>> Stashed changes
 let _clientsByCategory: Map<number, number[]> | null = null;
 
 function getClientsByTerm(): Map<number, number[]> {
@@ -97,11 +92,7 @@ export interface SoftwarePageData {
 }
 
 export async function getSoftwarePageData(): Promise<SoftwarePageData> {
-<<<<<<< Updated upstream
   const termMap = getClientsByTerm();
-=======
-  const termMap = await getClientsByTerm();
->>>>>>> Stashed changes
   const db = await getDb();
   const docs = await db.collection("clients")
     .find({ status: "publish" })
