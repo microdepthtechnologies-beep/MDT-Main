@@ -282,3 +282,25 @@
   :root .approach-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 18px; }
   :root .approach-grid h3 { font-size: 18px; }
 }
+
+/* Readability boosts: utility bar, product categories, footer content. */
+:root .utility-bar { font-weight: 600; }
+:root[data-theme="light"] .utility-bar { color: var(--color-ink-700); }
+:root[data-theme="light"] .utility-bar-contacts a { color: var(--text-primary); }
+
+:root .shop-category-nav a { font-weight: 600; }
+:root .shop-category-menu-panel a { font-weight: 500; }
+
+:root :is(
+  .footer-columns a:not(.footer-brand > a:first-child),
+  .footer-brand p, .footer-bottom
+) { font-weight: 500; }
+:root[data-theme="dark"] :is(
+  .footer-columns a:not(.footer-brand > a:first-child),
+  .footer-brand p, .footer-intro .eyebrow
+) { color: #e3e7e0; }
+:root[data-theme="dark"] .footer-bottom { color: #d2d7ce; }
+:root[data-theme="light"] :is(
+  .footer-columns a:not(.footer-brand > a:first-child),
+  .footer-brand p, .footer-bottom
+) { color: var(--color-ink-700); }
