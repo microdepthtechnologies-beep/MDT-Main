@@ -96,7 +96,7 @@ test("shop displays category previews with responsive limits and links to the fu
   expect((await page.locator(".product-card h3").allTextContents()).slice(0, firstProducts.length)).toEqual(firstProducts);
 });
 
-test("catalogue search, sorting and filter state work together", async ({ page }) => {
+test("catalogue search and filter state work together", async ({ page }) => {
   await page.goto("/shop/?q=Epson&category=projectors");
   await expect(page.locator(".product-card").first()).toBeVisible();
   await page.getByRole("button", { name: "Refine your search" }).click();
@@ -107,15 +107,13 @@ test("catalogue search, sorting and filter state work together", async ({ page }
   await expect(page).toHaveURL(/instock=1/);
   await filters.getByRole("button", { name: "Close filters" }).click();
   await expect(page.locator(".product-card h3").first()).toContainText("Epson");
-  await page.getByLabel("Sort by", { exact: true }).selectOption("name");
-  await expect(page).toHaveURL(/sort=name/);
   await expect(page).toHaveURL(/category=projectors/);
   await expect(page).toHaveURL(/q=Epson/);
   await page.getByRole("link", { name: "Remove Epson filter", exact: true }).click();
   await expect(page).not.toHaveURL(/brand=/);
   await expect(page).toHaveURL(/instock=1/);
   await page.getByRole("link", { name: "Clear all", exact: true }).click();
-  await expect(page).toHaveURL(/\/shop\/\?sort=name$/);
+  await expect(page).toHaveURL(/\/shop\/$/);
   await expect(page.locator(".active-filters")).toHaveCount(0);
 });
 
@@ -129,7 +127,7 @@ test("empty searches and special characters are safe; pagination preserves filte
   await page.getByRole("link", { name: "Next page", exact: true }).click();
   await expect(page).toHaveURL(/page=2/);
   await expect(page.locator(".results-count")).toContainText("25–48");
-  await page.goto("/shop/?sort=price-asc&min=10000&max=1000");
+  await page.goto("/shop/?min=10000&max=1000");
   await expect(page.locator(".active-filters")).toContainText("From KES 1,000");
   await expect(page.locator(".active-filters")).toContainText("Up to KES 10,000");
 });
@@ -229,8 +227,8 @@ test("existing pages fit mobile, tablet and desktop; shared links resolve", asyn
   expect(errors).toEqual([]);
 });
 
-test("quick look opens the chosen product and list view preserves browsing state", async ({ page }) => {
-  await page.goto("/shop/?q=HP&sort=name");
+test("quick look opens the chosen product and the grid keeps browsing state", async ({ page }) => {
+  await page.goto("/shop/?q=HP");
   const card = page.locator(".product-card").first();
   const title = await card.locator("h3").innerText();
   await card.getByRole("button", { name: /^Quick look at/ }).click();
@@ -244,19 +242,12 @@ test("quick look opens the chosen product and list view preserves browsing state
   await expect(dialog).toHaveCount(0);
   await expect(card.getByRole("button", { name: /^Quick look at/ })).toBeFocused();
 
-  await page.getByRole("link", { name: "List view", exact: true }).click();
-  await expect(page).toHaveURL(/view=list/);
-  await expect(page).toHaveURL(/q=HP/);
-  await expect(page).toHaveURL(/sort=name/);
-  await expect(page.locator(".product-list")).toBeVisible();
-  await page.getByLabel("Sort by", { exact: true }).selectOption("newest");
-  await expect(page).toHaveURL(/view=list/);
+  await expect(page.locator(".catalogue-sort")).toHaveCount(0);
+  await expect(page.locator(".catalogue-view")).toHaveCount(0);
   for (const width of [320, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   }
-  await page.getByRole("link", { name: "Grid view", exact: true }).click();
-  await expect(page.locator(".product-list")).toHaveCount(0);
   await expect(page).toHaveURL(/q=HP/);
 });
 
@@ -316,7 +307,7 @@ test("multiple brands compose instantly and survive history, pagination and relo
 });
 
 test("category archives use header menus and leave only refinements in the sidebar", async ({ page }) => {
-  await page.goto("/product-category/pcs-desktops/?brand=HP&view=list");
+  await page.goto("/product-category/pcs-desktops/?brand=HP");
   const categories = page.getByRole("navigation", { name: "Shop categories" });
   await expect(categories.getByRole("link")).toHaveCount(11);
   await page.getByRole("button", { name: "Refine your search" }).click();
@@ -332,11 +323,11 @@ test("category archives use header menus and leave only refinements in the sideb
   const href = await child.getAttribute("href");
   const childPath = new URL(href!, "http://localhost").pathname;
   await child.click();
-  await expect(page).toHaveURL(url => url.pathname === childPath && url.searchParams.get("brand") === "HP" && url.searchParams.get("view") === "list");
-  await expect(page.locator(".product-list")).toBeVisible();
+  await expect(page).toHaveURL(url => url.pathname === childPath && url.searchParams.get("brand") === "HP");
+  await expect(page.locator(".product-grid")).toBeVisible();
   await page.getByRole("navigation", { name: "Shop categories" }).getByRole("link", { name: "Laptops & Desktops", exact: true }).click();
-  await expect(page).toHaveURL(url => url.pathname === "/product-category/pcs-desktops/" && url.searchParams.get("brand") === "HP" && url.searchParams.get("view") === "list");
-  await expect(page.locator(".product-list")).toBeVisible();
+  await expect(page).toHaveURL(url => url.pathname === "/product-category/pcs-desktops/" && url.searchParams.get("brand") === "HP");
+  await expect(page.locator(".product-grid")).toBeVisible();
 });
 
 test("category archives keep four product columns and smaller product imagery", async ({ page }) => {
