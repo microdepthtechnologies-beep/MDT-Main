@@ -11,7 +11,7 @@ export const getDashboardAccount = cache(async (): Promise<DashboardAccount> => 
   const db = await getDb();
   const account = await db.collection("accounts").findOne(
     { email: session.user.email },
-    { projection: { name: 1, company: 1, phone: 1, passwordHash: 1, role: 1 } },
+    { projection: { name: 1, company: 1, phone: 1, passwordHash: 1, passwordStrong: 1, role: 1 } },
   );
   return {
     name: account?.name || session.user.name || "Your account",
@@ -19,6 +19,7 @@ export const getDashboardAccount = cache(async (): Promise<DashboardAccount> => 
     company: account?.company || "",
     phone: account?.phone || "",
     hasPassword: !!account?.passwordHash,
+    passwordUpgradeRequired: !!account?.passwordHash && account?.passwordStrong !== true,
     canSales: account?.role === "sales" || account?.role === "admin",
   };
 });

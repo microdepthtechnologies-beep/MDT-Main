@@ -3,6 +3,7 @@ import { decode } from "he";
 import { getDb } from "./mongodb";
 import { contentHtml } from "./content-html";
 import { editorialMedia } from "@/data/editorial-media";
+import { mediaUrl } from "./media";
 
 export type JournalPost = {
   slug: string; title: string; excerpt: string; content: string;
@@ -27,8 +28,8 @@ export const getJournalPosts = cache(async (): Promise<JournalPost[]> => {
     const date = publishedAt.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (!date || !/^[a-z0-9][a-z0-9-]*$/i.test(row.slug)) return [];
     const category = knownCategories[row.slug];
-    const source = String(row.featuredImage?.url || "").replace(/^https?:\/\/(?:www\.)?mdt\.co\.ke/, "");
-    const image = source.startsWith("/wp-content/uploads/") ? source : editorialMedia.hero;
+    const source = mediaUrl(String(row.featuredImage?.url || ""));
+    const image = source.includes("/wp-content/uploads/") ? source : editorialMedia.hero;
     const content = contentHtml(String(row.content || "").replace(/\[\/?(?:vc_|mfn_|fusion_)[^\]]*\]/g, ""));
     const excerpt = plain(row.excerpt) || plain(content).slice(0, 210).replace(/\s+\S*$/, "") + "…";
     return [{

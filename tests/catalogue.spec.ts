@@ -101,6 +101,7 @@ test("catalogue search and filter state work together", async ({ page }) => {
   await expect(page.locator(".product-card").first()).toBeVisible();
   await page.getByRole("button", { name: "Refine your search" }).click();
   const filters = page.locator(".filter-dialog");
+  await filters.getByLabel("Find a brand", { exact: true }).fill("Epson");
   await filters.getByRole("checkbox", { name: "Epson", exact: true }).check();
   await filters.getByLabel("In stock only").check();
   await expect(page).toHaveURL(/brand=Epson/);
@@ -128,8 +129,7 @@ test("empty searches and special characters are safe; pagination preserves filte
   await expect(page).toHaveURL(/page=2/);
   await expect(page.locator(".results-count")).toContainText("25–48");
   await page.goto("/shop/?min=10000&max=1000");
-  await expect(page.locator(".active-filters")).toContainText("From KES 1,000");
-  await expect(page.locator(".active-filters")).toContainText("Up to KES 10,000");
+  await expect(page.locator(".active-filters")).toHaveCount(0);
 });
 
 test("category links include the hierarchy and images load", async ({ page }) => {
@@ -312,9 +312,10 @@ test("category archives use header menus and leave only refinements in the sideb
   await expect(categories.getByRole("link")).toHaveCount(11);
   await page.getByRole("button", { name: "Refine your search" }).click();
   const sidebar = page.locator(".filter-dialog");
-  await expect(sidebar.getByText("Category", { exact: true })).toHaveCount(0);
-  await expect(sidebar.locator(".facet-group")).toHaveCount(2);
-  await expect(sidebar.locator(".facet-group").first()).toContainText("Brands");
+  await expect(sidebar.locator(".facet-group")).toHaveCount(3);
+  await expect(sidebar.locator(".facet-group").first()).toContainText("Category");
+  await expect(sidebar.locator(".category-current")).toBeVisible();
+  await expect(sidebar.locator(".filter-category-trail")).toContainText("All hardware");
   await sidebar.getByRole("button", { name: "Close filters" }).click();
   await categories.getByRole("button", { name: "Browse Laptops & Desktops subcategories" }).click();
   const menu = page.getByRole("group", { name: "Laptops & Desktops categories" });
@@ -365,22 +366,15 @@ test("live search keeps focus and scroll position; reset cancels a queued query"
   await expect(page).toHaveURL(/\/shop\/$/);
 });
 
-test("price validation and mobile drawer remain usable at the smallest viewport", async ({ page }) => {
+test("pricing stays quote-only and the mobile drawer remains usable at the smallest viewport", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 640 });
   await page.goto("/shop/?min=0&max=10000");
   const trigger = page.getByRole("button", { name: "Refine your search" });
   await trigger.click();
   const dialog = page.locator(".filter-dialog");
-  const min = dialog.getByLabel("Minimum (KES)");
-  await min.fill("20000");
-  await dialog.getByRole("button", { name: "Set price range" }).click();
-  await expect(dialog.getByRole("alert")).toContainText("Minimum price");
-  await expect(page).toHaveURL(/min=0/);
+  await expect(dialog.getByLabel("Minimum (KES)")).toHaveCount(0);
   const bottom = dialog.locator(".filter-dialog-bottom");
   expect((await bottom.boundingBox())!.y + (await bottom.boundingBox())!.height).toBeLessThanOrEqual(641);
-  await dialog.getByRole("link", { name: "Include all prices", exact: true }).click();
-  await expect(page).not.toHaveURL(/min=|max=/);
-  await expect(dialog).toBeVisible();
   expect(await dialog.evaluate(el => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
@@ -388,5 +382,4 @@ test("price validation and mobile drawer remain usable at the smallest viewport"
   await trigger.click();
   await dialog.locator("summary").filter({ hasText: "Pricing" }).click();
   await expect(dialog.getByRole("link", { name: "Request pricing", exact: true })).toBeVisible();
-  await expect(dialog.getByLabel("Minimum (KES)")).toHaveCount(0);
 });

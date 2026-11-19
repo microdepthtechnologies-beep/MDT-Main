@@ -78,20 +78,20 @@ test.describe("password recovery security", () => {
     const old = token;
     account.resetRequestedAt = new Date(0);
     await requestPasswordReset(db, String(account.email), send);
-    expect(await completePasswordReset(db, old, "A new passphrase")).toBe(false);
+    expect(await completePasswordReset(db, old, "Harbour-Lantern-2026!")).toBe(false);
     account.resetExpiresAt = new Date(0);
-    expect(await completePasswordReset(db, token, "A new passphrase")).toBe(false);
+    expect(await completePasswordReset(db, token, "Harbour-Lantern-2026!")).toBe(false);
     expect(account.passwordHash).toBe("old-hash");
     account.resetExpiresAt = new Date(Date.now() + 60_000);
     const results = await Promise.all([
-      completePasswordReset(db, token, "A new passphrase"),
-      completePasswordReset(db, token, "A new passphrase"),
+      completePasswordReset(db, token, "Harbour-Lantern-2026!"),
+      completePasswordReset(db, token, "Harbour-Lantern-2026!"),
     ]);
     expect(results.filter(Boolean)).toHaveLength(1);
-    expect(await bcrypt.compare("A new passphrase", String(account.passwordHash))).toBe(true);
+    expect(await bcrypt.compare("Harbour-Lantern-2026!", String(account.passwordHash))).toBe(true);
     expect(account.passwordVersion).toBe(1);
     expect(account.resetTokenHash).toBeUndefined();
-    expect(await completePasswordReset(db, token, "Another passphrase")).toBe(false);
+    expect(await completePasswordReset(db, token, "Another-Lantern-2026!")).toBe(false);
   });
 
   test("failed delivery cleans up the token; input checks reject weak and oversized passwords", async () => {
@@ -102,7 +102,10 @@ test.describe("password recovery security", () => {
     expect(account.passwordHash).toBe("old-hash");
     expect(resetPasswordIsValid("short")).toBe(false);
     expect(resetPasswordIsValid("é".repeat(37))).toBe(false);
-    expect(resetPasswordIsValid("a".repeat(72))).toBe(true);
+    expect(resetPasswordIsValid("a".repeat(72))).toBe(false);
+    expect(resetPasswordIsValid("Password123!")).toBe(false);
+    expect(resetPasswordIsValid("Aa1!" + "Zq7#Lm2$Vb9&Hn4@".repeat(4) + "Kp5%")).toBe(true);
+    expect(resetPasswordIsValid("Aa1!" + "Zq7#Lm2$Vb9&Hn4@".repeat(4) + "Kp5%x")).toBe(false);
     expect(resetTokenIsValid({ $ne: null })).toBe(false);
   });
 });
@@ -119,8 +122,8 @@ test("recovery pages are responsive and support request, validation, failure and
   await page.route("**/api/auth/forgot-password/", route => route.fulfill({ status: 200, json: { message: "Request accepted" } }));
   await page.getByLabel("Email address").fill("recovery@example.test");
   await page.getByRole("button", { name: "Send reset link" }).click();
-  await expect(page.getByRole("status")).toContainText("Check your inbox");
-  await expect(page.getByRole("status")).toContainText("If this email");
+  await expect(page.locator(".recovery-success")).toContainText("Check your inbox");
+  await expect(page.locator(".recovery-success")).toContainText("If this email");
   await page.goto("/auth/reset-password/");
   await expect(page.locator(".account-error")).toContainText("invalid");
   await expect(page.getByRole("button", { name: "Save new password" })).toHaveCount(0);
@@ -130,11 +133,11 @@ test("recovery pages are responsive and support request, validation, failure and
     await page.setViewportSize({ width, height: 900 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   }
-  await page.getByLabel("New password", { exact: true }).fill("New passphrase 2026");
+  await page.getByLabel("New password", { exact: true }).fill("New-Harbour-Lantern-26!");
   await page.getByLabel("Confirm new password").fill("Different passphrase");
   await page.getByRole("button", { name: "Save new password" }).click();
   await expect(page.locator(".account-error")).toContainText("don’t match");
-  await page.getByLabel("Confirm new password").fill("New passphrase 2026");
+  await page.getByLabel("Confirm new password").fill("New-Harbour-Lantern-26!");
   await page.getByRole("button", { name: "Show passwords" }).click();
   await expect(page.getByLabel("New password", { exact: true })).toHaveAttribute("type", "text");
   await page.route("**/api/auth/reset-password/", route => route.fulfill({ status: 400, json: { error: "This reset link has expired." } }));
@@ -143,7 +146,7 @@ test("recovery pages are responsive and support request, validation, failure and
   await page.unroute("**/api/auth/reset-password/");
   await page.route("**/api/auth/reset-password/", route => route.fulfill({ status: 200, json: { ok: true } }));
   await page.getByRole("button", { name: "Save new password" }).click();
-  await expect(page.getByRole("status")).toContainText("password has been updated");
+  await expect(page.locator(".recovery-success")).toContainText("password has been updated");
   expect(new URL(page.url()).search).toBe("");
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });

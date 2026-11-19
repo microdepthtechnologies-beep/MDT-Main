@@ -159,7 +159,7 @@ test("mobile navigation and licensing enquiries lead to the right pages", async 
   await page.locator(".marketing-cta .button").click();
   await expect(page).toHaveURL(/\/contact\//);
   await expect(page.getByLabel("Area of interest")).toHaveValue(/Software/i);
-  await page.getByRole("button", { name: "Continue in email" }).click();
+  await page.getByRole("button", { name: "Send enquiry" }).click();
   await expect(page.getByText("Please enter your name.", { exact: true })).toBeVisible();
 });
 

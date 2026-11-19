@@ -1,12 +1,8 @@
 export type SearchValues = Record<string, string | string[] | undefined>;
 export function normaliseFilters(raw: SearchValues) {
   const single = (key: string) => typeof raw[key] === "string" ? (raw[key] as string).trim().slice(0, 160) : "";
-  const price = (key: string) => {
-    const value = single(key);
-    return value && Number.isFinite(Number(value)) && Number(value) >= 0 ? String(Number(value)) : "";
-  };
-  let min = price("min"), max = price("max");
-  if (min && max && Number(min) > Number(max)) [min, max] = [max, min];
+  // Price filters are disabled publicly (quote-only pricing); min/max stay in the shape for URL compatibility.
+  const min = "", max = "";
   return {
     q: single("q"), category: single("category"),
     brand: [...new Set((Array.isArray(raw.brand) ? raw.brand : [raw.brand || ""])

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/mongodb";
+import { cleanProduct, type Product } from "@/lib/catalogue";
 
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
@@ -20,10 +21,13 @@ export async function GET(req: NextRequest) {
   const limit = Number.isSafeInteger(limitValue) && limitValue > 0 ? Math.min(100, limitValue) : 24;
   const col = db.collection("products");
   const [items, total] = await Promise.all([
-    col.find(filter, { projection: { description: 0 } })
+    col.find(filter, { projection: { description: 0, price: 0, totalSales: 0, rating: 0, "variations.price": 0 } })
        .sort({ menuOrder: 1, name: 1 })
        .skip((page - 1) * limit).limit(limit).toArray(),
     col.countDocuments(filter),
   ]);
-  return NextResponse.json({ items, total, page, pages: Math.ceil(total / limit) });
+  // Public catalogue: an explicit allowlist of fields. Internal prices, sales
+  // figures and database ids never leave the server (quote-only pricing).
+  const publicItems = (items as unknown as Product[]).map(cleanProduct);
+  return NextResponse.json({ items: publicItems, total, page, pages: Math.ceil(total / limit) });
 }

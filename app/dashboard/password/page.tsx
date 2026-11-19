@@ -6,5 +6,5 @@ export const metadata: Metadata = { title: "Sign-in & security" };
 
 export default async function PasswordPage() {
   const account = await getDashboardAccount();
-  return <DashboardSecurity hasPassword={account.hasPassword} />;
+  return <DashboardSecurity hasPassword={account.hasPassword} upgradeRequired={!!account.passwordUpgradeRequired} email={account.email} name={account.name} />;
 }

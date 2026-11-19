@@ -5,31 +5,47 @@ import { ArrowRightIcon, CheckIcon, LoaderCircleIcon } from 'lucide-react';
 import { solutions } from '../data/solutions';
 import { contact } from '../data/company';
 
-type Status = 'idle' | 'submitting' | 'success';
-type Fields = {name: string;company: string;email: string;interest: string;message: string;};
+type Status = 'idle' | 'submitting' | 'success' | 'error';
+type Fields = {name: string;company: string;email: string;interest: string;message: string;website: string;};
 type Errors = Partial<Record<keyof Fields, string>>;
 
-const empty: Fields = { name: '', company: '', email: '', interest: '', message: '' };
+const empty: Fields = { name: '', company: '', email: '', interest: '', message: '', website: '' };
 const ease = [0.23, 1, 0.32, 1] as const;
 
 export function EnquiryForm({ initialInterest = "" }: { initialInterest?: string }) {
   const [fields, setFields] = useState<Fields>({ ...empty, interest: initialInterest });
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const update = (key: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFields((f) => ({ ...f, [key]: e.target.value }));
     if (errors[key]) setErrors((er) => ({ ...er, [key]: undefined }));
   };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const next = validate(fields);
     setErrors(next);
     if (Object.keys(next).length > 0) return;
-    const body = `Name: ${fields.name}\nCompany: ${fields.company || 'Not specified'}\nReply email: ${fields.email}\nInterest: ${fields.interest}\n\n${fields.message}`;
-    window.location.href = `mailto:${contact.email}?subject=${encodeURIComponent(`MDT enquiry: ${fields.interest}`)}&body=${encodeURIComponent(body)}`;
-    setStatus('success');
+    setStatus('submitting');
+    try {
+      const res = await fetch('/api/enquiries/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fields),
+      });
+      const result = await res.json().catch(() => null);
+      if (!res.ok) {
+        setErrorMessage(result?.error || 'Something went wrong. Please try again.');
+        setStatus('error');
+        return;
+      }
+      setStatus('success');
+    } catch {
+      setErrorMessage('No connection — check your internet and try again.');
+      setStatus('error');
+    }
   };
 
   const reset = () => {
@@ -56,9 +72,9 @@ export function EnquiryForm({ initialInterest = "" }: { initialInterest?: string
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand text-white">
               <CheckIcon className="h-6 w-6" />
             </span>
-            <h3 className="mt-6 text-3xl font-semibold">Your email draft is ready.</h3>
+            <h3 className="mt-6 text-3xl font-semibold">We&apos;ve got it — thank you.</h3>
             <p className="mt-3 max-w-sm leading-relaxed text-muted">
-              Send the draft from your email app to reach our team. If an app didn&apos;t open, email {contact.email} or use the WhatsApp link beside this form.
+              Your enquiry is with our team and a confirmation is on its way to your inbox. Expect a reply shortly — usually within one business day.
             </p>
             <button type="button" onClick={reset} className="mt-8 font-medium text-ink underline underline-offset-4">
               Edit your enquiry
@@ -103,6 +119,8 @@ export function EnquiryForm({ initialInterest = "" }: { initialInterest?: string
                 <textarea id="f-message" rows={4} value={fields.message} onChange={update('message')} className={`${inputBase} resize-none ${errors.message ? 'border-brand' : 'border-line'}`} placeholder="Tell us about your project, timeline or the equipment you need." />
               </Field>
             </div>
+            <input type="text" name="website" value={fields.website} onChange={update('website')} className="hidden" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+            {status === 'error' && <p role="alert" className="mt-4 text-sm font-medium text-brand">{errorMessage}</p>}
             <button
             type="submit"
             disabled={status === 'submitting'}
@@ -114,11 +132,11 @@ export function EnquiryForm({ initialInterest = "" }: { initialInterest?: string
                 </> :
 
             <>
-                  Continue in email <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  Send enquiry <ArrowRightIcon className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </>
             }
             </button>
-            <p className="mt-3 text-xs text-muted">Opens a draft in your email app. Nothing is sent until you send it.</p>
+            <p className="mt-3 text-xs text-muted">Goes straight to our team. Prefer email? Write to {contact.email}.</p>
           </motion.form>
         }
       </AnimatePresence>

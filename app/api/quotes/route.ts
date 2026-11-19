@@ -4,6 +4,7 @@ import { getDb } from "@/lib/mongodb";
 import { sendQuoteEmails, type QuoteEmailData } from "@/lib/email";
 import { getDashboardQuotes } from "@/lib/dashboard";
 import { quoteActor, quoteApiError } from "@/lib/quote-access";
+import { consumeRateLimit, tooManyRequests } from "@/lib/rate-limit";
 
 function quoteNumber() {
   return "MDT-" + Date.now().toString(36).toUpperCase() + "-" + Math.floor(Math.random() * 899 + 100);
@@ -14,6 +15,9 @@ export async function POST(req: Request) {
     const session = await auth();
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Please sign in to request a quote." }, { status: 401 });
+    }
+    if (!(await consumeRateLimit("quote-submit", session.user.email, 20, 3600))) {
+      return tooManyRequests("You’ve sent many quote requests in the last hour. Please wait a little, or contact sales@mdt.co.ke.");
     }
     const body = await req.json();
     const { items, company, phone, message } = body;

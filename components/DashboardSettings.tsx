@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { isStrongPassword, passwordPolicyMessage } from "@/lib/password-policy";
+import { PasswordStrength } from "./PasswordStrength";
 import { ArrowUpRight, Check, Eye, EyeOff, Info, KeyRound, LoaderCircle, LockKeyhole, Mail, Save, ShieldCheck, UserRound } from "lucide-react";
 import { accountInitials, type DashboardAccount, type ProfileResult } from "@/lib/dashboard-types";
 import { contact } from "@/data/company";
@@ -41,14 +44,17 @@ export function DashboardProfile({ account, saveAction }: { account: DashboardAc
   </>;
 }
 
-function PasswordField({ name, label, autoComplete, hint }: { name: string; label: string; autoComplete: string; hint?: string }) {
+function PasswordField({ name, label, autoComplete, hint, onValue, children }: { name: string; label: string; autoComplete: string; hint?: string; onValue?: (value: string) => void; children?: ReactNode }) {
   const [visible, setVisible] = useState(false);
-  return <div className="workspace-password-field"><label htmlFor={`security-${name}`}>{label}</label><div><input id={`security-${name}`} name={name} type={visible ? "text" : "password"} autoComplete={autoComplete} required minLength={name === "current" ? 1 : 8} aria-describedby={hint ? `security-${name}-hint` : undefined} /><button type="button" aria-label={`${visible ? "Hide" : "Show"} ${label.toLowerCase()}`} aria-pressed={visible} onClick={() => setVisible(!visible)}>{visible ? <EyeOff size={18} /> : <Eye size={18} />}</button></div>{hint && <small id={`security-${name}-hint`}>{hint}</small>}</div>;
+  const describedBy = hint || children ? `security-${name}-hint` : undefined;
+  return <div className="workspace-password-field"><label htmlFor={`security-${name}`}>{label}</label><div><input id={`security-${name}`} name={name} type={visible ? "text" : "password"} autoComplete={autoComplete} required minLength={name === "current" ? 1 : 12} maxLength={name === "current" ? 200 : 72} aria-describedby={describedBy} onChange={onValue ? e => onValue(e.target.value) : undefined} /><button type="button" aria-label={`${visible ? "Hide" : "Show"} ${label.toLowerCase()}`} aria-pressed={visible} onClick={() => setVisible(!visible)}>{visible ? <EyeOff size={18} /> : <Eye size={18} />}</button></div>{hint && <small id={describedBy}>{hint}</small>}{children}</div>;
 }
 
-export function DashboardSecurity({ hasPassword }: { hasPassword: boolean }) {
+export function DashboardSecurity({ hasPassword, upgradeRequired = false, email, name }: { hasPassword: boolean; upgradeRequired?: boolean; email?: string; name?: string }) {
+  const router = useRouter();
   const [pending, setPending] = useState(false);
   const [result, setResult] = useState<ProfileResult | null>(null);
+  const [next, setNext] = useState("");
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const element = event.currentTarget;
@@ -58,6 +64,10 @@ export function DashboardSecurity({ hasPassword }: { hasPassword: boolean }) {
       setResult({ ok: false, message: "Your new passwords don’t match. Please check both fields." });
       return;
     }
+    if (!isStrongPassword(String(form.get("next") || ""), { email, name })) {
+      setResult({ ok: false, message: passwordPolicyMessage });
+      return;
+    }
     setPending(true);
     try {
       const response = await fetch("/api/auth/password/", {
@@ -65,8 +75,9 @@ export function DashboardSecurity({ hasPassword }: { hasPassword: boolean }) {
         body: JSON.stringify({ current: form.get("current"), next: form.get("next") }),
       });
       const data = await response.json();
-      setResult({ ok: response.ok, message: response.ok ? "Your password has been updated." : data.error || "Couldn’t update your password. Please try again." });
-      if (response.ok) element.reset();
+      setResult({ ok: response.ok, message: response.ok ? "Your password has been updated. Signing you out of all sessions…" : data.error || "Couldn’t update your password. Please try again." });
+      // A password change signs out every session, including this one.
+      if (response.ok) { element.reset(); setNext(""); setTimeout(() => router.replace("/auth/signin/?reason=password-changed"), 1800); }
     } catch { setResult({ ok: false, message: "We couldn’t connect. Your password hasn’t changed. Please try again." }); }
     finally { setPending(false); }
   }
@@ -76,9 +87,10 @@ export function DashboardSecurity({ hasPassword }: { hasPassword: boolean }) {
       <section className="workspace-panel">
         <div className="workspace-panel-heading"><div><h2>{hasPassword ? "Change your password" : "Your sign-in method"}</h2><p>{hasPassword ? "A strong password helps keep your account private." : "Your account uses Google to sign in."}</p></div><KeyRound size={22} strokeWidth={1.4} /></div>
         {hasPassword ? <form className="workspace-form" onSubmit={save} aria-busy={pending} onChange={() => setResult(null)}>
+          {upgradeRequired && <p className="workspace-feedback workspace-feedback-error" role="alert"><Info size={17} />Your current password doesn’t meet MDT’s security standard. Please choose a strong new password to continue using your account.</p>}
           <div className="workspace-security-intro"><ShieldCheck size={20} /><p>Enter your current password to confirm it’s you, then choose a new one.</p></div>
           <PasswordField name="current" label="Current password" autoComplete="current-password" />
-          <PasswordField name="next" label="New password" autoComplete="new-password" hint="Use at least 8 characters. A longer, unique password is even better." />
+          <PasswordField name="next" label="New password" autoComplete="new-password" onValue={setNext}><PasswordStrength id="security-next-hint" password={next} email={email} name={name} /></PasswordField>
           <PasswordField name="confirm" label="Confirm new password" autoComplete="new-password" />
           {result && <p className={`workspace-feedback ${result.ok ? "workspace-feedback-success" : "workspace-feedback-error"}`} role={result.ok ? "status" : "alert"}>{result.ok ? <Check size={17} /> : <Info size={17} />}{result.message}</p>}
           <div className="workspace-form-footer"><span>Never share your password with anyone.</span><button type="submit" className="workspace-button workspace-button-red" disabled={pending}>{pending ? <LoaderCircle size={17} className="filter-spinner" /> : <LockKeyhole size={17} />}{pending ? "Updating…" : "Update password"}</button></div>

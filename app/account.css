@@ -113,3 +113,25 @@
   .account-private { font-size: 10px; gap: 5px; }
   .account-story { padding: 24px 20px; }
 }
+
+/* Live password-strength checklist: each rule turns green as it is met. */
+.password-strength { margin-top: 10px; padding: 12px 14px; border: 1px solid var(--border, #dedede); border-radius: 8px; background: var(--surface, #f7f7f5); transition: border-color .2s; }
+.password-strength.is-strong { border-color: #16a34a; }
+.password-strength-bar { height: 4px; border-radius: 4px; background: var(--border, #dedede); overflow: hidden; }
+.password-strength-bar span { display: block; height: 100%; border-radius: inherit; transition: width .25s ease, background-color .25s ease; }
+.password-strength-bar span[data-level="weak"] { background: #df1b23; }
+.password-strength-bar span[data-level="fair"] { background: #f59e0b; }
+.password-strength-bar span[data-level="good"] { background: #84cc16; }
+.password-strength-bar span[data-level="strong"] { background: #16a34a; }
+.password-strength-label { margin: 8px 0 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary, #626262); }
+.password-strength.is-strong .password-strength-label { color: #16a34a; }
+.password-strength ul { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.password-strength li { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-secondary, #707070); transition: color .2s; }
+.password-strength li svg { flex-shrink: 0; width: 14px; }
+.password-strength li.met { color: #16a34a; font-weight: 500; }
+:root[data-theme="dark"] .password-strength li.met, :root[data-theme="dark"] .password-strength.is-strong .password-strength-label { color: #4ade80; }
+:root[data-theme="dark"] .password-strength.is-strong { border-color: #22c55e; }
+@media (prefers-reduced-motion: reduce) { .password-strength, .password-strength-bar span, .password-strength li { transition: none; } }
+.session-expiry-notice { position: fixed; z-index: 90; left: 50%; bottom: 20px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; width: min(560px, calc(100vw - 24px)); padding: 14px 18px; border-radius: 10px; background: #151516; color: #f5f4f1; box-shadow: 0 14px 40px rgb(0 0 0 / 30%); font-size: 14px; }
+.session-expiry-notice button { padding: 8px 14px; border-radius: 6px; background: #df1b23; color: #fff; font-weight: 600; }
+.account-notice-warning { border-color: #f59e0b !important; }

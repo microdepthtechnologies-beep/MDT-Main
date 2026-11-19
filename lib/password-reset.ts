@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import bcrypt from "bcryptjs";
 import type { Db } from "mongodb";
+import { isStrongPassword } from "./password-policy";
 
 export const resetRequestMessage = "If this email belongs to an account with a password, a reset link will arrive shortly. Check your inbox and spam folder.";
 export const invalidResetMessage = "This reset link is invalid, expired or already used. Please request a new link.";
@@ -8,7 +9,7 @@ export const resetTokenIsValid = (token: unknown): token is string => typeof tok
 const digest = (value: string) => createHash("sha256").update(value).digest("hex");
 
 export function resetPasswordIsValid(password: unknown): password is string {
-  return typeof password === "string" && password.length >= 8 && Buffer.byteLength(password, "utf8") <= 72;
+  return isStrongPassword(password);
 }
 
 /** Use a configured origin, never the incoming Host header, for recovery links. */
@@ -75,17 +76,17 @@ export async function completePasswordReset(db: Db, token: string, password: str
   if (!resetTokenIsValid(token) || !resetPasswordIsValid(password)) return false;
   const accounts = db.collection("accounts");
   const filter = { resetTokenHash: digest(token), resetExpiresAt: { $gt: new Date() }, passwordHash: { $type: "string" } };
-  const account = await accounts.findOne(filter, { projection: { _id: 1, passwordHash: 1 } });
+  const account = await accounts.findOne(filter, { projection: { _id: 1, passwordHash: 1, email: 1, name: 1 } });
   if (!account) return false;
   const passwordHash = await bcrypt.hash(password, 12);
   // Consume the token and change the password in the SAME atomic write.
   const result = await accounts.updateOne(
     { ...filter, _id: account._id, passwordHash: account.passwordHash, resetExpiresAt: { $gt: new Date() } },
     {
-      $set: { passwordHash, updatedAt: new Date() },
+      $set: { passwordHash, passwordStrong: true, updatedAt: new Date() },
       $inc: { passwordVersion: 1 },
       $unset: { resetTokenHash: "", resetExpiresAt: "" },
     },
   );
-  return result.modifiedCount === 1;
+  return result.modifiedCount === 1 ? { email: String(account.email || ""), name: String(account.name || "") } : false;
 }

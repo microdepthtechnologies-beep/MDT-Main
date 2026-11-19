@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, Eye, EyeOff, LoaderCircle, LockKeyhole, Mail } from "lucide-react";
+import { isStrongPassword, passwordPolicyMessage } from "@/lib/password-policy";
+import { PasswordStrength } from "./PasswordStrength";
 
 export function PasswordRecoveryForm({ mode, token = "" }: { mode: "request" | "reset"; token?: string }) {
   const reset = mode === "reset";
@@ -11,6 +13,7 @@ export function PasswordRecoveryForm({ mode, token = "" }: { mode: "request" | "
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
   const [show, setShow] = useState(false);
+  const [password, setPassword] = useState("");
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -21,6 +24,7 @@ export function PasswordRecoveryForm({ mode, token = "" }: { mode: "request" | "
     setError("");
     if (reset && password !== data.get("confirm")) { setError("Your passwords don’t match. Please enter the same password twice."); return; }
     if (reset && new TextEncoder().encode(password).length > 72) { setError("Please use a password no longer than 72 bytes (fewer characters when using symbols or emoji)."); return; }
+    if (reset && !isStrongPassword(password)) { setError(passwordPolicyMessage); return; }
     setPending(true);
     try {
       const response = await fetch(`/api/auth/${reset ? "reset-password" : "forgot-password"}/`, {
@@ -31,6 +35,7 @@ export function PasswordRecoveryForm({ mode, token = "" }: { mode: "request" | "
       const result = await response.json();
       if (!response.ok) { setError(result.error || "We couldn’t complete your request. Please try again."); return; }
       form.reset();
+      setPassword("");
       setDone(true);
       if (reset) window.history.replaceState(null, "", "/auth/reset-password/");
     } catch {
@@ -51,12 +56,12 @@ export function PasswordRecoveryForm({ mode, token = "" }: { mode: "request" | "
         <div className="account-password-field">
           <label htmlFor="recovery-password">New password</label>
           <div className="account-password-input">
-            <input id="recovery-password" name="password" type={show ? "text" : "password"} autoComplete="new-password" required minLength={8} maxLength={72} placeholder="Create a new password" aria-describedby="recovery-hint" disabled={pending} />
+            <input id="recovery-password" name="password" type={show ? "text" : "password"} autoComplete="new-password" required minLength={12} maxLength={72} placeholder="Create a strong password" aria-describedby="recovery-hint" disabled={pending} onChange={e => setPassword(e.target.value)} />
             <button type="button" onClick={() => setShow(!show)} aria-label={show ? "Hide passwords" : "Show passwords"} aria-pressed={show}>{show ? <EyeOff size={18} /> : <Eye size={18} />}</button>
           </div>
-          <p id="recovery-hint" className="account-field-hint">At least 8 characters. A longer, unique passphrase is best.</p>
+          <PasswordStrength id="recovery-hint" password={password} />
         </div>
-        <label htmlFor="recovery-confirm">Confirm new password<input id="recovery-confirm" name="confirm" type={show ? "text" : "password"} autoComplete="new-password" placeholder="Enter it once more" required minLength={8} maxLength={72} disabled={pending} /></label>
+        <label htmlFor="recovery-confirm">Confirm new password<input id="recovery-confirm" name="confirm" type={show ? "text" : "password"} autoComplete="new-password" placeholder="Enter it once more" required minLength={12} maxLength={72} disabled={pending} /></label>
       </>}
       {error && <p className="account-error" role="alert">{error}</p>}
       <button className="account-submit" type="submit" disabled={pending}>{pending ? <>{reset ? "Updating your password…" : "Requesting your link…"}<LoaderCircle size={18} className="filter-spinner" /></> : <>{reset ? "Save new password" : "Send reset link"}<ArrowRight size={18} /></>}</button>
