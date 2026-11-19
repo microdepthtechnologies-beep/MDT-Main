@@ -30,7 +30,7 @@ let otherContext: BrowserContext;
 
 async function signedIn(browser: Browser, user: typeof customer) {
   const context = await browser.newContext({ baseURL: origin });
-  const value = await encode({ secret, salt: "authjs.session-token", token: { sub: user._id.toString(), email: user.email, name: user.name, role: user.role, passwordVersion: 0 }, maxAge: 3600 });
+  const value = await encode({ secret, salt: "authjs.session-token", token: { sub: user._id.toString(), email: user.email, name: user.name, role: user.role, passwordVersion: 0, authTime: Math.floor(Date.now() / 1000) }, maxAge: 3600 });
   await context.addCookies([{ name: "authjs.session-token", value, url: origin, httpOnly: true, sameSite: "Lax" }]);
   return context;
 }
@@ -43,8 +43,8 @@ test.describe("sales quotation workflow", () => {
     client = new MongoClient(replica.getUri(), { serverSelectionTimeoutMS: 15000 });
     await client.connect();
     db = client.db(databaseName);
-    const passwordHash = await bcrypt.hash("Test password 2026", 12);
-    await db.collection("accounts").insertMany([customer, staff, other].map(user => ({ ...user, passwordHash, passwordVersion: 0 })));
+    const passwordHash = await bcrypt.hash("Test-Harbour-Lantern-26!", 12);
+    await db.collection("accounts").insertMany([customer, staff, other].map(user => ({ ...user, passwordHash, passwordStrong: true, passwordVersion: 0 })));
     smtp = createServer(socket => {
       socket.setEncoding("utf8");
       socket.write("220 localhost MDT test SMTP\r\n");

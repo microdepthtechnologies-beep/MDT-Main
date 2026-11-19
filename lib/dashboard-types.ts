@@ -4,6 +4,7 @@ export type DashboardAccount = {
   company: string;
   phone: string;
   hasPassword: boolean;
+  passwordUpgradeRequired?: boolean;
   canSales?: boolean;
 };
 

@@ -12,7 +12,7 @@ export function mergeContent<T>(base: T, value: unknown, field = ""): T {
   if (typeof base === "string") {
     if (typeof value !== "string" || value.length > 12000) return base;
     if (/(?:href|url)$/i.test(field) && !safeContentLink(value)) return base;
-    if (/^(?:image|src)$/i.test(field) && !/^\/wp-content\/uploads\/[^?#]+$/.test(value)) return base;
+    if (/^(?:image|src)$/i.test(field) && !/^(?:https?:\/\/[^/?#]+)?\/wp-content\/uploads\/[^?#]+$/.test(value)) return base;
     if (field === "icon" && !["network", "security", "hardware", "software", "av", "support"].includes(value)) return base;
     return value as T;
   }

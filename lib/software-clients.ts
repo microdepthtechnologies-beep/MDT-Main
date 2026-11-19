@@ -1,4 +1,5 @@
 import { getDb } from "./mongodb";
+import { mediaUrl } from "./media";
 
 export interface SoftwareClient {
   wpId: number | string;
@@ -147,7 +148,7 @@ export async function getSoftwarePageData(): Promise<SoftwarePageData> {
       wpId: d.wpId ?? String(d._id),
       title: String(d.title),
       slug: String(d.slug ?? d._id),
-      imageUrl: d.featuredImage?.url ?? null,
+      imageUrl: mediaUrl(d.featuredImage?.url) || null,
       website: d.website ?? null,
     };
     for (const id of catIds) put(id, client);

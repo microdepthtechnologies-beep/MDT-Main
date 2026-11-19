@@ -10,6 +10,7 @@ declare module "next-auth" {
       image?: string | null;
       role: UserRole;
       provider?: string;
+      passwordUpgradeRequired?: boolean;
     };
   }
   interface User {
@@ -25,5 +26,7 @@ declare module "next-auth/jwt" {
     passwordVersion?: number;
     role?: UserRole;
     provider?: string;
+    authTime?: number;
+    passwordUpgradeRequired?: boolean;
   }
 }

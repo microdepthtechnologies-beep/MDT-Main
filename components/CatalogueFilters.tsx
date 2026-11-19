@@ -2,28 +2,78 @@
 
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
-import { ArrowRight, ArrowUpRight, ChevronDown, LoaderCircle, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, ChevronRight, Layers, LoaderCircle, Search, SlidersHorizontal, X } from "lucide-react";
 import { clearedRefinements, refinementCount } from "@/lib/catalogue-filters";
+import type { Category } from "@/lib/catalogue";
 import { BrowseLink, revealResults, useBrowse } from "./CatalogueBrowser";
+
+function CategoryChoices() {
+  const { categories, facets, filters, locked } = useBrowse();
+  const [query, setQuery] = useState("");
+  const id = useId();
+  const bySlug = new Map(categories.map(c => [c.slug, c]));
+  const chainOf = (cat: Category) => {
+    const chain: Category[] = [];
+    const seen = new Set<number>();
+    let current: Category | undefined = cat;
+    while (current && !seen.has(current.wpTermId)) {
+      seen.add(current.wpTermId); chain.unshift(current);
+      current = categories.find(c => c.wpTermId === current?.parentWpTermId);
+    }
+    return chain;
+  };
+  const hrefOf = (cat: Category) => `/product-category/${chainOf(cat).map(c => c.slug).join("/")}/`;
+  const count = (slug: string) => facets.categories[slug] ?? 0;
+  // The nav covers the first three levels; the filter carries the rest, and
+  // after any category is chosen it drills into that branch's deeper levels.
+  const node = (filters.category && bySlug.get(filters.category)) || (locked && bySlug.get(locked)) || undefined;
+  const options = (node
+    ? categories.filter(c => c.parentWpTermId === node.wpTermId)
+    : categories.filter(c => chainOf(c).length > 3)
+  ).filter(c => count(c.slug) > 0).sort((a, b) => a.name.localeCompare(b.name));
+  const term = query.trim().toLocaleLowerCase();
+  const shown = term ? options.filter(c => c.name.toLocaleLowerCase().includes(term)) : options;
+  const trail = node ? chainOf(node) : [];
+  return <div className="category-navigator">
+    {node ? <>
+      <div className="filter-category-trail" aria-label="Category path">
+        <span><BrowseLink to="/shop/" changes={{ category: "" }}>All hardware</BrowseLink></span>
+        {trail.map((step, index) => <span key={step.slug}><ChevronRight size={11} aria-hidden="true" /><BrowseLink to={hrefOf(step)} changes={{ category: "" }} aria-current={index === trail.length - 1 ? "page" : undefined}>{step.name}</BrowseLink></span>)}
+      </div>
+      <div className="category-current"><Layers size={14} /><span>{node.name}</span><span>{count(node.slug).toLocaleString()} products</span></div>
+    </> : <p className="facet-hint">Categories deeper than the menu live here — pick one to focus the results.</p>}
+    {options.length > 6 && <div className="facet-search"><Search size={15} /><label className="sr-only" htmlFor={id}>Find a category</label><input id={id} value={query} onChange={e => setQuery(e.target.value)} placeholder="Find a category…" autoComplete="off" />{query && <button type="button" aria-label="Clear category search" onClick={() => setQuery("")}><X size={14} /></button>}</div>}
+    {shown.length > 0 && <div className="facet-option-list category-option-list">
+      {shown.map(c => <BrowseLink key={c.slug} className="category-choice" to={hrefOf(c)} changes={{ category: "" }}>
+        <span><strong>{c.name}</strong>{!node && <small>{chainOf(c).slice(1, -1).map(parent => parent.name).join(" / ")}</small>}</span>
+        <span className="facet-count" aria-hidden="true">{count(c.slug).toLocaleString()}</span>
+      </BrowseLink>)}
+    </div>}
+    {!shown.length && <p className="facet-hint">{term ? "No categories match that name." : node ? "You’re browsing the deepest category here." : "No categories match your current filters."}</p>}
+  </div>;
+}
 
 function BrandChoices() {
   const { filters, facets, update } = useBrowse();
   const [query, setQuery] = useState("");
-  const [expanded, setExpanded] = useState(false);
   const id = useId();
-  const matches = facets.brands.filter(b => b.name.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
-  const visible = expanded || query ? matches : matches.filter((b, i) => i < 7 || filters.brand.includes(b.name));
+  const term = query.trim().toLocaleLowerCase();
+  const matches = term ? facets.brands.filter(b => b.name.toLocaleLowerCase().includes(term)) : [];
+  const selected = facets.brands.filter(b => filters.brand.includes(b.name));
+  const chosen = filters.brand.filter(name => !selected.some(b => b.name === name)).map(name => ({ name, count: 0 }));
+  const list = term ? matches : [...selected, ...chosen];
+  const toggle = (name: string) => update(current => ({ brand: current.brand.includes(name) ? current.brand.filter(b => b !== name) : [...current.brand, name] }));
   return <>
-    <p className="facet-hint">Choose one or more brands.</p>
-    {(facets.brands.length > 5 || query) && <div className="facet-search"><Search size={15} /><label className="sr-only" htmlFor={id}>Find a brand</label><input id={id} value={query} onChange={e => setQuery(e.target.value)} placeholder="Find a brand…" autoComplete="off" />{query && <button type="button" aria-label="Clear brand search" onClick={() => setQuery("")}><X size={14} /></button>}</div>}
-    <div className="facet-option-list brand-option-list">
-      {visible.map(brand => <label className="brand-choice" key={brand.name}>
-        <input type="checkbox" aria-label={brand.name} checked={filters.brand.includes(brand.name)} onChange={() => update(current => ({ brand: current.brand.includes(brand.name) ? current.brand.filter(b => b !== brand.name) : [...current.brand, brand.name] }))} />
+    {facets.brands.length > 0 && <p className="facet-hint">{facets.brands.length.toLocaleString()} {facets.brands.length === 1 ? "brand" : "brands"} available — search and select.</p>}
+    <div className="facet-search"><Search size={15} /><label className="sr-only" htmlFor={id}>Find a brand</label><input id={id} value={query} onChange={e => setQuery(e.target.value)} placeholder="Find a brand…" autoComplete="off" />{query && <button type="button" aria-label="Clear brand search" onClick={() => setQuery("")}><X size={14} /></button>}</div>
+    {list.length > 0 && <div className="facet-option-list brand-option-list">
+      {list.map(brand => <label className="brand-choice" key={brand.name}>
+        <input type="checkbox" aria-label={brand.name} checked={filters.brand.includes(brand.name)} onChange={() => toggle(brand.name)} />
         <span>{brand.name}</span><span className="facet-count" aria-hidden="true">{brand.count.toLocaleString()}</span>
       </label>)}
-    </div>
-    {!matches.length && <p className="facet-hint">{query ? "No brands match that name." : "No brands match your current filters. Try removing a filter."}</p>}
-    {!query && matches.length > 7 && <button type="button" className="facet-more" aria-expanded={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? "Show fewer brands" : `Show all ${matches.length} brands`}<ChevronDown size={13} /></button>}
+    </div>}
+    {term && !matches.length && <p className="facet-hint">No brands match that name.</p>}
+    {!facets.brands.length && <p className="facet-hint">No brands match your current filters. Try removing a filter.</p>}
   </>;
 }
 
@@ -64,6 +114,7 @@ function PriceRange() {
 function FilterSections() {
   const { filters, facets, update } = useBrowse();
   return <div className="filter-sections">
+    <details className="facet-group" open><summary><span>Category {filters.category && <b>1</b>}</span><ChevronDown size={15} /></summary><CategoryChoices /></details>
     <details className="facet-group" open><summary><span>Brands {filters.brand.length > 0 && <b>{filters.brand.length}</b>}</span><ChevronDown size={15} /></summary><BrandChoices /></details>
     <details className="facet-group" open={!!(filters.min || filters.max)}><summary><span>{facets.price.priced || filters.min || filters.max ? <>Price range <small>KES</small></> : <>Pricing <small>On request</small></>}</span><ChevronDown size={15} /></summary><PriceRange key={`${filters.min}:${filters.max}`} /></details>
     <div className="stock-refinement"><label className="stock-switch"><span><strong>In stock only</strong><small>{facets.stock.available.toLocaleString()} available under these filters</small></span><input type="checkbox" role="switch" aria-label="In stock only" checked={filters.instock} onChange={e => update({ instock: e.target.checked })} /></label></div>

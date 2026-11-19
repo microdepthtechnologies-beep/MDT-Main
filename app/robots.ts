@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/cart", "/checkout", "/my-account", "/dashboard/", "/sales/", "/quote/", "/wp-content/uploads/wc-logs/", "/wp-content/uploads/woocommerce_uploads/", "/wp-content/uploads/wpforms/"] },
+    // Legacy plugin folders are no longer served at all, so they aren't advertised here.
+    rules: { userAgent: "*", allow: "/", disallow: ["/api/", "/cart", "/checkout", "/my-account", "/dashboard/", "/sales/", "/quote/", "/auth/"] },
     sitemap: "https://mdt.co.ke/sitemap.xml",
   };
 }

@@ -17,16 +17,23 @@ export async function CataloguePage({ search, category }: { search: SearchValues
   const base = category ? categoryHref(category, categories) : "/shop/";
   const controls = { base, filters, categories, facets, total, pages, locked: category?.slug };
   const categoryLink = (item: Category) => catalogueUrl(categoryHref(item, categories), filters, { category: "" });
-  const categoryPaths = categories.map(item => ({ item, chain: categoryChain(item, categories) }));
   const selectedCategory = category || categories.find(c => c.slug === filters.category);
   const selectedChain = selectedCategory ? categoryChain(selectedCategory, categories) : [];
   const departmentLinks: ShopCategoryNavigation = Object.fromEntries(shopDepartments.flatMap(({ slug }) => {
     const item = categories.find(c => c.parentWpTermId === 0 && c.slug === slug);
     if (!item) return [];
-    const subcategories = categoryPaths
-      .filter(({ item: candidate, chain }) => candidate.count > 0 && candidate.wpTermId !== item.wpTermId && chain.some(parent => parent.wpTermId === item.wpTermId))
-      .map(({ item: candidate, chain }) => ({ label: chain.slice(1).map(parent => parent.name).join(" / "), href: categoryLink(candidate) }))
-      .sort((a, b) => a.label.localeCompare(b.label));
+    // Two visible levels: the department's children open the first dropdown level,
+    // their children fill the flyout. Deeper terms live in the Category filter.
+    const kidsOf = (parent: Category) => categories
+      .filter(candidate => candidate.parentWpTermId === parent.wpTermId && candidate.count > 0)
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const link = (candidate: Category, children: ShopCategoryNavigation[string]["subcategories"] = []) => ({
+      label: candidate.name,
+      href: categoryLink(candidate),
+      current: selectedChain.some(current => current.wpTermId === candidate.wpTermId),
+      children,
+    });
+    const subcategories = kidsOf(item).map(child => link(child, kidsOf(child).map(grandchild => link(grandchild))));
     return [[slug, {
       href: categoryLink(item),
       current: selectedChain.some(current => current.wpTermId === item.wpTermId),

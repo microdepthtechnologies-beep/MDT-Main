@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 import type { Document } from "mongodb";
 import { getDb } from "./mongodb";
 import { QuoteError, ownerFilter, type QuoteActor } from "./quote-access";
-import { validateQuotation, quotationTotals, offerExpired, type IssuedQuotation, type SalesQuote } from "./quotation";
-import { sendIssuedQuotation } from "./email";
+import { validateQuotation, quotationTotals, offerExpired, money, type IssuedQuotation, type SalesQuote } from "./quotation";
+import { sendIssuedQuotation, sendQuoteResponseEmails, sendQuoteStatusEmail } from "./email";
 
 type StoredQuote = Omit<SalesQuote, "createdAt" | "updatedAt" | "activity" | "revision"> & {
   createdAt: Date; updatedAt: Date; revision?: number; userId?: string;
@@ -80,6 +80,10 @@ export async function updateSalesQuote(number: string, actor: QuoteActor, body: 
     $push: { activity: { $each: [event(label)], $slice: -200 } },
   });
   if (!result.modifiedCount) throw new QuoteError("A colleague updated this request. Reload and try again.", 409);
+  if (action === "status" && typeof set.status === "string") {
+    try { await sendQuoteStatusEmail({ quoteNumber: doc.number, customerName: doc.customerName, customerEmail: doc.customerEmail, status: set.status }); }
+    catch (mailError) { console.error(`Status email failed for ${doc.number}`, mailError); }
+  }
   let emailFailed = false;
   if (sendOffer) {
     try { await sendIssuedQuotation(salesQuote({ ...doc, ...set }), sendOffer); }
@@ -108,4 +112,10 @@ export async function respondToQuote(number: string, actor: QuoteActor, body: Re
     $push: { activity: { $each: [{ at: now, label: `Quotation ${body.action}`, by: actor.name }], $slice: -200 } },
   });
   if (!result.modifiedCount) throw new QuoteError("This request changed. Please refresh.", 409);
+  try {
+    await sendQuoteResponseEmails({
+      quoteNumber: doc.number, customerName: doc.customerName, customerEmail: doc.customerEmail,
+      action: body.action as "accepted" | "declined", total: typeof doc.offer?.total === "number" ? money(doc.offer.total) : undefined,
+    });
+  } catch (mailError) { console.error(`Response email failed for ${doc.number}`, mailError); }
 }
