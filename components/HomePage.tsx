@@ -34,7 +34,7 @@ export function HomePage({ content: c, brands, testimonials }: HomePageProps) {
           <a className="hero-scroll" href="#approach"><span><ArrowDown size={17} /></span>How we work with you</a>
         </div>
         <div className="hq-hero-art">
-          <div className="hq-hero-photo"><MediaImage src={c.hero.image} alt={c.hero.imageAlt} fill preload sizes="(max-width:800px) 90vw, 48vw" className="object-cover" /><span className="photo-overline">{c.hero.caption}</span></div>
+          <div className="hq-hero-photo"><MediaImage src="/hero/hero.webp" alt={c.hero.imageAlt} fill preload sizes="(max-width:800px) 90vw, 48vw" className="object-cover" /><span className="photo-overline">{c.hero.caption}</span></div>
           <div className="hero-orbit" aria-hidden="true"><span /></div>
           <div className="hero-note"><CircleCheck size={25} strokeWidth={1.4} aria-hidden="true" /><div><strong>{c.hero.noteTitle}</strong><span>{c.hero.noteText}</span></div></div>
         </div>
