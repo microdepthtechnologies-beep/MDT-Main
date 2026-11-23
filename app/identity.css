@@ -37,6 +37,7 @@ h1, h2, h3 { font-family: var(--font-display), sans-serif; }
 .hero-scroll { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; margin-top: 55px; color: #9aa09c; }
 .hero-scroll > span { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #3a3a3a; display: grid; place-items: center; }
 .hq-hero-art { position: relative; padding: 15px 15px 48px 0; }
+.black-november-sash { position: absolute; top: 24px; right: 52px; background: linear-gradient(135deg, #df1b23 0%, #b8151c 100%); color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 8px 20px; border-radius: 4px 12px 12px 4px; box-shadow: 0 4px 16px rgba(223, 27, 35, 0.4); z-index: 2; }
 .hq-hero-photo { position: relative; height: 100%; min-height: 460px; border-radius: 110px 12px 12px 12px; overflow: hidden; }
 .hq-hero-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg,rgba(0,0,0,.35),transparent 50%,rgba(0,0,0,.2)); }
 .hq-hero-photo img { object-position: 60% center; animation: hero-settle 1.3s ease-out both; }
@@ -181,6 +182,29 @@ h1, h2, h3 { font-family: var(--font-display), sans-serif; }
 .home-contact-grid > div:last-child { border-radius: 12px; box-shadow: 0 12px 50px #242b2010; border: 1px solid #e9e5dd; }
 .home-contact input, .home-contact select, .home-contact textarea { font-size: 15px; border-radius: 6px; }
 .home-contact form > button { border-radius: 6px; }
+
+/* Black November banner */
+.black-november-banner { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%); border-bottom: 1px solid #df1b23; position: relative; overflow: hidden; }
+.black-november-banner::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 20% 50%, rgba(223, 27, 35, 0.08) 0%, transparent 50%); pointer-events: none; }
+.black-november-track { overflow: hidden; padding-block: 10px; white-space: nowrap; }
+.black-november-marquee { display: flex; width: max-content; animation: mdt-black-november-scroll 24s linear infinite; will-change: transform; }
+.black-november-group { display: flex; flex: 0 0 auto; align-items: center; gap: 60px; padding-right: 60px; }
+@keyframes mdt-black-november-scroll {
+  to { transform: translateX(-16.666667%); }
+}
+.black-november-item { display: flex; align-items: center; gap: 12px; color: #f5f5f5; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.black-november-icon { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #df1b23; color: white; flex-shrink: 0; }
+.black-november-text { color: #e5e5e5; }
+.black-november-highlight { color: #df1b23; margin-left: 8px; }
+@media (max-width: 600px) {
+  .black-november-item { font-size: 10px; gap: 8px; }
+  .black-november-icon { width: 20px; height: 20px; }
+  .black-november-group { gap: 40px; padding-right: 40px; }
+  .black-november-sash { right: 40px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .black-november-marquee { animation: none; }
+}
 
 /* The shop: editorial framing, open photographic tiles, useful interactions. */
 .shop-stage { background: #222b2b; color: white; position: relative; overflow: hidden; }
