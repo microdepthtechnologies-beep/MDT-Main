@@ -1,46 +1,26 @@
 {
   "hero": {
-    "mediaId": "mdt-editorial-pexels-442150",
-    "file": "2026/11/mdt-network-installation-442150.webp",
-    "title": "Network installation",
-    "alt": "Engineer connecting Ethernet cables to equipment in a network rack",
-    "description": "Real network installation photography for the headquarters introduction and infrastructure content.",
-    "tags": ["editorial", "home", "infrastructure", "installation"],
+    "mediaId": "mdt-home",
+    "file": "2026/12/home.jpeg",
+    "title": "Home hero",
+    "alt": "Technology and people working together",
+    "description": "Home page hero image showing technology in action.",
+    "tags": ["editorial", "home", "hero"],
     "source": {
-      "provider": "Pexels",
-      "photoId": "442150",
-      "photographer": "Field Engineer",
-      "pageUrl": "https://www.pexels.com/photo/electronics-engineer-fixing-cables-on-server-442150/",
-      "downloadUrl": "https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=2400",
-      "publishedAt": "2017-06-15",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/"
-    },
-    "replaces": {
-      "file": "2026/10/mdt-data-centre.webp",
-      "original": "public/assets/d80e2ed8-7854-425e-8085-c2249ae33ac8.jpg"
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   },
   "workspace": {
-    "mediaId": "mdt-editorial-pexels-2072060",
-    "file": "2026/11/mdt-desktop-workspace-2072060.webp",
-    "title": "Desktop workspace",
-    "alt": "Desktop computer, keyboard and mouse on a wooden office desk beside a window",
-    "description": "Photographed computer workspace for computing collections and hardware information.",
-    "tags": ["editorial", "hardware", "computing", "workspace"],
+    "mediaId": "mdt-about",
+    "file": "2026/12/About Us.avif",
+    "title": "About Us",
+    "alt": "About Micro Depth Technologies",
+    "description": "About page hero image showing the company story.",
+    "tags": ["editorial", "about", "hero"],
     "source": {
-      "provider": "Pexels",
-      "photoId": "2072060",
-      "photographer": "Junior Teixeira",
-      "pageUrl": "https://www.pexels.com/photo/turned-off-silver-imac-2072060/",
-      "downloadUrl": "https://images.pexels.com/photos/2072060/pexels-photo-2072060.jpeg?auto=compress&cs=tinysrgb&w=2400",
-      "publishedAt": "2019-03-28",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/"
-    },
-    "replaces": {
-      "file": "2026/10/mdt-workspace.webp",
-      "original": "public/assets/edf9dc0c-5dab-4bf5-a3b2-b00e5c58710d.jpg"
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   },
   "network": {
@@ -63,6 +43,18 @@
     "replaces": {
       "file": "2026/10/mdt-network.webp",
       "original": "public/assets/e5edd73c-f7ef-4a41-a192-881cb538919b.jpg"
+    }
+  },
+  "services-hero": {
+    "mediaId": "mdt-services-hero",
+    "file": "2026/12/explore-services.avif",
+    "title": "Explore services",
+    "alt": "ICT services and IT support",
+    "description": "Services page hero image showing IT expertise.",
+    "tags": ["editorial", "services", "hero"],
+    "source": {
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   },
   "security": {
@@ -110,47 +102,39 @@
     }
   },
   "collaboration": {
-    "mediaId": "mdt-editorial-pexels-3184418",
-    "file": "2026/11/mdt-team-collaboration-3184418.webp",
-    "title": "Working together",
-    "alt": "Colleagues collaborating around an office table with laptops and documents",
-    "description": "Real office collaboration photography, used as illustrative stock rather than a portrait of MDT employees.",
-    "tags": ["editorial", "collaboration", "workspaces", "teamwork"],
+    "mediaId": "mdt-connected-workspaces",
+    "file": "2026/12/Connected workspaces.avif",
+    "title": "Connected workspaces",
+    "alt": "Connected workplace technology and collaboration",
+    "description": "Connected workspaces service image showing collaboration technology.",
+    "tags": ["editorial", "services", "workspaces"],
     "source": {
-      "provider": "Pexels",
-      "photoId": "3184418",
-      "photographer": "fauxels",
-      "pageUrl": "https://www.pexels.com/photo/photo-of-people-near-wooden-table-3184418/",
-      "downloadUrl": "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=2400",
-      "publishedAt": "2019-11-05",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/"
-    },
-    "replaces": {
-      "file": "2026/10/mdt-collaboration.webp",
-      "original": "public/assets/f5614fd6-dac5-4d01-93ef-aab11c8746bb.jpg"
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   },
   "repair": {
-    "mediaId": "mdt-editorial-pexels-6754846",
-    "file": "2026/11/mdt-computer-diagnostics-6754846.webp",
-    "title": "Computer repair and diagnostics",
-    "alt": "Technician testing an opened computer with a multimeter at a repair bench",
-    "description": "Real electronics diagnostics photograph for repair, maintenance and technical support.",
-    "tags": ["editorial", "repairs", "diagnostics", "support"],
+    "mediaId": "mdt-it-support",
+    "file": "2026/12/IT support.avif",
+    "title": "IT support",
+    "alt": "IT support and technical assistance",
+    "description": "IT support service image showing technical help.",
+    "tags": ["editorial", "services", "support"],
     "source": {
-      "provider": "Pexels",
-      "photoId": "6754846",
-      "photographer": "Tima Miroshnichenko",
-      "pageUrl": "https://www.pexels.com/photo/man-fixing-a-computer-6754846/",
-      "downloadUrl": "https://images.pexels.com/photos/6754846/pexels-photo-6754846.jpeg?auto=compress&cs=tinysrgb&w=2400",
-      "publishedAt": "2021-02-08",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/"
-    },
-    "replaces": {
-      "file": "2026/10/mdt-repair.webp",
-      "original": "public/assets/2767f3e4-09b5-43dc-96cc-fb24b0861da1.jpg"
+      "provider": "Custom",
+      "photographer": "MDT"
+    }
+  },
+  "maintenance": {
+    "mediaId": "mdt-repair-maintenance",
+    "file": "2026/12/Repair and Maintenance.avif",
+    "title": "Repair and Maintenance",
+    "alt": "Computer repair and maintenance",
+    "description": "Repair and maintenance service image showing equipment diagnostics.",
+    "tags": ["editorial", "services", "repairs"],
+    "source": {
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   }
 }
