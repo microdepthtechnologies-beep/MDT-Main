@@ -4,7 +4,7 @@ import { Percent, ShoppingCart, Zap } from "lucide-react";
 
 const messages = [
   { icon: <Percent size={16} strokeWidth={2} />, text: "3% OFF SELECTED HARDWARE", highlight: "BLACK NOVEMBER" },
-  { icon: <Zap size={16} strokeWidth={2} />, text: "NO VAT INCLUDED", highlight: "LIMITED TIME" },
+  { icon: <Zap size={16} strokeWidth={2} />, text: "VAT EXCLUSIVE", highlight: "LIMITED TIME" },
   { icon: <ShoppingCart size={16} strokeWidth={2} />, text: "QUOTE-ONLY PRICING", highlight: "PREMIUM QUALITY" },
 ];
 
