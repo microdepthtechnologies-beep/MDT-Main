@@ -7,6 +7,7 @@ import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { contact } from "@/data/company";
 import { QuoteCartButton } from "./QuoteCart";
+import { BlackNovemberBanner } from "./BlackNovemberBanner";
 
 const links = [
   ["Home", "/"], ["About us", "/about/"], ["Hardware", "/shop/"],
@@ -21,6 +22,7 @@ export function SiteHeader() {
   return (
     <>
       <a className="skip-link" href="#main-content">Skip to content</a>
+      <BlackNovemberBanner />
       <div className="utility-bar"><div className="site-width">
         <span>MICRO DEPTH TECHNOLOGIES <span className="utility-divider">/</span> Nairobi, Kenya</span>
         <div className="utility-bar-contacts">
