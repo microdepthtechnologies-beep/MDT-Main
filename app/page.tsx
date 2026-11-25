@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/site-seo";
 export const dynamic = "force-dynamic";
 export async function generateMetadata() {
   const c = await getSiteContent("home");
-  return pageMetadata(c.seo.title, c.seo.description, "/", "/wp-content/uploads/2026/12/retail-logo.png");
+  return pageMetadata(c.seo.title, c.seo.description, "/", "/wp-content/uploads/2026/13/retail-logo-enlarged.jpeg");
 }
 export default async function Home() {
   const [content, brands, testimonials] = await Promise.all([
