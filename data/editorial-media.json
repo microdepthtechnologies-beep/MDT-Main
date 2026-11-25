@@ -1,7 +1,7 @@
 {
   "hero": {
     "mediaId": "mdt-home",
-    "file": "2026/12/home.jpeg",
+    "file": "2026/13/Home.png",
     "title": "Home hero",
     "alt": "Technology and people working together",
     "description": "Home page hero image showing technology in action.",
@@ -12,37 +12,39 @@
     }
   },
   "workspace": {
+    "mediaId": "mdt-hardware",
+    "file": "2026/13/Hardware.jpg",
+    "title": "ICT hardware",
+    "alt": "Laptops, desktop computers and workstations",
+    "description": "Hardware image showing computers for business workspaces.",
+    "tags": ["editorial", "hardware", "workspaces"],
+    "source": {
+      "provider": "Custom",
+      "photographer": "MDT"
+    }
+  },
+  "about": {
     "mediaId": "mdt-about",
-    "file": "2026/12/About Us.avif",
-    "title": "About Us",
-    "alt": "About Micro Depth Technologies",
-    "description": "About page hero image showing the company story.",
-    "tags": ["editorial", "about", "hero"],
+    "file": "2026/13/about1.png",
+    "title": "About Micro Depth Technologies",
+    "alt": "An MDT team member seated at the reception desk in the company office",
+    "description": "About page hero showing an MDT team member at the company reception.",
+    "tags": ["editorial", "about", "team", "hero"],
     "source": {
       "provider": "Custom",
       "photographer": "MDT"
     }
   },
   "network": {
-    "mediaId": "mdt-editorial-pexels-2881232",
-    "file": "2026/11/mdt-network-switch-2881232.webp",
-    "title": "Network switching and cabling",
-    "alt": "Blue Ethernet cables connected to the ports of a network switch",
-    "description": "Close-up photograph of real network infrastructure.",
+    "mediaId": "mdt-network-infrastructure",
+    "file": "2026/13/Network Infrastructure.jpg",
+    "title": "Network infrastructure",
+    "alt": "A technician working with a network equipment rack",
+    "description": "Network infrastructure image showing equipment installation and maintenance.",
     "tags": ["editorial", "networking", "switching", "cabling"],
     "source": {
-      "provider": "Pexels",
-      "photoId": "2881232",
-      "photographer": "Brett Sayles",
-      "pageUrl": "https://www.pexels.com/photo/cables-connected-to-ethernet-ports-2881232/",
-      "downloadUrl": "https://images.pexels.com/photos/2881232/pexels-photo-2881232.jpeg?auto=compress&cs=tinysrgb&w=2400",
-      "publishedAt": "2019-09-02",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/"
-    },
-    "replaces": {
-      "file": "2026/10/mdt-network.webp",
-      "original": "public/assets/e5edd73c-f7ef-4a41-a192-881cb538919b.jpg"
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   },
   "services-hero": {
@@ -58,55 +60,35 @@
     }
   },
   "security": {
-    "mediaId": "mdt-editorial-pexels-10902545",
-    "file": "2026/11/mdt-security-cameras-10902545.webp",
-    "title": "Physical security and surveillance",
-    "alt": "Surveillance cameras and security lights mounted on a building wall",
-    "description": "Real installed security equipment for surveillance and physical security services.",
+    "mediaId": "mdt-security-solutions",
+    "file": "2026/13/Security Solutions.jpg",
+    "title": "Security solutions",
+    "alt": "A security camera and access keypad protecting a building",
+    "description": "Security solutions image showing surveillance and access control equipment.",
     "tags": ["editorial", "security", "surveillance", "cctv"],
     "source": {
-      "provider": "Pexels",
-      "photoId": "10902545",
-      "photographer": "Possessed Photography",
-      "pageUrl": "https://www.pexels.com/photo/surveillance-camera-mounted-on-the-wall-10902545/",
-      "downloadUrl": "https://images.pexels.com/photos/10902545/pexels-photo-10902545.jpeg?auto=compress&cs=tinysrgb&w=2400",
-      "publishedAt": "2022-01-19",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/"
-    },
-    "replaces": {
-      "file": "2026/10/mdt-security.webp",
-      "original": "public/assets/6d217523-f787-4bad-90a6-781c756352f2.jpg"
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   },
   "software": {
-    "mediaId": "mdt-editorial-pexels-19805876",
-    "file": "2026/11/mdt-nairobi-software-workspace-19805876.webp",
-    "title": "Software work in Nairobi",
-    "alt": "Developer using a laptop and external monitor in a Nairobi workspace",
-    "description": "A real Nairobi workspace photographed by Naboth Otieno, used to illustrate software and business applications.",
-    "tags": ["editorial", "software", "development", "nairobi"],
+    "mediaId": "mdt-business-software",
+    "file": "2026/13/Software.png",
+    "title": "Business software",
+    "alt": "A professional using a laptop with business software and cloud tools",
+    "description": "Software image illustrating business applications, analytics and cloud services.",
+    "tags": ["editorial", "software", "business", "productivity", "cloud"],
     "source": {
-      "provider": "Pexels",
-      "photoId": "19805876",
-      "photographer": "Naboth Otieno",
-      "pageUrl": "https://www.pexels.com/photo/man-working-on-computer-in-an-office-19805876/",
-      "downloadUrl": "https://images.pexels.com/photos/19805876/pexels-photo-19805876.jpeg?auto=compress&cs=tinysrgb&w=2400",
-      "publishedAt": "2024-01-09",
-      "license": "Pexels License",
-      "licenseUrl": "https://www.pexels.com/license/"
-    },
-    "replaces": {
-      "file": "2026/10/mdt-software.webp",
-      "original": "public/assets/d6129170-9fdc-40d0-a3d2-4dbf92090621.jpg"
+      "provider": "Custom",
+      "photographer": "MDT"
     }
   },
   "collaboration": {
     "mediaId": "mdt-connected-workspaces",
-    "file": "2026/12/Connected workspaces.avif",
-    "title": "Connected workspaces",
-    "alt": "Connected workplace technology and collaboration",
-    "description": "Connected workspaces service image showing collaboration technology.",
+    "file": "2026/13/connected team.jpg",
+    "title": "Connected team",
+    "alt": "A diverse team collaborating around a meeting table",
+    "description": "Connected team image showing people working together.",
     "tags": ["editorial", "services", "workspaces"],
     "source": {
       "provider": "Custom",
@@ -114,24 +96,36 @@
     }
   },
   "repair": {
-    "mediaId": "mdt-it-support",
-    "file": "2026/12/IT support.avif",
-    "title": "IT support",
-    "alt": "IT support and technical assistance",
-    "description": "IT support service image showing technical help.",
-    "tags": ["editorial", "services", "support"],
+    "mediaId": "mdt-repairs-maintenance",
+    "file": "2026/13/Repairs & maintenance.png",
+    "title": "Repairs and maintenance",
+    "alt": "A technician repairing and maintaining a desktop computer",
+    "description": "Repairs and maintenance image showing a technician working on a computer.",
+    "tags": ["editorial", "services", "repairs", "maintenance"],
     "source": {
       "provider": "Custom",
       "photographer": "MDT"
     }
   },
-  "maintenance": {
-    "mediaId": "mdt-repair-maintenance",
-    "file": "2026/12/Repair and Maintenance.avif",
-    "title": "Repair and Maintenance",
-    "alt": "Computer repair and maintenance",
-    "description": "Repair and maintenance service image showing equipment diagnostics.",
-    "tags": ["editorial", "services", "repairs"],
+  "support": {
+    "mediaId": "mdt-support-consulting",
+    "file": "2026/13/support & consulting.png",
+    "title": "IT support and consulting",
+    "alt": "An IT professional advising a colleague at a computer",
+    "description": "IT support and consulting image showing a team member providing technical guidance.",
+    "tags": ["editorial", "services", "support", "consulting"],
+    "source": {
+      "provider": "Custom",
+      "photographer": "MDT"
+    }
+  },
+  "services": {
+    "mediaId": "mdt-services-feature",
+    "file": "2026/13/Services.jpg",
+    "title": "MDT services",
+    "alt": "Two professionals discussing a technology project",
+    "description": "Services feature image showing a client and consultant meeting.",
+    "tags": ["editorial", "services", "consulting"],
     "source": {
       "provider": "Custom",
       "photographer": "MDT"

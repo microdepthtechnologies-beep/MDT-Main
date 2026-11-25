@@ -14,7 +14,7 @@
 .mobile-filter-button .filter-count { background: white; color: var(--charcoal); margin: 0 0 0 2px; }
 .product-card-image { width: 100%; }
 .product-card h3 button { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 48px; text-align: left; }
-.product-card h3 button:hover { color: var(--red); }
+.product-card h3 button:hover { color: var(--brand); }
 .product-list .product-card h3 button { min-height: unset; }
 .quick-view-dialog .product-detail-grid { padding-top: 24px; }
 .quick-view-dialog .product-detail-info h2 { font-size: clamp(25px, 2.3vw, 34px); font-weight: 600; line-height: 1.25; letter-spacing: -.045em; overflow-wrap: anywhere; }
@@ -73,7 +73,7 @@
 .quotation-pricing a { display: inline-flex; align-items: center; gap: 12px; font-size: 13px; margin-top: 14px; }
 .price-refinement .price-inputs { margin-bottom: 10px; }
 .price-refinement input { width: 100%; min-width: 0; border: 1px solid var(--border); border-radius: 5px; padding: 10px; font-size: 13px; min-height: 43px; }
-.price-refinement input[aria-invalid="true"] { border-color: var(--red); }
+.price-refinement input[aria-invalid="true"] { border-color: var(--danger); }
 .facet-error { font-size: 12px; line-height: 1.6; color: #b9151c; margin: 10px 0; }
 .price-apply { display: flex; align-items: center; justify-content: space-between; border: 1px solid #ccc; border-radius: 5px; width: 100%; padding: 10px 12px; min-height: 42px; font-size: 12px; background: white; }
 .price-apply:hover { border-color: #333; }

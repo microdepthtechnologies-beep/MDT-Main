@@ -2,6 +2,24 @@ import { test, expect } from "@playwright/test";
 
 const product = "/product/hp-240-14-g9-notebook-pc/";
 
+test("quote cart restores saved items after hydration without a mismatch", async ({ page }) => {
+  const hydrationErrors: string[] = [];
+  page.on("console", message => {
+    if (message.type() === "error" && message.text().includes("Hydration failed")) hydrationErrors.push(message.text());
+  });
+  page.on("pageerror", error => {
+    if (error.message.includes("Hydration failed")) hydrationErrors.push(error.message);
+  });
+  await page.addInitScript(() => {
+    localStorage.setItem("mdt_quote_cart", JSON.stringify([
+      { wpId: 1, slug: "saved-product", name: "Saved product", quantity: 2 },
+    ]));
+  });
+  await page.goto("/");
+  await expect(page.locator(".quote-cart-count")).toHaveText("2");
+  expect(hydrationErrors).toEqual([]);
+});
+
 test("shop landing puts the 11 departments and product grid first", async ({ page }) => {
   const categoryLabels = [
     "Audio-Visual", "Laptops & Desktops", "Networking", "Point of Sale",
@@ -50,8 +68,8 @@ test("shop landing puts the 11 departments and product grid first", async ({ pag
     return navTop >= headerBottom - 1;
   })).toBe(true);
 
-  await page.locator(".header-theme-toggle").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(page.locator(".theme-toggle")).toHaveCount(0);
   await expect(categoryNav).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(categoryNav.getByRole("link").first()).toHaveCSS("color", "rgb(34, 35, 35)");
   await laptopToggle.click();
@@ -59,12 +77,6 @@ test("shop landing puts the 11 departments and product grid first", async ({ pag
   await expect(laptopMenu.getByRole("link").first()).toHaveCSS("color", "rgb(34, 35, 35)");
   await page.keyboard.press("Escape");
   await expect(laptopToggle).toBeFocused();
-  await page.locator(".header-theme-toggle").click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await laptopToggle.click();
-  await expect(laptopMenu).toHaveCSS("background-color", "rgb(12, 12, 13)");
-  await expect(laptopMenu.getByRole("link").first()).toHaveCSS("color", "rgb(245, 244, 241)");
-  await page.keyboard.press("Escape");
 
   await page.getByRole("button", { name: "Search products" }).click();
   await page.getByRole("searchbox", { name: "Search products" }).fill("ThinkPad");

@@ -3,10 +3,16 @@ import { test, expect } from "@playwright/test";
 const pages = ["/", "/about/", "/our-services/", "/software-licenses/", "/blog/", "/contact/"];
 const article = "/2026/09/28/11-branch-network-refresh-for-a-regional-sacco/";
 
-test("dark theme keeps branding readable and sections follow the displayed order", async ({ page }) => {
+test("light theme is fixed, branding stays readable and sections follow their displayed order", async ({ page }) => {
   for (const path of ["/", "/about/"]) {
     await page.goto(path);
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await expect(page.locator(".theme-toggle")).toHaveCount(0);
+    await expect.poll(() => page.locator("html").evaluate(element => getComputedStyle(element).getPropertyValue("--brand").trim())).toBe("#0062b9");
+    await expect.poll(() => page.locator(".site-header .header-contact").evaluate(element => getComputedStyle(element).backgroundColor)).toBe("rgb(0, 98, 185)");
+    const navLink = page.locator(".site-header .desktop-nav a").first();
+    await navLink.hover();
+    await expect.poll(() => navLink.evaluate(element => getComputedStyle(element).color)).toBe("rgb(0, 98, 185)");
     const numbers = await page.locator("main .eyebrow, main .section-index > span").evaluateAll(elements =>
       elements.map(element => element.textContent?.match(/^(\d+)\s*\//)?.[1]).filter(Boolean).map(Number),
     );
@@ -15,6 +21,8 @@ test("dark theme keeps branding readable and sections follow the displayed order
   }
   await page.goto("/");
   const sections = await page.locator("main section[id]").evaluateAll(elements => elements.map(element => element.id));
+  await expect(page.locator(".footer-intro h2 > span")).toHaveCSS("color", "rgb(249, 160, 34)");
+  await expect(page.locator(".testimonial-service").first()).toHaveCSS("color", "rgb(249, 160, 34)");
   expect(sections.indexOf("approach")).toBeLessThan(sections.indexOf("platforms"));
   expect(sections.indexOf("about")).toBeGreaterThan(sections.indexOf("platforms"));
   await expect(page.locator(".hq-hero-actions a")).toHaveCount(1);
@@ -26,37 +34,13 @@ test("dark theme keeps branding readable and sections follow the displayed order
   await expect(page.locator(".mobile-nav-dialog")).not.toBeVisible();
 });
 
-test("theme toggle changes the page theme and persists the preference", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  const accountButton = page.getByRole("link", { name: "My account" });
-  const desktopToggle = page.locator(".header-theme-toggle");
-  const quoteButton = page.getByRole("link", { name: "Request a quote" });
-  await expect(desktopToggle).toHaveCSS("border-width", "0px");
-  const headerPositions = await Promise.all([accountButton, desktopToggle, quoteButton].map(element =>
-    element.evaluate(node => node.getBoundingClientRect().x),
-  ));
-  expect(headerPositions[0]).toBeLessThan(headerPositions[1]);
-  expect(headerPositions[1]).toBeLessThan(headerPositions[2]);
-
-  await desktopToggle.click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await expect(page.locator(".hq-hero")).toHaveCSS("background-color", "rgb(245, 245, 242)");
-
-  await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await page.getByRole("button", { name: "Switch to dark mode" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole("button", { name: "Open navigation" }).click();
-  await page.getByRole("button", { name: "Switch to light mode" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-
-  await page.goto("/auth/signin/");
-  await expect(page.getByRole("button", { name: "Switch to dark mode" })).toBeVisible();
-  await page.getByRole("button", { name: "Switch to dark mode" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+test("the light theme is fixed and theme controls are absent", async ({ page }) => {
+  for (const path of ["/", "/shop/", "/auth/signin/"]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await expect(page.locator(".theme-toggle")).toHaveCount(0);
+    await expect(page.locator(".mobile-theme-control")).toHaveCount(0);
+  }
 });
 
 test("software category navigation uses icons and has no category quote actions", async ({ page }) => {

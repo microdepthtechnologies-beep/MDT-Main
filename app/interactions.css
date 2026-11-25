@@ -1,7 +1,6 @@
 /* A shared interaction language: a red underline, a soft tint and moving
    arrows. Decorative effects never change a link's layout or hit area. */
-:root { --link-accent: var(--red); --link-tint: #df1b230c; }
-:root[data-theme="dark"] { --link-accent: var(--accent-text); --link-tint: #ff858a14; }
+:root { --link-accent: var(--brand); --link-tint: rgb(0 98 185 / 7%); }
 
 /* Use ::before so the current page's red dot stays visible. */
 .site-header .desktop-nav a::before {
@@ -39,15 +38,15 @@
   color: var(--link-accent);
   background-size: 100% 1px;
 }
-:root[data-theme] .site-header :is(.icon-button, .quote-cart-button, .theme-toggle):is(:hover, :focus-visible) {
+:root[data-theme] .site-header :is(.icon-button, .quote-cart-button):is(:hover, :focus-visible) {
   color: var(--link-accent);
   background: var(--link-tint);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--link-accent) 22%, transparent);
 }
 :root[data-theme] .site-header .header-contact:is(:hover, :focus-visible) {
-  background: #bb151d;
+  background: #004a8f;
   color: #fff;
-  box-shadow: 0 5px 18px #df1b232b;
+  box-shadow: 0 5px 18px rgb(0 98 185 / 17%);
 }
 :root[data-theme] .mobile-nav-dialog nav a:is(:hover, :focus-visible, :active) {
   color: var(--link-accent);
@@ -70,7 +69,7 @@
     transition: color .2s ease, background-size .28s ease, background-color .2s ease, box-shadow .2s ease;
   }
   .site-header .desktop-nav a::before { transition: transform .28s cubic-bezier(.22,.68,.2,1); }
-  .site-header :is(.icon-button, .quote-cart-button, .theme-toggle, .header-contact) {
+  .site-header :is(.icon-button, .quote-cart-button, .header-contact) {
     transition: color .2s ease, background-color .2s ease, box-shadow .25s ease;
   }
   :is(.site-header, .site-footer, .mobile-nav-dialog, .text-link) a > svg,
@@ -82,7 +81,7 @@
   :is(.site-footer a, .mobile-nav-dialog nav a, .text-link):hover > .lucide-arrow-up-right {
     transform: translate(2px, -2px);
   }
-  .site-header :is(.icon-button, .quote-cart-button, .theme-toggle):hover > svg { transform: translateY(-2px); }
+  .site-header :is(.icon-button, .quote-cart-button):hover > svg { transform: translateY(-2px); }
 }
 @media (prefers-reduced-motion: reduce) {
   :is(.site-header, .site-footer, .utility-bar, .mobile-nav-dialog) :is(a, button, svg),

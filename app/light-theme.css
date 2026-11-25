@@ -1,26 +1,29 @@
 :root[data-theme="light"] {
   color-scheme: light;
   --page: #ffffff;
-  --surface: #f5f5f2;
-  --panel: #eeefeb;
-  --panel-raised: #e4e5e1;
-  --border: #dedede;
-  --charcoal: #202323;
-  --text-primary: #222323;
-  --text-secondary: #626763;
-  --text-subtle: #6b6b6b;
+  --surface: #faf8f6;
+  --panel: #f4f3f1;
+  --panel-raised: #e8e7e5;
+  --border: #dcdcd8;
+  --charcoal: #1a1a1a;
+  --text-primary: #1a1a1a;
+  --text-secondary: #595956;
+  --text-subtle: #6f6f6c;
   --text-inverse: #4b4d49;
   --muted: var(--text-secondary);
-  --accent-text: #b8151c;
+  --accent-text: #0062B9;
   --color-ink: var(--text-primary);
-  --color-ink-900: #171818;
-  --color-ink-800: #2c2e2e;
-  --color-ink-700: #3d4040;
-  --color-ink-600: var(--text-secondary);
+  --color-ink-900: #1a1a1a;
+  --color-ink-800: #2b2b2a;
+  --color-ink-700: #3b3b3a;
+  --color-ink-600: #4b4b4a;
   --color-paper: var(--surface);
   --color-line: var(--border);
   --color-muted: var(--text-secondary);
   --marketing-line: var(--border);
+  --brand: #0062B9;
+  --brand-dark: #004a8f;
+  --brand-light: #e6f0fa;
   background: var(--page);
 }
 
@@ -86,7 +89,7 @@
 :root[data-theme="light"] .solution-tabs button { border-color: var(--border); }
 :root[data-theme="light"] .home-solutions,
 :root[data-theme="light"] .home-contact { color: var(--text-primary); }
-:root[data-theme="light"] .home-contact { background: #f4f1ec; }
+:root[data-theme="light"] .home-contact { background: #f4f3f1; }
 :root[data-theme="light"] .about-pillars,
 :root[data-theme="light"] .solution-tabs,
 :root[data-theme="light"] .solution-copy > div { border-color: var(--border); }
@@ -127,35 +130,7 @@
 :root[data-theme="light"] .footer-columns h3 { color: var(--text-primary); }
 :root[data-theme="light"] .footer-columns a:hover { color: var(--red); }
 
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 44px;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-primary);
-  transition: background-color .18s, border-color .18s, color .18s;
-}
-.theme-toggle:hover {
-  background: var(--panel);
-  border-color: var(--text-subtle);
-}
-.mobile-theme-control {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  border-block: 1px solid var(--border);
-  padding-block: 16px;
-  font-size: 13px;
-}
-
 @media (max-width: 700px) {
-  .header-actions .header-theme-toggle { display: none; }
   :root[data-theme="light"] .utility-bar .site-width {
     justify-content: space-between;
     min-height: 34px;
