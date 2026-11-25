@@ -112,7 +112,7 @@
 :root .sw-overview-grid { gap: 8px; margin-top: 20px; }
 :root .sw-category-label-short { display: none; }
 :root .sw-overview-chip { padding: 9px 12px; min-height: 44px; }
-:root[data-theme] .sw-overview-chip { min-height: 44px; }
+:root .sw-overview-chip { min-height: 44px; }
 :root .sw-category-section { padding-block: 30px; }
 :root .sw-cat-inner { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 2fr); gap: 32px; align-items: start; }
 :root .sw-cat-header { margin-bottom: 0; }
@@ -134,8 +134,8 @@
 :root .sw-client-logo { width: 100%; height: 100%; object-fit: contain; }
 :root .sw-client-title { font-size: 13px; line-height: 18px; align-self: center; overflow-wrap: anywhere; }
 :root .sw-client-enquire { margin-top: 0; align-self: end; }
-:root[data-theme="light"] .sw-client-enquire { color: var(--text-secondary); }
-:root[data-theme="light"] .sw-client-card:is(:hover, :focus-visible) .sw-client-enquire { color: var(--red); }
+:root .sw-client-enquire { color: var(--text-secondary); }
+:root .sw-client-card:is(:hover, :focus-visible) .sw-client-enquire { color: var(--red); }
 :root .sw-cat-empty { padding: 22px; }
 
 /* Journal imagery is shallower; article body type stays comfortable to read. */
@@ -285,8 +285,8 @@
 
 /* Readability boosts: utility bar, product categories, footer content. */
 :root .utility-bar { font-weight: 600; }
-:root[data-theme="light"] .utility-bar { color: var(--color-ink-700); }
-:root[data-theme="light"] .utility-bar-contacts a { color: var(--text-primary); }
+:root .utility-bar { color: var(--color-ink-700); }
+:root .utility-bar-contacts a { color: var(--text-primary); }
 
 :root .shop-category-nav a { font-weight: 600; }
 :root .shop-category-menu-panel a { font-weight: 500; }
@@ -295,12 +295,7 @@
   .footer-columns a:not(.footer-brand > a:first-child),
   .footer-brand p, .footer-bottom
 ) { font-weight: 500; }
-:root[data-theme="dark"] :is(
-  .footer-columns a:not(.footer-brand > a:first-child),
-  .footer-brand p, .footer-intro .eyebrow
-) { color: #e3e7e0; }
-:root[data-theme="dark"] .footer-bottom { color: #d2d7ce; }
-:root[data-theme="light"] :is(
+:root :is(
   .footer-columns a:not(.footer-brand > a:first-child),
   .footer-brand p, .footer-bottom
 ) { color: var(--color-ink-700); }

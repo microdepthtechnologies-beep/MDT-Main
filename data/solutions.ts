@@ -105,7 +105,7 @@ export const solutions: Solution[] = [
   'Data recovery for lost or corrupted files',
   'Upgrades & preventive maintenance'],
 
-  image: editorialMedia.repair,
+  image: editorialMedia.support,
 
   imageAlt: editorialMediaAlt.repair,
   link: { label: 'Book a repair', href: 'https://www.mdtrepairs.co.ke/' }

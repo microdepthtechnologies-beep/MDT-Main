@@ -3,7 +3,7 @@ import { editorialMedia as images, editorialMediaAlt as descriptions } from "./e
 type ServiceContent = { path: string; title: string; description: string; image: string; imageAlt: string; paragraphs: string[]; capabilities: { title: string; text: string }[]; catalogueHref: string };
 export const servicePages: Record<string, ServiceContent> = {
   "our-services/it-support-services": {
-    path: "/our-services/it-support-services/", title: "IT support services", description: "Practical IT support for the people, applications and systems that keep your business moving.", image: images.repair, imageAlt: descriptions.repair,
+    path: "/our-services/it-support-services/", title: "IT support services", description: "Practical IT support for the people, applications and systems that keep your business moving.", image: images.support, imageAlt: descriptions.support,
     paragraphs: ["From everyday user questions to infrastructure planning, Micro Depth Technologies helps organisations manage the technology behind their work.", "Tell us about your users, equipment, locations and support priorities. We’ll help define an appropriate scope, with clear responsibilities and agreed arrangements."],
     capabilities: [
       { title: "Helpdesk & user support", text: "Assistance with day-to-day device, connectivity and application issues, with diagnostics to identify the next step." },

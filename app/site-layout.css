@@ -1,0 +1,119 @@
+::selection { background: #0062B9; color: white; }
+
+.hq-hero-grid { align-items: center; padding-block: 64px 48px; gap: 64px; }
+.marketing-main .hq-hero-copy h1 { font-size: clamp(40px, 5.2vw, 74px); line-height: 1.12; letter-spacing: -.055em; }
+.hq-hero-description { max-width: 470px; }
+.hq-hero-art { padding: 15px 15px 36px 0; }
+.hq-hero-photo { min-height: 420px; height: 460px; border-radius: 110px 12px 72px 12px; }
+.photo-overline { writing-mode: vertical-rl; left: auto; top: 24px; right: 20px; }
+.hq-hero-art .hero-orbit { top: -8px; left: -30px; }
+.hq-hero-art .hero-note { left: -28px; bottom: 8px; padding: 20px 24px; border-radius: 10px; }
+.home-approach, .home-about, .home-collections, .testimonials-section { padding-block: 72px; }
+.home-collections { padding-top: 12px; }
+.home-collection-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.home-collection { min-height: 340px; border-radius: 6px; }
+.home-collection > div { padding: 26px; }
+.home-collection h3 { font-size: clamp(23px, 2.2vw, 31px); margin-block: 16px 28px; }
+.home-platforms { padding-block: 64px; }
+.platform-reveal, .collection-reveal { min-width: 0; }
+.platform-card { min-height: 375px; height: 100%; border: 0; border-radius: 12px; padding: 36px; }
+.platform-card h3 { margin-block: 35px 17px; }
+.platform-card-top > span { letter-spacing: .13em; }
+.platform-link { margin-top: 30px; }
+.platform-watermark { font-size: clamp(85px, 9vw, 130px); }
+.home-about-grid { gap: 64px; }
+.home-contact h2 { font-size: clamp(34px, 4vw, 54px); }
+.testimonials-header { margin-bottom: 30px; }
+.testimonial-card { padding: 28px; border-radius: 6px; }
+.testimonial-body { font-size: 14px; line-height: 1.8; }
+
+.sw-overview-chip svg { flex-shrink: 0; }
+.sw-client-logo-wrap { background: #fff; color: #222; width: 100%; height: 66px; padding: 12px; border-radius: 4px; }
+.sw-client-logo { filter: none; width: auto; height: auto; max-width: 100%; }
+.sw-client-name { color: #222; }
+.sw-cat-empty > svg { flex-shrink: 0; }
+.sw-category-section { padding-block: 52px; }
+.sw-cat-header { margin-bottom: 28px; }
+.sw-cat-description { max-width: 650px; }
+.brand-logo-tile:focus-visible { outline-offset: -3px; }
+
+@media (max-width: 800px) {
+  .hq-hero-grid { grid-template-columns: 1fr; padding-block: 40px; gap: 32px; }
+  .hq-hero-art { max-width: 600px; padding: 12px 12px 44px; }
+  .hq-hero-photo { min-height: 0; height: 350px; border-radius: 80px 12px 60px 12px; }
+  .hq-hero-art .hero-orbit { left: 0; top: 0; width: 78px; height: 78px; }
+  .hq-hero-art .hero-note { left: 0; bottom: 12px; padding: 16px 20px; }
+  .platform-card { padding: 26px; }
+  .platform-card h3 { font-size: 24px; }
+  .home-about-grid { gap: 28px; }
+  .home-collection-grid { gap: 14px; }
+  .home-collection > div { padding: 20px; }
+  .home-collection h3 { font-size: 24px; }
+}
+
+@media (max-width: 700px) {
+  .marketing-main .hq-hero-copy h1 { font-size: clamp(36px, 9vw, 55px); }
+  .hq-hero-photo { height: 280px; }
+  .hq-hero-art .hero-note { gap: 12px; padding: 15px 18px; }
+  .hq-hero-art .hero-note strong { font-size: 13px; }
+  .hq-hero-art .hero-note span { font-size: 10px; }
+  .hero-scroll { margin-top: 24px; }
+  .home-approach, .home-about, .home-platforms, .testimonials-section, .home-contact { padding-block: 48px; }
+  .home-collections { padding-block: 8px 48px; }
+  .home-collection-grid { grid-template-columns: 1fr; }
+  .home-collection { min-height: 290px; }
+  .home-collection h3 { font-size: 29px; }
+  .home-collection > div { padding: 26px; }
+  .platform-card { padding: 28px; min-height: 340px; }
+  .platform-card h3 { font-size: clamp(22px, 6vw, 28px); }
+  .platform-card-top { gap: 12px; }
+  .testimonial-card { padding: 24px; }
+  .sw-overview-grid { gap: 8px; }
+  .sw-overview-chip { padding: 10px 12px; font-size: 12px; border-radius: 6px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brands-track { animation: none; }
+  .brands-carousel-wrap { overflow-x: auto; }
+}
+
+@keyframes mdt-rise {
+  from { opacity: .35; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes mdt-badge-arrive {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .reveal-entered { animation: mdt-rise .65s cubic-bezier(.22,.68,.2,1) both; }
+  .hq-hero-copy > * { animation: mdt-rise .7s cubic-bezier(.22,.68,.2,1) both; }
+  .hq-hero-copy > :nth-child(2) { animation-delay: 80ms; }
+  .hq-hero-copy > :nth-child(3) { animation-delay: 150ms; }
+  .hq-hero-copy > :nth-child(4) { animation-delay: 220ms; }
+  .hq-hero-copy > :nth-child(5) { animation-delay: 280ms; }
+  .hq-hero-art .hero-note { animation: mdt-badge-arrive .7s .25s both; }
+  .hq-hero-art .hero-orbit { animation: mdt-badge-arrive .9s .1s both; }
+  :is(.button, .account-submit, .workspace-button, .sw-overview-chip, .platform-card, .home-collection) {
+    transition: background-color .2s, border-color .2s, color .2s, box-shadow .25s, transform .25s;
+  }
+  :is(.button, .account-submit, .workspace-button, .sw-overview-chip):active { transform: translateY(1px); }
+  :is(.platform-card, .home-collection):active { transform: scale(.99); }
+  .platform-card :is(.platform-card-top > svg:last-child, .platform-link svg) { transition: transform .25s; }
+  .platform-card:focus-visible .platform-link svg { transform: translateX(5px); }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .platform-card:hover { transform: translateY(-5px); box-shadow: 0 16px 36px #0003; }
+  .platform-card:hover .platform-card-top > svg:last-child { transform: translate(3px,-3px); }
+  .platform-card:hover .platform-link svg { transform: translateX(5px); }
+}
+@media (hover: none) {
+  .platform-card:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.reveal-entered, .hq-hero-copy > *, .hero-note, .hero-orbit) { animation: none; }
+  :is(.platform-card, .home-collection, .button, .account-submit, .workspace-button, .sw-overview-chip, .sw-client-card) { transition: none; }
+  .sw-client-card:hover { transform: none; }
+}
