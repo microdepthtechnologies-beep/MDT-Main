@@ -59,9 +59,9 @@ export async function CataloguePage({ search, category }: { search: SearchValues
             <CatalogueResults>
               {featuredDepartments ? featuredDepartments.map((department, index) => <section className="department-products" key={department.slug} aria-labelledby={`department-${department.slug}`}>
                 <div className="section-caption"><h2 id={`department-${department.slug}`}>{department.label}</h2><Link href={categoryLink(department.category)} className="text-link">View all <span className="sr-only">{department.label}</span><ArrowRight size={16} /></Link></div>
-                {departmentProducts[index].length ? <div className="product-grid">{departmentProducts[index].map(p => <ProductCard p={p} key={p.wpId} />)}</div> : <p>No products are currently available in this category.</p>}
+                {departmentProducts[index].length ? <div className="product-grid">{departmentProducts[index].map(({ key, product }) => <ProductCard p={product} key={key} />)}</div> : <p>No products are currently available in this category.</p>}
               </section>) : <>
-                {products.length ? <div className="product-grid">{products.map(p => <ProductCard p={p} key={p.wpId} />)}</div> : <CatalogueEmpty />}
+                {products.length ? <div className="product-grid">{products.map(({ key, product }) => <ProductCard p={product} key={key} />)}</div> : <CatalogueEmpty />}
                 <CataloguePagination />
               </>}
             </CatalogueResults>

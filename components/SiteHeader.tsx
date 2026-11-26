@@ -25,11 +25,11 @@ export function SiteHeader() {
       <div className="utility-bar"><div className="site-width">
         <span>MICRO DEPTH TECHNOLOGIES <span className="utility-divider">/</span> Nairobi, Kenya</span>
         <div className="utility-bar-contacts">
-          <a href={`mailto:${contact.email}`}><Mail size={11} />{contact.email}</a>
+          <a className="utility-email" href={`mailto:${contact.email}`}><Mail size={11} />{contact.email}</a>
           <span className="utility-divider">·</span>
-          <a href={`tel:${contact.phoneIntl}`} aria-label="Call our mobile line"><Phone size={11} />{contact.phoneDisplay}</a>
+          <a className="utility-phone" href={`tel:${contact.phoneIntl}`} aria-label={`Call sales on ${contact.phoneDisplay}`}><Phone size={11} /><span className="utility-contact-label">Sales</span><span className="utility-contact-number">{contact.phoneDisplay}</span></a>
           <span className="utility-divider">·</span>
-          <a href={`tel:${contact.landlineIntl}`} aria-label="Call our landline"><Phone size={11} />{contact.landlineDisplay}</a>
+          <a className="utility-phone" href={`tel:${contact.landlineIntl}`} aria-label={`Call the landline on ${contact.landlineDisplay}`}><Phone size={11} /><span className="utility-contact-label">Landline</span><span className="utility-contact-number">{contact.landlineDisplay}</span></a>
         </div>
       </div></div>
       <header className="site-header">
@@ -57,8 +57,8 @@ export function SiteHeader() {
         <nav aria-label="Mobile navigation">{links.map(([label, href]) => <Link key={href} href={href} aria-current={activeLink(href) ? "page" : undefined} onClick={() => drawer.current?.close()}>{label}<ArrowUpRight size={20} /></Link>)}</nav>
         <div className="mobile-account-links"><Link href="/dashboard/" onClick={() => drawer.current?.close()}>My account</Link><Link href="/quote/checkout/" onClick={() => drawer.current?.close()}>Your quote cart</Link></div>
         <Link className="button button-red" href="/contact/" onClick={() => drawer.current?.close()}>Talk to an expert <ArrowUpRight size={18} /></Link>
-        <a className="mobile-nav-phone" href={`tel:${contact.phoneIntl}`} aria-label="Call our mobile line"><Phone size={17} /> {contact.phoneDisplay}</a>
-        <a className="mobile-nav-phone" href={`tel:${contact.landlineIntl}`} aria-label="Call our landline"><Phone size={17} /> {contact.landlineDisplay}</a>
+        <a className="mobile-nav-phone" href={`tel:${contact.phoneIntl}`} aria-label={`Call sales on ${contact.phoneDisplay}`}><Phone size={17} /><span className="phone-contact-details"><span className="phone-contact-label">Sales</span><span>{contact.phoneDisplay}</span></span></a>
+        <a className="mobile-nav-phone" href={`tel:${contact.landlineIntl}`} aria-label={`Call the landline on ${contact.landlineDisplay}`}><Phone size={17} /><span className="phone-contact-details"><span className="phone-contact-label">Landline</span><span>{contact.landlineDisplay}</span></span></a>
       </dialog>
     </>
   );

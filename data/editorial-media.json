@@ -1,7 +1,7 @@
 {
   "hero": {
     "mediaId": "mdt-home",
-    "file": "2026/13/Home.png",
+    "file": "2026/13/Home.avif",
     "title": "Home hero",
     "alt": "Technology and people working together",
     "description": "Home page hero image showing technology in action.",
@@ -73,7 +73,7 @@
   },
   "software": {
     "mediaId": "mdt-business-software",
-    "file": "2026/13/Software.png",
+    "file": "2026/13/Software (1).avif",
     "title": "Business software",
     "alt": "A professional using a laptop with business software and cloud tools",
     "description": "Software image illustrating business applications, analytics and cloud services.",
@@ -97,7 +97,7 @@
   },
   "repair": {
     "mediaId": "mdt-repairs-maintenance",
-    "file": "2026/13/Repairs & maintenance.png",
+    "file": "2026/13/Repairs & maintenance.avif",
     "title": "Repairs and maintenance",
     "alt": "A technician repairing and maintaining a desktop computer",
     "description": "Repairs and maintenance image showing a technician working on a computer.",
@@ -109,7 +109,7 @@
   },
   "support": {
     "mediaId": "mdt-support-consulting",
-    "file": "2026/13/support & consulting.png",
+    "file": "2026/13/support & consulting.avif",
     "title": "IT support and consulting",
     "alt": "An IT professional advising a colleague at a computer",
     "description": "IT support and consulting image showing a team member providing technical guidance.",
