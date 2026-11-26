@@ -4,6 +4,11 @@ body { background: #fff; font-size: 16px; }
 .desktop-nav a.active::after { background: var(--red); }
 .utility-bar-contacts { display: flex; align-items: center; gap: 12px; }
 .utility-bar-contacts a { display: inline-flex; align-items: center; gap: 7px; }
+.utility-bar-contacts .utility-phone > span { color: inherit; margin-left: 0; }
+.utility-contact-label { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.utility-contact-number { white-space: nowrap; }
+.phone-contact-details { display: flex; flex-direction: column; gap: 1px; line-height: 1.3; }
+.phone-contact-label { color: var(--text-primary); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 h1, h2, h3 { font-family: var(--font-display), sans-serif; }
 .eyebrow { font-size: 11px; letter-spacing: .13em; font-weight: 500; }
 .button { border-radius: 8px; font-size: 15px; padding: 14px 22px; gap: 24px; min-height: 50px; }

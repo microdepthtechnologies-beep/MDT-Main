@@ -137,7 +137,11 @@
     font-size: 11px;
   }
   :root[data-theme="light"] .utility-bar .site-width > span { display: none; }
-  :root[data-theme="light"] .utility-bar-contacts { width: 100%; justify-content: space-between; gap: 8px; }
+  :root[data-theme="light"] .utility-bar-contacts { width: 100%; justify-content: space-between; gap: clamp(2px, 1vw, 5px); flex-wrap: nowrap; }
   :root[data-theme="light"] .utility-bar-contacts a { display: inline-flex; }
   :root[data-theme="light"] .utility-bar-contacts > .utility-divider { display: none; }
+  :root[data-theme="light"] .utility-bar-contacts > a { flex: 0 0 auto; gap: 0; font-size: clamp(8px, 2.7vw, 10px); white-space: nowrap; }
+  :root[data-theme="light"] .utility-bar-contacts > .utility-phone { gap: 3px; letter-spacing: 0; }
+  :root[data-theme="light"] .utility-bar-contacts > a svg { display: none; }
+  :root[data-theme="light"] .utility-contact-label { font-size: 1em; letter-spacing: 0; text-transform: none; }
 }

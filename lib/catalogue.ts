@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { decode } from "he";
-import type { Filter, Sort } from "mongodb";
+import type { Filter, ObjectId, Sort } from "mongodb";
 import { getDb } from "./mongodb";
 import { normaliseFilters, type CatalogueFacets, type SearchValues } from "./catalogue-filters";
 import { mediaUrl } from "./media";
@@ -23,6 +23,8 @@ export type Product = {
   attributes?: Record<string, string[]>; variations?: Variation[];
   seo?: { title?: string; metaDescription?: string; canonical?: string; noindex?: boolean };
 };
+type ProductDocument = Product & { _id: ObjectId };
+type CatalogueProduct = { key: string; product: Product };
 
 export const text = (value?: string) => decode((value || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
 export { mediaUrl };
@@ -43,6 +45,10 @@ export function cleanProduct(doc: Product): Product {
       stock: v.stock, imageUrl: mediaUrl(v.imageUrl),
     })),
   };
+}
+
+function catalogueProduct(doc: ProductDocument): CatalogueProduct {
+  return { key: doc._id.toHexString(), product: cleanProduct(doc) };
 }
 
 export const getCategories = cache(async (): Promise<Category[]> => {
@@ -87,7 +93,7 @@ export async function getDepartmentProducts(departments: Category[], categories:
       { status: "publish", "categories.slug": { $in: descendants(category, categories) } },
       { projection: { description: 0, shortDescription: 0, gallery: 0, variations: 0, seo: 0 } },
     ).sort({ featured: -1, "featuredImage.url": -1, wpId: -1 }).limit(8).toArray();
-    return products.map(cleanProduct);
+    return products.map(catalogueProduct);
   }));
 }
 
@@ -169,7 +175,7 @@ export async function getCatalogue(raw: SearchValues, lockedCategory?: Category)
   const rows = await col.find(filter, { projection: { description: 0, shortDescription: 0 } })
     .sort(sort[filters.sort] || sort.recommended).skip((page - 1) * 24).limit(24).toArray();
   return {
-    products: rows.map(cleanProduct), total, pages, page, categories,
+    products: rows.map(catalogueProduct), total, pages, page, categories,
     facets, selectedCategory, filters: { ...filters, page },
   };
 }
